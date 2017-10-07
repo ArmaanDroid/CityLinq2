@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">CityLinq</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">LOGIN</string>
+    <string name="signup">SIGN UP</string>
+    <string name="app_name1">CITY LINQ</string>
+    <string name="moto">app motto goes here</string>
+    <string name="login_small">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="continueNe">CONTINUE</string>
 </resources>
