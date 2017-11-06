@@ -10,4 +10,33 @@
     <string name="login_small">Login</string>
     <string name="create_account">Create Account</string>
     <string name="continueNe">CONTINUE</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="verify_phone_number">Verify Phone</string>
+    <string name="register">Register</string>
+    <string name="_4_digit_code_is_sent_as_an_sms_to_your_phone">4 digit code is sent as an SMS to your phone</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="explore_routes">Explore Routes</string>
+    <string name="help_or_faq">Help or FAQ</string>
+    <string name="refer_amp_earn"><![CDATA[Refer & Earn]]></string>
+    <string name="my_passes">My Passes</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="my_favorite_trips">My Favorite Trips</string>
+    <string name="my_trips">My Trips</string>
+    <string name="schedule">SCHEDULED</string>
+    <string name="complete">COMPLETED</string>
+    <string name="purchased">PURCHASED</string>
+    <string name="available">AVAILABLE</string>
+    <string name="passes">Passes</string>
+    <string name="favorite_trips">Favorite Trips</string>
+    <string name="wallet">Wallet</string>
+    <string name="invite">Invite</string>
 </resources>

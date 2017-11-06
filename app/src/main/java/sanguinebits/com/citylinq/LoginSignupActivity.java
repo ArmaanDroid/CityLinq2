@@ -6,12 +6,14 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import fragments.LoginFragment;
-import fragments.MBaseFragment;
+import fragments.MyBaseFragment;
+import fragments.SignupFragment;
 import utils.AppConstants;
 import utils.FragTransactFucntion;
 
-public class LoginSignupActivity extends AppCompatActivity implements MBaseFragment.OnFragmentInteractionListener {
+public class LoginSignupActivity extends AppCompatActivity implements MyBaseFragment.OnFragmentInteractionListener {
 
     @BindView(R.id.textViewTitle)
     TextView textViewTitle;
@@ -21,12 +23,22 @@ public class LoginSignupActivity extends AppCompatActivity implements MBaseFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
         ButterKnife.bind(this);
-        boolean isLogin = getIntent().getBooleanExtra("isLogin", true);
-        if(isLogin)
-            FragTransactFucntion.replaceFragFromFadeWithoutHistory(getFragmentManager(),new LoginFragment(),R.id.fragment_container_login);
-        else
-            FragTransactFucntion.replaceFragFromFadeWithoutHistory(getFragmentManager(),new LoginFragment(),R.id.fragment_container_login);
+    }
 
+    @OnClick(R.id.imageButtonBack)
+    void imageBack() {
+        onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        boolean isLogin = getIntent().getBooleanExtra("isLogin", true);
+        if (isLogin)
+            FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new LoginFragment(), R.id.fragment_container_login);
+        else
+            FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new SignupFragment(), R.id.fragment_container_login);
     }
 
     @Override
@@ -38,7 +50,14 @@ public class LoginSignupActivity extends AppCompatActivity implements MBaseFragm
             case AppConstants.TAG_SIGNUP_FRAGMENT:
                 textViewTitle.setText(R.string.create_account);
                 break;
-
+            case AppConstants.TAG_VERIFY_PHONE_FRAGMENT:
+                textViewTitle.setText(R.string.verify_phone_number);
+                break;
         }
+    }
+
+    @Override
+    public void backPressed() {
+        onBackPressed();
     }
 }

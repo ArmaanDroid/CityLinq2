@@ -2,13 +2,21 @@
 <resources>
     <color name="colorPrimary">#001a37</color>
     <color name="colorPrimaryDark">#001a37</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#36af47</color>
     <color name="white">#ffffff</color>
-
+    <color name="activityBackgroundMain">#3f5f82</color>
     <!--button colors-->
     <color name="btnColorDark">#36af47</color>
     <color name="btnColorLight">#ffffff</color>
+    <color name="FBBtnColor">#3b5998</color>
 
     <!--text colors-->
     <color name="textColorDark">#011e3e</color>
+    <color name="textColorMaterialDark">#354052</color>
+    <color name="textColorGrey">#a3acb8</color>
+    <color name="black">#000000</color>
+
+    <!--extra colors-->
+    <color name="lineGrey">#dfe2e5</color>
+
 </resources>
