@@ -15,11 +15,11 @@ import sanguinebits.com.citylinq.R;
  * Created by Armaan on 13-10-2017.
  */
 
-public class MyEditTextUnderlineGreen extends TextInputEditText {
+public class MyEditTextUnderline extends TextInputEditText {
 
     private final int linewidth;
 
-    public MyEditTextUnderlineGreen(Context context, AttributeSet attrs) {
+    public MyEditTextUnderline(Context context, AttributeSet attrs) {
         super(context, attrs);
         linewidth = getResources().getDimensionPixelOffset(R.dimen.editText_line_width);
         isInEditMode();
@@ -52,6 +52,7 @@ public class MyEditTextUnderlineGreen extends TextInputEditText {
             else
                 paint.setColor(getResources().getColor(R.color.lineGrey));
         }
+
         Point c = new Point((getWidth() - getPaddingRight()), getHeight());
         path.setFillType(Path.FillType.EVEN_ODD);
         path.moveTo(getPaddingLeft() - 5, getHeight());

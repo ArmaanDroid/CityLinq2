@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +21,9 @@ import butterknife.OnClick;
 import fragments.FavouriteFragment;
 import fragments.HomeFragment;
 import fragments.InviteFragment;
-import fragments.LoginFragment;
+import fragments.ProfileFragment;
+import fragments.ReviewFleetFragment;
+import fragments.login_signup.LoginFragment;
 import fragments.MyBaseFragment;
 import fragments.wallet.WalletFragment;
 import fragments.passes.MyPassesFragment;
@@ -60,14 +60,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new HomeFragment(), R.id.frame_container_main);
 
         mainContent = findViewById(R.id.mainContent);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerElevation(0f);
@@ -78,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 mainContent.setTranslationX(drawerView.getWidth() * slideOffset);
                 Log.d("TAG", "onDrawerSlide: " + slideOffset);
-                if (slideOffset > 0.76) {
+                if (slideOffset > 0.7) {
                     mainContent.setScaleY(getScaleRatio(slideOffset));
                     mainContent.setScaleX(getScaleRatio(slideOffset));
                 }
@@ -124,10 +116,13 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new InviteFragment(), R.id.frame_container_main);
                 break;
             case R.id.myHelp:
-                FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new LoginFragment(), R.id.frame_container_main);
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ReviewFleetFragment(), R.id.frame_container_main);
                 break;
             case R.id.myExploreRoutes:
-                FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new LoginFragment(), R.id.frame_container_main);
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new LoginFragment(), R.id.frame_container_main);
+                break;
+            case R.id.imageViewProfile:
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ProfileFragment(), R.id.frame_container_main);
                 break;
         }
     }
@@ -184,6 +179,13 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     }
 
+    @OnClick(R.id.imageViewProfile)
+    void myProfile(View view) {
+        isDrawerItemSelected = true;
+        drawerSelectedItemId = view.getId();
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
     @OnClick(R.id.myFavTrips)
     void myFavTrips(View view) {
         isDrawerItemSelected = true;
@@ -236,12 +238,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
     @Override
     public void changeUIAccToFragment(String fragmentTag, String s) {
@@ -270,11 +266,21 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 showDarkToolbar();
                 textViewTitle.setText(R.string.invite);
                 break;
+            case AppConstants.TAG_PROFILE_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.profile);
+                break;
+            case AppConstants.TAG_REVIEW_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.reviewFleet);
+                imageViewMenu.setVisibility(View.GONE);
+                break;
         }
     }
 
     private void showNormalToolbar() {
         drawer.setEnabled(true);
+        imageViewMenu.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         imageViewMenu.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_menu));
         textViewTitle.setTextColor(ContextCompat.getColor(this, R.color.textColorDark));
@@ -283,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     private void showDarkToolbar() {
         drawer.setEnabled(false);
+        imageViewMenu.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         imageViewMenu.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_back_white));
         textViewTitle.setTextColor(ContextCompat.getColor(this, R.color.white));

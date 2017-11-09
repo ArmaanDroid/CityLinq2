@@ -7,9 +7,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fragments.LoginFragment;
+import fragments.login_signup.LoginFragment;
 import fragments.MyBaseFragment;
-import fragments.SignupFragment;
+import fragments.login_signup.SignupFragment;
 import utils.AppConstants;
 import utils.FragTransactFucntion;
 

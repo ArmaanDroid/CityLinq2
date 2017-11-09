@@ -5,6 +5,9 @@
     <color name="colorAccent">#36af47</color>
     <color name="white">#ffffff</color>
     <color name="activityBackgroundMain">#3f5f82</color>
+    <color name="activityBackground">#fafafa</color>
+
+
     <!--button colors-->
     <color name="btnColorDark">#36af47</color>
     <color name="btnColorLight">#ffffff</color>
@@ -18,5 +21,6 @@
 
     <!--extra colors-->
     <color name="lineGrey">#dfe2e5</color>
-
+    <color name="dotColor">#18bae2</color>
+    <color name="moneyColor">#31a0ad</color>
 </resources>

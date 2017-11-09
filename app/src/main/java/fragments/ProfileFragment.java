@@ -8,21 +8,18 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
-import sanguinebits.com.citylinq.LoginSignupActivity;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WelcomeFragment#newInstance} factory method to
+ * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WelcomeFragment extends MyBaseFragment {
+public class ProfileFragment extends MyBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,10 +30,9 @@ public class WelcomeFragment extends MyBaseFragment {
     private String mParam2;
     private Unbinder unbinder;
     private Intent intentLoginSignup;
-    @BindView(R.id.btnSignup)
-    Button btnSignup;
 
-    public WelcomeFragment() {
+
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
@@ -49,8 +45,8 @@ public class WelcomeFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WelcomeFragment newInstance(String param1, String param2) {
-        WelcomeFragment fragment = new WelcomeFragment();
+    public static ProfileFragment newInstance(String param1, String param2) {
+        ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,7 +67,7 @@ public class WelcomeFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_welcome, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -79,20 +75,7 @@ public class WelcomeFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        intentLoginSignup = new Intent(getActivity(), LoginSignupActivity.class);
-
-        System.gc();
-    }
-
-    @OnClick(R.id.btnSignup)
-    public void openSignup(View view) {
-        intentLoginSignup.putExtra("isLogin",false);
-        startActivity(intentLoginSignup);
-    }
-    @OnClick(R.id.textView2)
-    public void openLogin(View view) {
-        intentLoginSignup.putExtra("isLogin",true);
-        startActivity(intentLoginSignup);
+        mListener.changeUIAccToFragment(AppConstants.TAG_PROFILE_FRAGMENT,"");
     }
 
     @Override

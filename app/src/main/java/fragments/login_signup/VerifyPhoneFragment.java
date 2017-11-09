@@ -1,7 +1,8 @@
-package fragments;
+package fragments.login_signup;
 
 
 import android.app.Service;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import fragments.MyBaseFragment;
 import models.CommonPojo;
+import sanguinebits.com.citylinq.MainActivity;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -167,7 +170,7 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-
+                startActivity(new Intent(getActivity(), MainActivity.class));
             }
 
             @Override

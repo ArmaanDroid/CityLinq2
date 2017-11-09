@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import butterknife.ButterKnife;
 import fragments.MyBaseFragment;
-import fragments.WelcomeFragment;
+import fragments.login_signup.WelcomeFragment;
 import utils.FragTransactFucntion;
 
 public class SplashActivity extends AppCompatActivity implements MyBaseFragment.OnFragmentInteractionListener {

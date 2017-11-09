@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fragments.LoginFragment">
+    tools:context="fragments.login_signup.LoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <views.MyEditTextUnderlineGreen
+    <views.MyEditTextUnderline
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:focusable="false"
@@ -62,7 +62,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <views.MyEditTextUnderlineGreen
+        <views.MyEditTextUnderline
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
-        <views.MyEditTextUnderlineGreen
+        <views.MyEditTextUnderline
             android:layout_width="match_parent"
             android:id="@+id/editTextEmailAddress"
             android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayoutCountryPicker"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutsd">
 
-        <views.MyEditTextUnderlineGreen
+        <views.MyEditTextUnderline
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-        <views.MyEditTextUnderlineGreen
+        <views.MyEditTextUnderline
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -21,5 +21,6 @@ public class AppConstants {
     public static final String TAG_FAVOURITE_RIDES_FRAGMENT = "TAG_FAVOURITE_RIDES_FRAGMENT";
     public static final String TAG_WALLET_FRAGMENT = "TAG_WALLET_FRAGMENT";
     public static final String TAG_INVITE_FRAGMENT = "TAG_INVITE_FRAGMENT";
-
+    public static final String TAG_PROFILE_FRAGMENT = "TAG_PROFILE_FRAGMENT";
+    public static final String TAG_REVIEW_FRAGMENT = "TAG_REVIEW_FRAGMENT";
 }

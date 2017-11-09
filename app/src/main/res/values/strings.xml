@@ -39,4 +39,26 @@
     <string name="favorite_trips">Favorite Trips</string>
     <string name="wallet">Wallet</string>
     <string name="invite">Invite</string>
+    <string name="amount">Amount ($)</string>
+    <string name="it_s_quick_safe_and_secure">It’s Quick, Safe and Secure</string>
+    <string name="add_money">Add Money</string>
+    <string name="available_balance">Available Balance</string>
+    <string name="transactionHistory">Transaction History</string>
+    <string name="add_promo_code">Add Promo Code</string>
+    <string name="share_it_with_your_friends_and_they_will_get_discount_off_on_their_first_booking_every_time_someone_uses_your_code_you_will_also_get_some_discount">Share it with your friends and they will get discount off on their first booking. Every time someone uses your code, you will also get some discount.</string>
+    <string name="your_code">Your Code</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="phone">Phone</string>
+    <string name="reviewFleet">Review Fleet</string>
+    <string name="add_to_favourites">ADD TO FAVOURITES</string>
+    <string name="care_to_give_a_complement">Care to give a complement...</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="continue_via_facebook">CONTINUE VIA FACEBOOK</string>
+    <string name="please_enter_email_id">Please enter email id</string>
+    <string name="please_enter_valid_email_id">Please enter valid email id</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="please_enter_phone_umber">Please enter phone number</string>
+    <string name="source_location">Source Location</string>
 </resources>

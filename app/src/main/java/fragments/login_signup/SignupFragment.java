@@ -1,4 +1,4 @@
-package fragments;
+package fragments.login_signup;
 
 
 import android.os.Bundle;
@@ -20,11 +20,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import fragments.MyBaseFragment;
 import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 import utils.FragTransactFucntion;
-import views.MyEditTextUnderlineGreen;
+import views.MyEditTextUnderline;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,16 +44,16 @@ public class SignupFragment extends MyBaseFragment {
     private Unbinder unbinder;
 
     @BindView(R.id.editTextName)
-    MyEditTextUnderlineGreen editTextName;
+    MyEditTextUnderline editTextName;
 
     @BindView(R.id.editTextPhoneNumber)
-    MyEditTextUnderlineGreen editTextPhoneNumber;
+    MyEditTextUnderline editTextPhoneNumber;
 
     @BindView(R.id.editTextEmailAddress)
-    MyEditTextUnderlineGreen editTextEmailAddress;
+    MyEditTextUnderline editTextEmailAddress;
 
     @BindView(R.id.editTextPassword)
-    MyEditTextUnderlineGreen editTextPassword;
+    MyEditTextUnderline editTextPassword;
 
     @BindView(R.id.textViewPhoneCode)
     TextView textViewPhoneCode;
@@ -143,23 +144,23 @@ public class SignupFragment extends MyBaseFragment {
 
 
         if (name.isEmpty()) {
-            editTextName.setError("Please enter name");
+            editTextName.setError(getString(R.string.please_enter_name));
             return;
         }
         if (email.isEmpty()) {
-            editTextEmailAddress.setError("Please enter email id");
+            editTextEmailAddress.setError(getString(R.string.please_enter_email_id));
             return;
         }
         if (!isValidEmail(email)) {
-            editTextEmailAddress.setError("Please enter valid email id");
+            editTextEmailAddress.setError(getString(R.string.please_enter_valid_email_id));
             return;
         }
         if (password.isEmpty()) {
-            editTextPassword.setError("Please enter password");
+            editTextPassword.setError(getString(R.string.please_enter_password));
             return;
         }
         if (phoneNumber.isEmpty()) {
-            editTextPhoneNumber.setError("Please enter phone number");
+            editTextPhoneNumber.setError(getString(R.string.please_enter_phone_umber));
             return;
         }
 

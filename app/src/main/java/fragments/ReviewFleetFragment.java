@@ -1,30 +1,25 @@
-package fragments.passes;
+package fragments;
 
 
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import adapters.PassesPagerAdapter;
-import adapters.TripsPagerAdapter;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import fragments.MyBaseFragment;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MyPassesFragment#newInstance} factory method to
+ * Use the {@link ReviewFleetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyPassesFragment extends MyBaseFragment {
+public class ReviewFleetFragment extends MyBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,14 +31,8 @@ public class MyPassesFragment extends MyBaseFragment {
     private Unbinder unbinder;
     private Intent intentLoginSignup;
 
-    private PassesPagerAdapter viewPagerAdapter;
-    @BindView(R.id.tablayout_group)
-    android.support.design.widget.TabLayout tabLayout;
 
-    @BindView(R.id.viewpager)
-    ViewPager viewPager;
-
-    public MyPassesFragment() {
+    public ReviewFleetFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +45,8 @@ public class MyPassesFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPassesFragment newInstance(String param1, String param2) {
-        MyPassesFragment fragment = new MyPassesFragment();
+    public static ReviewFleetFragment newInstance(String param1, String param2) {
+        ReviewFleetFragment fragment = new ReviewFleetFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,7 +67,7 @@ public class MyPassesFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_mytrips, container, false);
+        View view = inflater.inflate(R.layout.fragment_review, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -86,18 +75,8 @@ public class MyPassesFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_MY_PASSES_FRAGMENT, "");
-        viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity());
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        mListener.changeUIAccToFragment(AppConstants.TAG_REVIEW_FRAGMENT,"");
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        viewPager.invalidate();
-    }
-
 
     @Override
     public void onDestroy() {

@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,6 +87,7 @@ public class MyBaseFragment extends Fragment {
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
     }
+
     protected void setTypeFace(TextView tv, String fontName) {
         tv.setTypeface(getFont(fontName));
     }
@@ -95,7 +97,19 @@ public class MyBaseFragment extends Fragment {
         return cm.getActiveNetworkInfo() != null;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        } catch (Exception e) {
 
+        }
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -146,7 +160,7 @@ public class MyBaseFragment extends Fragment {
             public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
                 try {
                     progressDialog.dismiss();
-                    if (response.body().getMessage() != null && !response.body().getMessage().equalsIgnoreCase("success"))
+                    if (response.body().getMessage() != null && !response.body().getMessage().equalsIgnoreCase("Successful"))
                         showToast(response.body().getMessage());
                     if (response.isSuccessful() && response.body().isSuccess()) {
                         webResponseCallback.onResponse(response.body());
