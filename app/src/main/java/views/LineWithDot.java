@@ -20,12 +20,14 @@ import sanguinebits.com.citylinq.R;
 public class LineWithDot extends TextView {
 
 
+    private final int circleRadius;
     private  Point c;
     private Point mid1;
     private Point mid2;
 
     public LineWithDot(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        circleRadius= getContext().getResources().getDimensionPixelOffset(R.dimen.four_dp);
 
     }
 
@@ -36,10 +38,10 @@ public class LineWithDot extends TextView {
         mid1 = new Point(getWidth()/2-12, getHeight() / 2);
         mid2 = new Point(getWidth()/2+12, getHeight() / 2);
 
-        paint.setColor(ContextCompat.getColor(getContext(), R.color.dotColor));
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        int circleRadius= getContext().getResources().getDimensionPixelOffset(R.dimen.four_dp);
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.dotColor));
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, circleRadius, paint);
+
         int lineWidth = getContext().getResources().getDimensionPixelOffset(R.dimen.one_point_five_dp);
         paint.setColor(ContextCompat.getColor(getContext(), R.color.lineGrey));
         paint.setStrokeWidth(lineWidth);

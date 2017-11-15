@@ -75,7 +75,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_my_trip" />
+                        app:srcCompat="@drawable/ic_my_trip" />
 
                     <TextView
                         android:layout_width="match_parent"

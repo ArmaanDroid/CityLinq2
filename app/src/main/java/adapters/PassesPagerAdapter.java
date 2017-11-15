@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import fragments.passes.AvailabelFragment;
+import fragments.passes.PurchasedFragment;
 import fragments.trips.CompleteTripFragment;
 import fragments.trips.ScheduleTripsFragment;
 import sanguinebits.com.citylinq.R;
@@ -20,9 +22,9 @@ Context context;
     public Fragment getItem(int position) {
         Fragment fragment = null;
         if (position == 0) {
-            fragment = new ScheduleTripsFragment();
+            fragment = new PurchasedFragment();
         } else if (position == 1) {
-            fragment = new CompleteTripFragment();
+            fragment = new AvailabelFragment();
         }
         return fragment;
     }
@@ -41,6 +43,5 @@ Context context;
             title = context.getString(R.string.available);
         }
         return title;
-
     }
 }

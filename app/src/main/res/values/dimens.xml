@@ -7,5 +7,8 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="one_dp">1dp</dimen>
     <dimen name="four_dp">4dp</dimen>
+    <dimen name="ten_dp">10dp</dimen>
+    <dimen name="fourty_dp">40dp</dimen>
     <dimen name="one_point_five_dp" type="dimen" format="float">0.5dp</dimen>
+    <dimen name="line_width">0.7dp</dimen>
 </resources>

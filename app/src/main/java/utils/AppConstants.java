@@ -23,4 +23,10 @@ public class AppConstants {
     public static final String TAG_INVITE_FRAGMENT = "TAG_INVITE_FRAGMENT";
     public static final String TAG_PROFILE_FRAGMENT = "TAG_PROFILE_FRAGMENT";
     public static final String TAG_REVIEW_FRAGMENT = "TAG_REVIEW_FRAGMENT";
+    public static final String TAG_BROWSE_LINQS_FRAGMENT = "TAG_BROWSE_LINQS_FRAGMENT";
+    public static final String TAG_ROUTE_DETAIL_FRAGMENT = "TAG_ROUTE_DETAIL_FRAGMENT";
+    public static final String TAG_BOOK_MY_TRIP_FRAGMENT = "TAG_BOOK_MY_TRIP_FRAGMENT";
+    public static final String TAG_CHOOSE_PAYMENT_FRAGMENT = "TAG_CHOOSE_PAYMENT_FRAGMENT";
+    public static final String TAG_SELECT_CARD_FRAGMENT = "TAG_SELECT_CARD_FRAGMENT";
+    public static final String TAG_ADD_CARD_FRAGMENT = "TAG_ADD_CARD_FRAGMENT";
 }

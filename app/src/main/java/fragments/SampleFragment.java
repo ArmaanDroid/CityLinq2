@@ -29,7 +29,6 @@ public class SampleFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
-    private Intent intentLoginSignup;
 
 
     public SampleFragment() {

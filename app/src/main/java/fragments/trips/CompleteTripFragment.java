@@ -5,10 +5,15 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import adapters.CompletedTripsAdapter;
+import adapters.ScheduledTripsAdapter;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
@@ -30,7 +35,8 @@ public class CompleteTripFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
-    private Intent intentLoginSignup;
+    @BindView(R.id.recycleViewScheduleTrips)
+    RecyclerView mRecyclerView;
 
 
     public CompleteTripFragment() {
@@ -68,7 +74,7 @@ public class CompleteTripFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_complete_trip, container, false);
+        View view = inflater.inflate(R.layout.fragment_with_recycler, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -76,11 +82,14 @@ public class CompleteTripFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        intentLoginSignup = new Intent(getActivity(), LoginSignupActivity.class);
-
-        System.gc();
+        initViews();
     }
 
+    private void initViews() {
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(new CompletedTripsAdapter());
+    }
 
 
     @Override

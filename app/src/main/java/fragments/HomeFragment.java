@@ -1,14 +1,18 @@
 package fragments;
 
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,13 +21,14 @@ import butterknife.Unbinder;
 import sanguinebits.com.citylinq.LoginSignupActivity;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends MyBaseFragment {
+public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -73,6 +78,9 @@ public class HomeFragment extends MyBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         return view;
     }
 
@@ -89,4 +97,13 @@ public class HomeFragment extends MyBaseFragment {
     }
 
 
+    @OnClick(R.id.buttonLinqs)
+    void browseLinqs() {
+        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager(), new BrowseLinqsFragment(), R.id.frame_container_main);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
 }

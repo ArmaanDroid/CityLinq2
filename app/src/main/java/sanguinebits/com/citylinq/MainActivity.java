@@ -275,11 +275,35 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 textViewTitle.setText(R.string.reviewFleet);
                 imageViewMenu.setVisibility(View.GONE);
                 break;
+            case AppConstants.TAG_BROWSE_LINQS_FRAGMENT:
+                toolbar.setVisibility(View.GONE);
+                break;
+            case AppConstants.TAG_ROUTE_DETAIL_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.route_details);
+                break;
+            case AppConstants.TAG_BOOK_MY_TRIP_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.book_my_trip);
+                break;
+            case AppConstants.TAG_CHOOSE_PAYMENT_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.choose_payment);
+                break;
+            case AppConstants.TAG_SELECT_CARD_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.select_card);
+                break;
+            case AppConstants.TAG_ADD_CARD_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.add_card);
+                break;
         }
     }
 
     private void showNormalToolbar() {
         drawer.setEnabled(true);
+        toolbar.setVisibility(View.VISIBLE);
         imageViewMenu.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         imageViewMenu.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_menu));
@@ -289,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     private void showDarkToolbar() {
         drawer.setEnabled(false);
+        toolbar.setVisibility(View.VISIBLE);
         imageViewMenu.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         imageViewMenu.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_back_white));
@@ -298,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     @Override
     public void backPressed() {
-
+        onBackPressed();
     }
 
 }

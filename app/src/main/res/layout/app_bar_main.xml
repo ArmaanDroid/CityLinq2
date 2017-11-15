@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContent"
@@ -37,7 +38,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/ic_menu" />
+            app:srcCompat="@drawable/ic_menu" />
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -58,7 +59,11 @@
     </RelativeLayout>
 
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
+        />
 
     <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:id="@+id/fab"-->
@@ -68,4 +73,4 @@
         <!--android:layout_margin="@dimen/fab_margin"-->
         <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

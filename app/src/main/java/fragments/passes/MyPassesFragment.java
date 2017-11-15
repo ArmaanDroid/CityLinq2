@@ -34,7 +34,7 @@ public class MyPassesFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
-    private Intent intentLoginSignup;
+
 
     private PassesPagerAdapter viewPagerAdapter;
     @BindView(R.id.tablayout_group)

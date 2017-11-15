@@ -5,10 +5,14 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import adapters.FavouriteTripsAdapter;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import sanguinebits.com.citylinq.R;
@@ -29,7 +33,9 @@ public class FavouriteFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
-    private Intent intentLoginSignup;
+
+    @BindView(R.id.recycler_favourite_trips)
+    RecyclerView recyclerView;
 
 
     public FavouriteFragment() {
@@ -67,7 +73,7 @@ public class FavouriteFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_welcome, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite_trips, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -76,6 +82,12 @@ public class FavouriteFragment extends MyBaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListener.changeUIAccToFragment(AppConstants.TAG_FAVOURITE_RIDES_FRAGMENT,"");
+        initViews();
+    }
+
+    private void initViews() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new FavouriteTripsAdapter());
     }
 
     @Override

@@ -61,4 +61,26 @@
     <string name="please_enter_name">Please enter name</string>
     <string name="please_enter_phone_umber">Please enter phone number</string>
     <string name="source_location">Source Location</string>
+    <string name="destination">Choose a Destination</string>
+    <string name="browse_linqs">BROWSE LINQS</string>
+    <string name="route_details">Route Details</string>
+    <string name="map_view">MAP VIEW</string>
+    <string name="list_view">LIST VIEW</string>
+    <string name="book_my_trip">Book My Trip</string>
+    <string name="choose_payment">Choose Payment</string>
+    <string name="continueToPayment">Continue To Payment</string>
+    <string name="amount_payable">Amount Payable</string>
+    <string name="Card">Card</string>
+    <string name="net_banking">Net Banking</string>
+    <string name="add_new_card">Add New Card</string>
+    <string name="pay_">PAY $</string>
+    <string name="select_card">Select Card</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_number">Card Number</string>
+    <string name="expiary_date">Expiry Date</string>
+    <string name="cvv">CVV</string>
+    <string name="name_on_card">Name on Card</string>
+    <string name="save">Save</string>
+    <string name="per_ride_20">Per Ride $20</string>
+    <string name="completed">Completed</string>
 </resources>

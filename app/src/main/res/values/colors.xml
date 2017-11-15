@@ -6,6 +6,7 @@
     <color name="white">#ffffff</color>
     <color name="activityBackgroundMain">#3f5f82</color>
     <color name="activityBackground">#fafafa</color>
+    <color name="holeColor">#eeeeee</color>
 
 
     <!--button colors-->
@@ -17,10 +18,13 @@
     <color name="textColorDark">#011e3e</color>
     <color name="textColorMaterialDark">#354052</color>
     <color name="textColorGrey">#a3acb8</color>
+    <color name="textColorLabelGrey">#7f8fa4</color>
     <color name="black">#000000</color>
 
     <!--extra colors-->
     <color name="lineGrey">#dfe2e5</color>
     <color name="dotColor">#18bae2</color>
     <color name="moneyColor">#31a0ad</color>
+    <color name="windows_blue">#31a0ad</color>
+    <color name="white_80">#80ffffff</color>
 </resources>

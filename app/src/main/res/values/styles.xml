@@ -49,4 +49,14 @@
         <item name="android:background">@color/lineGrey</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/textColorGrey</item>
+        <item name="android:textSize">16dp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/textColorLabelGrey</item>
+
+        <item name="colorControlNormal">@color/textColorLabelGrey</item>
+        <item name="colorControlActivated">@color/textColorLabelGrey</item>
+    </style>
 </resources>
