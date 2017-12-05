@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constriantInner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
+        android:background="@color/white"
         android:paddingBottom="12dp">
 
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v4.view.ViewPager
             android:id="@+id/scheduledTripLayout"
             android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/drawable_blue_box_4_corner"
-            android:paddingBottom="16dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingTop="16dp"
-            android:visibility="visible"
-
+            android:layout_height="140dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -37,8 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:fontFamily="@font/sans_pro_regular"
+
                 android:text="Boarding Location"
-                android:textColor="#ffffff"
+                android:textColor="@color/white_80"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
@@ -47,9 +47,10 @@
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:text="Your Scheduled Trip"
                 android:textColor="@color/white"
-                android:textSize="12.7dp"
+                android:textSize="13dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView15" />
@@ -58,6 +59,7 @@
                 android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:text="August 16, 2017"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
@@ -68,8 +70,9 @@
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_regular"
                 android:text="11:55 AM"
-                android:textColor="#ffffff"
+                android:textColor="@color/white_80"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView15" />
@@ -78,15 +81,18 @@
                 android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:maxLines="1"
                 android:text="3435 Kuhlman Parks"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
 
-        </android.support.constraint.ConstraintLayout>
+        </android.support.v4.view.ViewPager>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutsd"
@@ -95,17 +101,18 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+
             app:hintAnimationEnabled="true"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/scheduledTripLayout">
 
-            <android.support.v7.widget.AppCompatEditText
+            <android.support.v7.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/editTextSource"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:hint="@string/source_location"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
@@ -139,18 +146,18 @@
             android:id="@+id/line4"
             android:layout_width="0dp"
             android:layout_height="0.7dp"
-            android:layout_marginEnd=   "16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginStart="56dp"
             android:background="@color/lineGrey"
             app:layout_constraintRight_toLeftOf="@+id/imageViewToFro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutsd" />
 
-        <View
+        <views.DottedLineVertical
             android:id="@+id/line5"
             android:layout_width="2dp"
             android:layout_height="0dp"
-            android:background="@drawable/drawable_dash_vertical"
+            app:dashWidth="2dp"
             app:layout_constraintBottom_toTopOf="@+id/imageView4"
             app:layout_constraintLeft_toLeftOf="@+id/imageView3"
             app:layout_constraintRight_toRightOf="@+id/imageView3"
@@ -169,17 +176,19 @@
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutsd">
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/editTextEmailAddress"
+            <AutoCompleteTextView
+                android:id="@+id/editTextDestination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:hint="@string/destination"
+                android:includeFontPadding="false"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:padding="10dp"
-                android:textColor="@color/textColorDark"
-                android:textSize="16dp" />
+
+                android:textAppearance="@style/TextLabel" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -211,6 +220,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+            android:fontFamily="@font/sans_pro_regular"
             android:text="Journey Date"
             android:textColor="#7f8fa4"
             android:textSize="14sp"
@@ -224,9 +234,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:drawableLeft="@drawable/ic_calendar"
             android:drawablePadding="16dp"
-            android:drawableRight="@drawable/ic_arrow_right"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:text="Journey Date"
             android:textColor="@color/textColorDark"
             android:textSize="20dp"
@@ -241,7 +250,8 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        map:cameraZoom="13"  android:layout_height="0dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -252,13 +262,36 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/btnColorDark"
+        android:fontFamily="@font/sans_pro_semi_bold"
         android:padding="16dp"
+
+        android:visibility="gone"
         android:text="@string/browse_linqs"
         android:textColor="@android:color/white"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerFavorite"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
 
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/sans_pro_semi_bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/drawable_circle_white"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/map"
+        app:srcCompat="@drawable/ic_my_location" />
 </android.support.constraint.ConstraintLayout>

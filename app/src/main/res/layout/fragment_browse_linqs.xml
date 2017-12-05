@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/activityBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/activityBackground">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/toolbar"
@@ -19,6 +19,7 @@
         <ImageView
             android:id="@+id/imageViewMenu"
             android:layout_width="32dp"
+            android:background="@android:color/transparent"
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,10 +33,11 @@
             android:layout_centerVertical="true"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="24dp"
+            android:background="@android:color/transparent"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/imageViewMenu"
-            android:drawableLeft="@drawable/ic_source_location_white"
             android:drawablePadding="16dp"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:text="3435 Kuhlman Parks"
             android:textColor="@color/white"
             android:textSize="16dp"
@@ -43,6 +45,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageViewMenu"
             app:layout_constraintStart_toEndOf="@+id/imageViewMenu"
             app:layout_constraintTop_toTopOf="@+id/imageViewMenu" />
+
+        <views.DottedLineVertical
+            android:id="@+id/line5"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="9dp"
+            app:dashWidth="0.51dp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewDestination"
+            app:layout_constraintLeft_toLeftOf="@+id/textViewDestination"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSource"
+            app:lineColor="@color/white_80" />
 
         <TextView
             android:id="@+id/textViewDestination"
@@ -52,9 +65,10 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
             android:layout_toRightOf="@+id/imageViewMenu"
-            android:drawableLeft="@drawable/ic_destination_white"
             android:drawablePadding="16dp"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:text="3435 Kuhlman Parks"
             android:textColor="@color/white"
             android:textSize="16dp"
@@ -71,8 +85,20 @@
         android:layout_marginEnd="12dp"
         android:layout_marginStart="12dp"
         android:overScrollMode="never"
+        android:paddingTop="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/no_record_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No transport on this route"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/recycleViewRoutes"
+        app:layout_constraintLeft_toLeftOf="@+id/recycleViewRoutes"
+        app:layout_constraintRight_toRightOf="@+id/recycleViewRoutes"
+        app:layout_constraintTop_toTopOf="@+id/recycleViewRoutes" />
 </android.support.constraint.ConstraintLayout>

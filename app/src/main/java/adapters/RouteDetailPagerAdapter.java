@@ -5,10 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
+
 import fragments.route_detail.ListViewFragment;
 import fragments.route_detail.MapViewFragment;
 import fragments.trips.CompleteTripFragment;
 import fragments.trips.ScheduleTripsFragment;
+import models.Station;
 import sanguinebits.com.citylinq.R;
 
 /**
@@ -17,18 +20,20 @@ import sanguinebits.com.citylinq.R;
 
 public class RouteDetailPagerAdapter extends FragmentPagerAdapter {
     Context context;
-    public RouteDetailPagerAdapter(FragmentManager fm, Context context) {
+    ArrayList<Station> stationList;
+    public RouteDetailPagerAdapter(ArrayList<Station> stationList, FragmentManager fm, Context context) {
         super(fm);
         this.context=context;
+        this.stationList=stationList;
     }
 
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
         if (position == 0) {
-            fragment = new MapViewFragment();
+            fragment = MapViewFragment.newInstance(stationList,null);
         } else if (position == 1) {
-            fragment = new ListViewFragment();
+            fragment = ListViewFragment.newInstance(stationList,null);
         }
         return fragment;
     }

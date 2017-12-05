@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import listners.AdapterItemClickListner;
+import models.Station;
 import sanguinebits.com.citylinq.R;
 import views.TextViewWithSideLine;
 
@@ -16,9 +19,12 @@ import views.TextViewWithSideLine;
 
 public class RouteDetailListAdapter extends RecyclerView.Adapter<RouteDetailListAdapter.ViewHolder> {
     AdapterItemClickListner mListner;
+    ArrayList<Station> stationList;
+    private Station currentItem;
 
-    public RouteDetailListAdapter(AdapterItemClickListner mListner) {
+    public RouteDetailListAdapter(ArrayList<Station> stationList, AdapterItemClickListner mListner) {
         this.mListner = mListner;
+        this.stationList=stationList;
     }
 
     @Override
@@ -29,17 +35,19 @@ public class RouteDetailListAdapter extends RecyclerView.Adapter<RouteDetailList
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        currentItem=stationList.get(position);
         if (position == 0)
             holder.textViewWithSideLine.setIsFirst(true);
         if (position == getItemCount() - 1)
             holder.textViewWithSideLine.setIsLast(true);
 
-        holder.textViewWithSideLine.customSetText("548 Nikolas Bridge", "Estd. Reach Time 10:00 AM");
+
+        holder.textViewWithSideLine.customSetText(currentItem.getName(), "Estd. Reach Time 10:00 AM");
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return stationList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

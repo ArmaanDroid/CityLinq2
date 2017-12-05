@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import sanguinebits.com.citylinq.R;
 
 /**
@@ -12,9 +14,15 @@ import sanguinebits.com.citylinq.R;
  */
 
 public class FavouriteTripsAdapter extends RecyclerView.Adapter<FavouriteTripsAdapter.ViewHolder> {
+    List<Object> favTrips;
+
+    public FavouriteTripsAdapter(List<Object> favTrips) {
+        this.favTrips = favTrips;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-       View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.view_favourite_trips,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_favourite_trips, parent, false);
         return new ViewHolder(view);
     }
 
@@ -25,7 +33,7 @@ public class FavouriteTripsAdapter extends RecyclerView.Adapter<FavouriteTripsAd
 
     @Override
     public int getItemCount() {
-        return 10;
+        return favTrips.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

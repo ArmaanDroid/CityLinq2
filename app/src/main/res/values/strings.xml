@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CityLinq</string>
-
+    <string name="facebook_app_id">156074315126766</string>
+    <string name="fb_login_protocol_scheme">fb156074315126766</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">LOGIN</string>
@@ -19,6 +20,7 @@
     <string name="_4_digit_code_is_sent_as_an_sms_to_your_phone">4 digit code is sent as an SMS to your phone</string>
     <string name="resend_code">Resend Code</string>
     <string name="title_activity_main">MainActivity</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -83,4 +85,12 @@
     <string name="save">Save</string>
     <string name="per_ride_20">Per Ride $20</string>
     <string name="completed">Completed</string>
+    <string name="city_linq">City Linq</string>
+    <string name="provide_permissions">Please provide permissions</string>
+    <string name="pay">PAY</string>
+    <string name="cancel">CANCEL</string>
+    <string name="wallet_balance">Wallet Balance</string>
+    <string name="remaining_balance">Remaining Balance</string>
+    <string name="payment">Payment</string>
+    <string name="please_enter_amount">Please enter some amount</string>
 </resources>

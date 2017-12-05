@@ -5,15 +5,23 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import api.RequestEndPoints;
+import api.WebRequestData;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import views.MyEditTextUnderline;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +40,15 @@ public class WalletFragment extends MyBaseFragment {
     private Unbinder unbinder;
     private Intent intentLoginSignup;
 
+    @BindView(R.id.textViewTransactionHistory)
+    TextView textViewTransactionHistory;
+
+    @BindView(R.id.textViewAvailableBalance)
+    TextView textViewAvailableBalance;
+
+    @BindView(R.id.textView11)
+    MyEditTextUnderline editTextAmount;
+    private String availableAmount="100";
 
     public WalletFragment() {
         // Required empty public constructor
@@ -77,6 +94,37 @@ public class WalletFragment extends MyBaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListener.changeUIAccToFragment(AppConstants.TAG_WALLET_FRAGMENT,"");
+        initView();
+    }
+
+    private void initView() {
+        textViewAvailableBalance.setText(availableAmount);
+        textViewTransactionHistory.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
+    }
+
+    @OnClick(R.id.continueButton)
+    void addMoney(){
+        final String amount = editTextAmount.getText().toString().trim();
+        if(amount.isEmpty() || amount.equalsIgnoreCase("0")){
+            editTextAmount.setError(getString(R.string.please_enter_amount));
+            return;
+        }
+        WebRequestData webRequestData=new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.ADD_TO_WALLET);
+        webRequestData.setUserId(AppConstants.USER_ID);
+        webRequestData.setAmount(amount);
+            updateData(webRequestData, new WeResponseCallback() {
+                @Override
+                public void onResponse(CommonPojo commonPojo) throws Exception {
+                    editTextAmount.setText("");
+//                    textViewAvailableBalance.setText(availableAmount+amount);
+                }
+
+                @Override
+                public void failure() throws Exception {
+
+                }
+            });
     }
 
     @Override
@@ -84,6 +132,4 @@ public class WalletFragment extends MyBaseFragment {
         super.onDestroy();
         unbinder.unbind();
     }
-
-
 }

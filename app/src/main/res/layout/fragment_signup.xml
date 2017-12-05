@@ -15,6 +15,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/linearLayoutCountryPicker"
         app:layout_constraintRight_toRightOf="@+id/linearLayoutCountryPicker"
         app:layout_constraintTop_toTopOf="@+id/linearLayoutCountryPicker" />
+
     <LinearLayout
         android:id="@+id/linearLayoutCountryPicker"
         android:layout_width="84dp"
@@ -22,8 +23,8 @@
         android:layout_marginStart="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
         android:paddingLeft="8dp"
+        android:paddingTop="10dp"
         android:text="TextView"
 
         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
@@ -34,6 +35,7 @@
             android:id="@+id/textViewPhoneCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
             android:textColor="@color/textColorMaterialDark"
             android:textSize="15dp" />
 
@@ -46,7 +48,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="-8dp"
-            android:background="@drawable/ic_arrow_drop_down_black_24dp" />
+            app:srcCompat="@drawable/ic_arrow_drop_down_black_24dp" />
 
     </LinearLayout>
 
@@ -66,6 +68,7 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/name"
             android:inputType="textPersonName"
             android:maxLength="30"
@@ -76,6 +79,16 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/fbLogin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_editor_absoluteY="0dp" />
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
@@ -99,6 +112,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/selector_fb_icon"
             android:drawablePadding="8dp"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:gravity="center"
             android:text="CONTINUE VIA FACEBOOK"
             android:textColor="@color/white"
@@ -120,12 +134,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
         <views.MyEditTextUnderline
-            android:layout_width="match_parent"
             android:id="@+id/editTextEmailAddress"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/email_address"
-            android:maxLength="30"
             android:inputType="textEmailAddress"
+            android:maxLength="30"
             android:maxLines="1"
             android:padding="8dp"
             android:textColorHint="@color/textColorGrey"
@@ -138,6 +153,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/btnColorDark"
+        android:fontFamily="@font/sans_pro_semi_bold"
         android:padding="16dp"
         android:text="@string/continueNe"
         android:textColor="@android:color/white"
@@ -162,10 +178,11 @@
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/phone_number"
             android:inputType="phone"
-            android:maxLines="1"
             android:maxLength="10"
+            android:maxLines="1"
             android:padding="8dp"
             android:textColorHint="@color/textColorGrey"
             android:textSize="16dp" />
@@ -189,9 +206,10 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/password"
-            android:maxLength="30"
             android:inputType="textPassword"
+            android:maxLength="30"
             android:maxLines="1"
             android:padding="8dp"
             android:textColorHint="@color/textColorGrey"

@@ -11,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import adapters.TripsPagerAdapter;
+import api.RequestEndPoints;
+import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -85,11 +88,30 @@ public class MyTripsFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        initViews();
         mListener.changeUIAccToFragment(AppConstants.TAG_MY_TRIPS_FRAGMENT, "");
-        viewPagerAdapter = new TripsPagerAdapter(getChildFragmentManager(), getActivity());
+
+    }
+
+    private void initViews() {
+        viewPagerAdapter = new TripsPagerAdapter(getChildFragmentManager(), getActivity(),null);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        WebRequestData webRequestData=new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.GET_MY_TRIPS+AppConstants.USER_ID);
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                viewPagerAdapter = new TripsPagerAdapter(getChildFragmentManager(), getActivity(),commonPojo);
+                viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
     }
 
     @Override

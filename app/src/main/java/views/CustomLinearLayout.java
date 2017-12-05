@@ -52,7 +52,7 @@ public class CustomLinearLayout extends LinearLayout {
         paint.setStyle(Paint.Style.FILL);
 //        canvas.drawRect(0, view.getTop(), 100, view.getTop() - pxFromDp(getContext(), holesBottomMargin), paint);
         eraser.setStyle(Paint.Style.FILL_AND_STROKE);
-        eraser.setColor(ContextCompat.getColor(getContext(), R.color.holeColor));
+        eraser.setColor(ContextCompat.getColor(getContext(), R.color.activityBackground));
         // adding punching holes on the ticket by erasing them
         canvas.drawCircle(0, view.getTop(), circleRadius, eraser); // top-left hole
         canvas.drawCircle(getWidth(), view.getTop(), circleRadius, eraser); // top-left hole

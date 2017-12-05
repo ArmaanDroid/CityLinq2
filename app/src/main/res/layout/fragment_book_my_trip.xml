@@ -3,8 +3,331 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/activityBackground">
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/activityBackground"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/continueButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/activityBackground">
+
+            <views.CustomLinearLayout
+                android:id="@+id/customLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/drawable_blue_box_4_corner"
+                android:fontFamily="@font/sans_pro_semi_bold"
+                android:orientation="vertical"
+                android:paddingBottom="18dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                          android:background="@android:color/transparent"
+                            android:fontFamily="@font/sans_pro_regular"
+                            android:text="Boarding Location"
+                            android:textColor="@color/white_80"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textViewSource"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/sans_pro_semi_bold"
+                            android:background="@android:color/transparent"
+                            android:minLines="2"
+                            android:text="3435 Kuhlman
+ Parks"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1.5"
+                        android:background="@android:color/transparent"
+
+                        app:srcCompat="@drawable/ic_to_from_white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+
+                            android:fontFamily="@font/sans_pro_regular"
+                            android:gravity="right"
+                            android:text="Drop Location"
+                            android:textColor="@color/white_80"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/textViewDestination"
+                            android:layout_width="match_parent"
+                            android:background="@android:color/transparent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/sans_pro_semi_bold"
+                            android:gravity="right"
+                            android:minLines="2"
+                            android:text="3435 Kuhlman
+ Parks"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingTop="18dp">
+
+                    <TextView
+                        android:id="@+id/textViewDateBookTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="12dp"
+                        android:fontFamily="@font/sans_pro_semi_bold"
+                        android:text="August 16, 201"
+                        android:textColor="@color/white"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentRight="true"
+                        android:drawablePadding="12dp"
+                        android:fontFamily="@font/sans_pro_semi_bold"
+                        android:gravity="right"
+                        android:text="11:15 AM"
+                        android:textColor="@color/white"
+                        android:textSize="16dp" />
+
+                </RelativeLayout>
+            </views.CustomLinearLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/drawable_white_box_4_corner"
+                android:elevation="2dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
+                app:layout_constraintVertical_bias="0.0">
+
+                <TextView
+                    android:id="@+id/textView261"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:text="$21.00"
+                    android:textColor="@color/dotColor"
+                    android:textSize="36dp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView8"
+                    app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="36dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView261"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView23"
+                    app:srcCompat="@drawable/ic_final_amount" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:fontFamily="@font/sans_pro_regular"
+                    android:paddingBottom="4dp"
+                    android:text="Amount to Pay"
+                    android:textColor="#7f8fa4"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView8"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/drawable_white_box_4_corner"
+                android:elevation="1dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:text="Total Passengers"
+                    android:textColor="@color/textColorDark"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/imageMinus"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/ic_subtract"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/textViewPassengerCount"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/textColorDark"
+                        android:textSize="16dp" />
+
+                    <ImageView
+                        android:id="@+id/imageAdd"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/ic_add"
+
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/drawable_white_box_4_corner"
+                android:elevation="1dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/customLinearLayout">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:text="NYC 23 3556"
+                    android:textColor="#011e3e"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView25"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView22"
+                    app:srcCompat="@drawable/ic_bus" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/sans_pro_regular"
+                    android:text="New Bay Rides"
+                    android:textColor="#7f8fa4"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/continueButton"
@@ -20,278 +343,5 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1" />
-
-    <views.CustomLinearLayout
-        android:id="@+id/customLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/drawable_blue_box_4_corner"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:paddingBottom="18dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Boarding Location"
-                    android:textColor="@color/white_80"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minLines="2"
-                    android:text="3435 Kuhlman
- Parks"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-
-                app:srcCompat="@drawable/ic_to_from_white" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="Drop Location"
-                    android:textColor="@color/white_80"
-                    android:textSize="12dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:minLines="2"
-                    android:text="3435 Kuhlman
- Parks"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingTop="18dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_calendar_white"
-                android:drawablePadding="12dp"
-                android:text="August 16, 201"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="12dp"
-                android:gravity="right"
-                android:text="11:15 AM"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-        </RelativeLayout>
-    </views.CustomLinearLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
-
-        <TextView
-            android:id="@+id/textView261"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="$21.00"
-            android:textColor="@color/dotColor"
-            android:textSize="40dp"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toBottomOf="@+id/textView23" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="36dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView261"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView23"
-            app:srcCompat="@drawable/ic_final_amount" />
-
-        <TextView
-            android:id="@+id/textView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:paddingBottom="4dp"
-            android:text="Amount to Pay"
-            android:textColor="#7f8fa4"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
-        android:paddingBottom="12dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:text="Total Passengers"
-            android:textColor="@color/textColorDark"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                app:srcCompat="@drawable/ic_subtract"
-
-                />
-
-            <TextView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="@color/textColorDark"
-                android:textSize="16dp" />
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                app:srcCompat="@drawable/ic_add"
-
-                />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customLinearLayout">
-
-        <TextView
-            android:id="@+id/textView25"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="NYC 23 3556"
-            android:textColor="#011e3e"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView22"
-            app:srcCompat="@drawable/ic_bus" />
-
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="New Bay Rides"
-            android:textColor="#7f8fa4"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

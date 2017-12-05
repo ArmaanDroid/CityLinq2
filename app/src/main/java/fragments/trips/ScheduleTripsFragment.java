@@ -3,18 +3,24 @@ package fragments.trips;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import adapters.ScheduledTripsAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.Scheduled;
 import sanguinebits.com.citylinq.R;
 
 /**
@@ -29,12 +35,13 @@ public class ScheduleTripsFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private List<Scheduled> tripList;
     private String mParam2;
     private Unbinder unbinder;
-    @BindView(R.id.recycleViewScheduleTrips)
+    @BindView(R.id.recycleView)
     RecyclerView mRecyclerView;
-
+    @BindView(R.id.no_record_text2)
+    TextView no_record_text2;
 
     public ScheduleTripsFragment() {
         // Required empty public constructor
@@ -49,10 +56,10 @@ public class ScheduleTripsFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScheduleTripsFragment newInstance(String param1, String param2) {
+    public static ScheduleTripsFragment newInstance(List<Scheduled> param1, String param2) {
         ScheduleTripsFragment fragment = new ScheduleTripsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelableArrayList(ARG_PARAM1, (ArrayList<? extends Parcelable>) param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +69,7 @@ public class ScheduleTripsFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            tripList = getArguments().getParcelableArrayList(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -79,11 +86,17 @@ public class ScheduleTripsFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();    }
+        initViews();
+    }
 
     private void initViews() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(new ScheduledTripsAdapter());
+        if (tripList.size() > 0) {
+
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRecyclerView.setAdapter(new ScheduledTripsAdapter(getContext(), (ArrayList<Scheduled>) tripList));
+            no_record_text2.setVisibility(View.GONE);
+        } else
+            no_record_text2.setVisibility(View.VISIBLE);
     }
 
 

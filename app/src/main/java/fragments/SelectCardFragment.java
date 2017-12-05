@@ -4,16 +4,24 @@ package fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import adapters.SelectCardAdapter;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 import utils.FragTransactFucntion;
+import views.BottomOffsetDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,10 +35,17 @@ public class SelectCardFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String fare;
     private String mParam2;
     private Unbinder unbinder;
 
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.textViewAddNewCard)
+    TextView textViewAddNewCard;
+    @BindView(R.id.continueButton)
+    Button continueButton;
 
     public SelectCardFragment() {
         // Required empty public constructor
@@ -58,7 +73,7 @@ public class SelectCardFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            fare = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -75,12 +90,26 @@ public class SelectCardFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mListener.changeUIAccToFragment(AppConstants.TAG_SELECT_CARD_FRAGMENT,"");
+    }
+
+    private void initViews() {
+        continueButton.setText(getString(R.string.pay_)+fare);
+        textViewAddNewCard.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_add_new), null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new BottomOffsetDecoration(10));
+        recyclerView.setAdapter(new SelectCardAdapter());
     }
 
     @OnClick(R.id.relativeLayoutAddNewCard)
     void addNewCard() {
-        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager(), new AddCardFragment(), R.id.frame_container_main);
+        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(), new AddCardFragment(), R.id.frame_container_main);
     }
 
     @Override
@@ -88,6 +117,10 @@ public class SelectCardFragment extends MyBaseFragment {
         super.onDestroy();
         unbinder.unbind();
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mListener.changeUIAccToFragment(AppConstants.TAG_CHOOSE_PAYMENT_FRAGMENT,"");
+    }
 
 }

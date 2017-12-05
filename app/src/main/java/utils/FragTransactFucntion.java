@@ -50,6 +50,11 @@ public class FragTransactFucntion {
         fragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in, 0, 0,
                 R.animator.fade_out).addToBackStack(null).add(containerId, fragment).commit();
     }
+    public static void addFragFromFadeWithoutHistory(FragmentManager fragmentManager, Fragment fragment,
+                                              int containerId) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in, 0, 0,
+                R.animator.fade_out).add(containerId, fragment).commit();
+    }
 
     public static void replaceFragFromRightWithoutHistry(FragmentManager fragmentManager, Fragment fragment,
                                                          int containerId) {

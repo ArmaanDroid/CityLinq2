@@ -22,7 +22,67 @@ public class WebRequestData {
     private String code;
     private String userId;
     private String type;
+    private String latitude;
+    private String longitude;
+    private String amount;
+    private String vehicleId;
+    private String vehicleNumber;
+    private String transportName;
+    private String time;
+    private String payment;
+    private String ticket ;
+    private String source ;
+    private String destination ;
+    private String date ;
 
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+
+    public void setTransportName(String transportName) {
+        this.transportName = transportName;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     public void setName(String name) {
         this.name = name;

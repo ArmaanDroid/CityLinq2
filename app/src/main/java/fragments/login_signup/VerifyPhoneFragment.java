@@ -170,7 +170,11 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                AppConstants.USER_ID=commonPojo.getUser().getId();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                getActivity().finish();
             }
 
             @Override

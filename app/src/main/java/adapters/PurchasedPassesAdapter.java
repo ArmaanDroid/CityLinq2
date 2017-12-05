@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import models.Pass;
 import sanguinebits.com.citylinq.R;
 
 /**
@@ -12,6 +15,11 @@ import sanguinebits.com.citylinq.R;
  */
 
 public class PurchasedPassesAdapter extends RecyclerView.Adapter<PurchasedPassesAdapter.ViewHolder> {
+    List<Pass> passList;
+    public PurchasedPassesAdapter(List<Pass> passList) {
+        this.passList=passList;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.view_purchased_pass,parent,false);
@@ -25,7 +33,7 @@ public class PurchasedPassesAdapter extends RecyclerView.Adapter<PurchasedPasses
 
     @Override
     public int getItemCount() {
-        return 10;
+        return passList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

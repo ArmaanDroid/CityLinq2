@@ -55,7 +55,7 @@
         <item name="android:textSize">16dp</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorAccent">@color/textColorLabelGrey</item>
-
+        <item name="android:fontFamily">@font/sans_pro_semi_bold</item>
         <item name="colorControlNormal">@color/textColorLabelGrey</item>
         <item name="colorControlActivated">@color/textColorLabelGrey</item>
     </style>

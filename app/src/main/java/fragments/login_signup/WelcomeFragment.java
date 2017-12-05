@@ -3,12 +3,25 @@ package fragments.login_signup;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,7 +29,9 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
 import sanguinebits.com.citylinq.LoginSignupActivity;
+import sanguinebits.com.citylinq.MainActivity;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,18 +96,49 @@ public class WelcomeFragment extends MyBaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         intentLoginSignup = new Intent(getActivity(), LoginSignupActivity.class);
+        AppConstants.USER_ID = mPreference.getUserID();
+        if (AppConstants.USER_ID != null) {
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            getActivity().finish();
+        }
+    }
 
-        System.gc();
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    public void key() {
+        PackageInfo info;
+        try {
+            info = getActivity().getPackageManager().getPackageInfo("sanguinebits.com.citylinq", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
     }
 
     @OnClick(R.id.btnSignup)
     public void openSignup(View view) {
-        intentLoginSignup.putExtra("isLogin",false);
+        intentLoginSignup.putExtra("isLogin", false);
         startActivity(intentLoginSignup);
     }
+
     @OnClick(R.id.textView2)
     public void openLogin(View view) {
-        intentLoginSignup.putExtra("isLogin",true);
+        intentLoginSignup.putExtra("isLogin", true);
         startActivity(intentLoginSignup);
     }
 

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.text.TextUtilsCompat;
@@ -50,6 +51,8 @@ public class TextViewWithSideLine extends TextView {
         path.setFillType(Path.FillType.EVEN_ODD);
 
         int lineWidth = getContext().getResources().getDimensionPixelOffset(R.dimen.one_dp);
+        if(lineWidth==0)
+            lineWidth=1;
         paint.setColor(ContextCompat.getColor(getContext(), R.color.textColorLabelGrey));
         paint.setStrokeWidth(lineWidth);
 
@@ -79,7 +82,9 @@ public class TextViewWithSideLine extends TextView {
         string.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColorDark)), 0, string.length(), 0);
         string1.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColorLabelGrey)), 0, string.length(), 0);
 
-        setText(TextUtils.concat(string,System.lineSeparator() ,string1));
+
+            setText(TextUtils.concat(string,"\n" ,string1));
+
     }
 
     public void setIsFirst(boolean isFirst) {

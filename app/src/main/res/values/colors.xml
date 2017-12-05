@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#001a37</color>
     <color name="colorAccent">#36af47</color>
     <color name="white">#ffffff</color>
+    <color name="white70">#70ffffff</color>
     <color name="activityBackgroundMain">#3f5f82</color>
     <color name="activityBackground">#fafafa</color>
     <color name="holeColor">#eeeeee</color>
@@ -18,7 +19,8 @@
     <color name="textColorDark">#011e3e</color>
     <color name="textColorMaterialDark">#354052</color>
     <color name="textColorGrey">#a3acb8</color>
-    <color name="textColorLabelGrey">#7f8fa4</color>
+        <color name="textColorLabelGrey">#7f8fa4</color>
+    <color name="polylineColor">#7f8fa4</color>
     <color name="black">#000000</color>
 
     <!--extra colors-->
@@ -27,4 +29,5 @@
     <color name="moneyColor">#31a0ad</color>
     <color name="windows_blue">#31a0ad</color>
     <color name="white_80">#80ffffff</color>
+    <color name="pale_red">#e65045</color>
 </resources>

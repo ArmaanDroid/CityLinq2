@@ -8,14 +8,15 @@
         android:id="@+id/customLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:layout_marginEnd="12dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:background="@drawable/drawable_blue_box_4_corner"
-        android:elevation="4dp"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,33 +24,41 @@
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp">
 
 
             <TextView
+                android:id="@+id/textViewPassPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_semi_bold"
+                android:background="@android:color/transparent"
                 android:gravity="start"
                 android:text="$349.69"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/textViewPassPricePErRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:gravity="right"
                 android:text="@string/per_ride_20"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="14dp" />
 
         </RelativeLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="vertical"
@@ -57,21 +66,27 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:background="@android:color/transparent"
                 android:layout_height="match_parent">
 
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/sans_pro_semi_bold"
                     android:gravity="start"
+                    android:background="@android:color/transparent"
                     android:text="Total Rides"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
 
                 <TextView
+                    android:id="@+id/textViewPassTotalRides"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:background="@android:color/transparent"
                     android:gravity="right"
                     android:text="20"
                     android:textColor="@color/white"
@@ -80,6 +95,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp">
@@ -88,15 +104,20 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:background="@android:color/transparent"
                     android:gravity="start"
                     android:text="Validity"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
 
                 <TextView
+                    android:id="@+id/textViewPassValidity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:background="@android:color/transparent"
                     android:gravity="right"
                     android:text="30 days"
                     android:textColor="@color/white"
@@ -106,6 +127,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp">
 
@@ -113,17 +135,22 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/sans_pro_semi_bold"
                     android:gravity="start"
                     android:text="Total Savings"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
 
                 <TextView
+                    android:id="@+id/textViewPassSaving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:fontFamily="@font/sans_pro_semi_bold"
                     android:gravity="right"
                     android:text="20%"
+                    android:background="@android:color/transparent"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
 
@@ -131,10 +158,10 @@
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="24dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
+                android:layout_margin="24dp"
                 android:background="@drawable/drawable_circle_white"
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"

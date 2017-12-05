@@ -1,5 +1,9 @@
 package utils;
 
+import android.location.Location;
+
+import services.SingleShotLocationProvider;
+
 /**
  * Created by Armaan on 07-10-2017.
  */
@@ -7,6 +11,8 @@ package utils;
 public class AppConstants {
 
     public static final String BASE_URL = "http://ec2-35-165-220-224.us-west-2.compute.amazonaws.com:8081/";
+    public static SingleShotLocationProvider.GPSCoordinates CURRENT_LOCATION ;
+    public static  String USER_ID   ;
 
 
     public static final String TYPE_USER = "user";
@@ -29,4 +35,11 @@ public class AppConstants {
     public static final String TAG_CHOOSE_PAYMENT_FRAGMENT = "TAG_CHOOSE_PAYMENT_FRAGMENT";
     public static final String TAG_SELECT_CARD_FRAGMENT = "TAG_SELECT_CARD_FRAGMENT";
     public static final String TAG_ADD_CARD_FRAGMENT = "TAG_ADD_CARD_FRAGMENT";
+
+    //Shared Preference stuff
+    public static final String SHARED_PREFERENCE_NAME = "sanguinebits.com.citylinq.preference";
+
+
+    //map
+    public static final int MAP_LEVEL_CITY= 13;
 }

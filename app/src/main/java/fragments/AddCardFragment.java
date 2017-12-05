@@ -75,16 +75,24 @@ public class AddCardFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_ADD_CARD_FRAGMENT, "");
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mListener.changeUIAccToFragment(AppConstants.TAG_ADD_CARD_FRAGMENT, "");
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mListener.changeUIAccToFragment(AppConstants.TAG_SELECT_CARD_FRAGMENT,"");
+    }
 
 }

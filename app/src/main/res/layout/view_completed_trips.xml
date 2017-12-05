@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp"
     android:layout_marginTop="6dp"
-    android:elevation="4dp"
+    android:elevation="2dp"
     android:background="@drawable/drawable_white_box_4_corner"
     android:padding="16dp">
 
@@ -16,19 +16,19 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="2dp"
-        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tv_date_adapter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="August 16,2017"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:textStyle="bold"
             android:drawablePadding="11dp"
-            android:drawableLeft="@drawable/ic_calendar_light"
             android:textColor="@color/textColorDark"
             android:textSize="16dp" />
 
@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@drawable/drawable_completed_box_4_corner"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:text="@string/completed"
             android:textColor="@color/white"
             android:paddingLeft="8dp"
@@ -48,8 +49,8 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
 
         android:background="@drawable/drawable_circle_green"
         android:padding="8dp"
@@ -65,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
@@ -77,6 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="NYC 23 3556"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:textColor="#011e3e"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -99,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:fontFamily="@font/sans_pro_regular"
             android:text="New Bay Rides"
             android:textColor="#7f8fa4"
             android:textSize="12sp"
@@ -125,15 +129,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="From"
+                android:fontFamily="@font/sans_pro_regular"
                 android:textColor="@color/textColorLabelGrey"
                 android:textSize="12dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:minLines="2"
                 android:text="3435 Kuhlman
  Parks"
@@ -143,9 +149,9 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="18dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             app:srcCompat="@drawable/ic_to_from_dark" />
 
         <LinearLayout
@@ -159,12 +165,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="To"
+                android:fontFamily="@font/sans_pro_regular"
                 android:textColor="@color/textColorLabelGrey"
                 android:textSize="12dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:gravity="right"
                 android:minLines="2"
                 android:text="3435 Kuhlman

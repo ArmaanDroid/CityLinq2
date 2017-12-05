@@ -3,18 +3,22 @@ package fragments.route_detail;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import adapters.PassesPagerAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
 import adapters.RouteDetailPagerAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.Station;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -40,6 +44,7 @@ public class RouteDetailFragment extends MyBaseFragment {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+    private ArrayList<Station> stationList;
 
     public RouteDetailFragment() {
         // Required empty public constructor
@@ -54,10 +59,10 @@ public class RouteDetailFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RouteDetailFragment newInstance(String param1, String param2) {
+    public static RouteDetailFragment newInstance(List<Station> param1, String param2) {
         RouteDetailFragment fragment = new RouteDetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelableArrayList(ARG_PARAM1, (ArrayList<? extends Parcelable>) param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -67,7 +72,7 @@ public class RouteDetailFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            stationList = getArguments().getParcelableArrayList(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -84,10 +89,15 @@ public class RouteDetailFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_ROUTE_DETAIL_FRAGMENT, "");
-        viewPagerAdapter = new RouteDetailPagerAdapter(getChildFragmentManager(), getActivity());
+        viewPagerAdapter = new RouteDetailPagerAdapter(stationList, getChildFragmentManager(), getActivity());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mListener.changeUIAccToFragment(AppConstants.TAG_ROUTE_DETAIL_FRAGMENT, "");
     }
 
     @Override
@@ -96,5 +106,9 @@ public class RouteDetailFragment extends MyBaseFragment {
         unbinder.unbind();
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mListener.changeUIAccToFragment(AppConstants.TAG_BROWSE_LINQS_FRAGMENT, "");
+    }
 }

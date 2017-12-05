@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/activityBackground"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -13,7 +14,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
+        android:elevation="1dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,27 +24,32 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:padding="16dp"
-                android:text="@string/amount_payable"
+                android:background="@android:color/transparent"
+                android:text="@string/wallet"
                 android:textColor="@color/textColorDark"
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/amountPayableWallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/sans_pro_semi_bold"
                 android:drawablePadding="8dp"
-                android:drawableRight="@drawable/ic_arrow_right"
                 android:gravity="right"
-                android:padding="14dp"
+                android:padding="16dp"
                 android:text="$34"
                 android:textColor="@color/moneyColor"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
         </RelativeLayout>
 
         <View
@@ -58,9 +64,10 @@
             android:id="@+id/textViewCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:layout_centerVertical="true"
             android:drawablePadding="8dp"
-            android:drawableRight="@drawable/ic_arrow_right"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:padding="16dp"
             android:text="@string/Card"
             android:textColor="@color/textColorDark"
@@ -75,12 +82,14 @@
             android:background="@color/lineGrey" />
 
         <TextView
+                android:id="@+id/textViewNetBanking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:drawablePadding="8dp"
-            android:drawableRight="@drawable/ic_arrow_right"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:padding="16dp"
+            android:background="@android:color/transparent"
             android:text="@string/net_banking"
             android:textColor="@color/textColorDark"
             android:textSize="16dp" />
@@ -91,6 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/sans_pro_regular"
         android:layout_marginTop="24dp"
         android:text="Payment Options"
         android:textColor="@color/textColorLabelGrey"
@@ -103,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/sans_pro_regular"
         android:layout_marginTop="24dp"
         android:text=" Avail Discount"
         android:textColor="@color/textColorLabelGrey"
@@ -118,7 +129,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
+        android:elevation="1dp"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,15 +139,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:padding="16dp"
+            android:background="@android:color/transparent"
             android:text="@string/amount_payable"
             android:textColor="@color/textColorDark"
             android:textSize="16dp" />
 
         <TextView
+            android:id="@+id/textViewAmountPayable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:fontFamily="@font/sans_pro_semi_bold"
+            android:background="@android:color/transparent"
             android:padding="14dp"
             android:text="$34"
             android:textColor="@color/moneyColor"
@@ -145,13 +161,13 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/drawable_white_box_4_corner"
-        android:elevation="2dp"
+        android:elevation="1dp"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -159,10 +175,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView27">
 
         <TextView
+            android:id="@+id/textViewAddPromoCode"
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawableRight="@drawable/ic_arrow_right"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:padding="16dp"
             android:text="@string/add_promo_code"
             android:textColor="@color/textColorDark"

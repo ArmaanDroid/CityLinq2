@@ -2,7 +2,6 @@ package fragments.passes;
 
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -11,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import adapters.PassesPagerAdapter;
-import adapters.TripsPagerAdapter;
+import api.RequestEndPoints;
+import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -87,9 +88,30 @@ public class MyPassesFragment extends MyBaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListener.changeUIAccToFragment(AppConstants.TAG_MY_PASSES_FRAGMENT, "");
-        viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity());
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        initViews();
+    }
+
+    private void initViews() {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.GET_MY_PASSES + AppConstants.USER_ID);
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+
+                viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity(), commonPojo);
+                viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+
+            @Override
+            public void failure() throws Exception {
+                viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity(), null);
+                viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        });
+
+
     }
 
     @Override

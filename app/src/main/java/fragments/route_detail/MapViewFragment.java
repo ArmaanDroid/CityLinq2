@@ -3,20 +3,33 @@ package fragments.route_detail;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import models.Station;
 import sanguinebits.com.citylinq.R;
-import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +46,7 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
+    private ArrayList<Station> stationList;
 
 
     public MapViewFragment() {
@@ -48,10 +62,10 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapViewFragment newInstance(String param1, String param2) {
+    public static MapViewFragment newInstance(ArrayList<Station> param1, String param2) {
         MapViewFragment fragment = new MapViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelableArrayList(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +75,7 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            stationList = getArguments().getParcelableArrayList(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -92,6 +106,24 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        PolylineOptions polylineOPtion = new PolylineOptions();
+        polylineOPtion.color(getColor(R.color.polylineColor));
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        LatLng latLng;
+        for (Station station : stationList) {
+            latLng = new LatLng(station.getLatitude(), station.getLongitude());
+            polylineOPtion.add(latLng);
+           Marker marker= googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.route_pointer)).position(latLng));
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds,50);
+//                new LatLng(stationList.get(0).getLatitude(), stationList.get(0).getLongitude()), 15);
+            Polyline polyline1 = googleMap.addPolyline(polylineOPtion);
+        googleMap.animateCamera(cameraUpdate);
 
     }
 }

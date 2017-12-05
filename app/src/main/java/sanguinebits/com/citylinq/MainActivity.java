@@ -1,10 +1,24 @@
 package sanguinebits.com.citylinq;
 
+import android.*;
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +28,11 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,19 +47,29 @@ import fragments.MyBaseFragment;
 import fragments.wallet.WalletFragment;
 import fragments.passes.MyPassesFragment;
 import fragments.trips.MyTripsFragment;
+import services.SingleShotLocationProvider;
 import utils.AppConstants;
+import utils.AppPreference;
 import utils.FragTransactFucntion;
 
 public class MainActivity extends AppCompatActivity implements MyBaseFragment.OnFragmentInteractionListener {
 
+    private static final int PERMISSION_REQUEST_CODE = 1032;
     private View mainContent;
     private DrawerLayout drawer;
     private static boolean isDrawerItemSelected;
     private static int drawerSelectedItemId = 0;
     private static float previousSlideOffset;
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     @BindView(R.id.toolbar)
     RelativeLayout toolbar;
+
+    @BindView(R.id.nav_view)
+    NavigationView nav_view;
 
     @BindView(R.id.imageViewMenu)
     ImageView imageViewMenu;
@@ -50,16 +79,26 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     @BindView(R.id.textViewTitle)
     TextView textViewTitle;
+    private Typeface typefaceSemiBold;
+    private Typeface typefaceTitle;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private HomeFragment homeFragment;
+    private static String currentFragment;
+    private AppPreference preference;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new HomeFragment(), R.id.frame_container_main);
-
+        homeFragment = new HomeFragment();
+        preference = new AppPreference(this);
+        FragTransactFucntion.addFragFromFadeWithoutHistory(getSupportFragmentManager(), homeFragment, R.id.frame_container_main);
         mainContent = findViewById(R.id.mainContent);
+        typefaceSemiBold = Typeface.createFromAsset(getAssets(), "fonts/sans_pro_semi_bold.ttf");
+        typefaceTitle = Typeface.createFromAsset(getAssets(), "fonts/big_noodle_titling.ttf");
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerElevation(0f);
@@ -97,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
             }
         });
     }
+
 
     private void replaceFragments() {
         switch (drawerSelectedItemId) {
@@ -162,9 +202,11 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (drawer.isEnabled())
+            if (drawer.isEnabled()) {
                 drawer.openDrawer(GravityCompat.START);
-            else
+                nav_view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.activityBackgroundMain));
+
+            } else
                 onBackPressed();
         }
     }
@@ -238,9 +280,58 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        } else {
+            mGetCurrentLocation();
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Toast.makeText(MainActivity.this, "Please turn on your GPS", Toast.LENGTH_LONG).show();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void mGetCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE);
+            return;
+        }
+        SingleShotLocationProvider.requestSingleUpdate(getApplicationContext(), new SingleShotLocationProvider.LocationCallback() {
+            @Override
+            public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                AppConstants.CURRENT_LOCATION = location;
+                if (homeFragment != null)
+                    homeFragment.mGetStations();
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     @Override
     public void changeUIAccToFragment(String fragmentTag, String s) {
+        currentFragment = fragmentTag;
         switch (fragmentTag) {
             case AppConstants.TAG_MY_TRIPS_FRAGMENT:
                 showDarkToolbar();
@@ -248,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 break;
             case AppConstants.TAG_HOME_FRAGMENT:
                 showNormalToolbar();
+                textViewTitle.setTypeface(typefaceTitle);
                 textViewTitle.setText(R.string.app_name1);
                 break;
             case AppConstants.TAG_MY_PASSES_FRAGMENT:
@@ -312,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     }
 
     private void showDarkToolbar() {
+        textViewTitle.setTypeface(typefaceSemiBold);
         drawer.setEnabled(false);
         toolbar.setVisibility(View.VISIBLE);
         imageViewMenu.setVisibility(View.VISIBLE);
@@ -326,4 +419,17 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         onBackPressed();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGetCurrentLocation();
+                }
+            } else {
+                Toast.makeText(this, R.string.provide_permissions, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

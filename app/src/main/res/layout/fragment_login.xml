@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     tools:context="fragments.login_signup.LoginFragment">
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/fbLogin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_editor_absoluteY="0dp" />
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView4"
@@ -12,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/sans_pro_semi_bold"
         android:text="@string/forgot_password"
         android:textColor="@color/btnColorDark"
         android:textSize="16dp"
@@ -34,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/email_address"
             android:inputType="textEmailAddress"
             android:maxLines="1"
@@ -61,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:fontFamily="@font/sans_pro_regular"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="10dp"
@@ -74,6 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/btnColorDark"
+        android:fontFamily="@font/sans_pro_semi_bold"
         android:padding="16dp"
         android:text="@string/login"
         android:textColor="@android:color/white"
@@ -109,6 +123,8 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/selector_fb_icon"
             android:drawablePadding="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/sans_pro_semi_bold"
             android:gravity="center"
             android:text="@string/continue_via_facebook"
             android:textColor="@color/white"

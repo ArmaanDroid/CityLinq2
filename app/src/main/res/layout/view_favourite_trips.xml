@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp"
     android:layout_marginTop="6dp"
-    android:elevation="4dp"
+    android:elevation="2dp"
     android:background="@drawable/drawable_white_box_4_corner"
     android:padding="16dp">
 
@@ -101,7 +101,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="From"
                 android:textColor="@color/textColorLabelGrey"
@@ -119,9 +119,9 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="18dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             app:srcCompat="@drawable/ic_to_from_dark" />
 
         <LinearLayout

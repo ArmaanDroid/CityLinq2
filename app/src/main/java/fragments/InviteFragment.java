@@ -5,11 +5,17 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
@@ -31,6 +37,8 @@ public class InviteFragment extends MyBaseFragment {
     private Unbinder unbinder;
     private Intent intentLoginSignup;
 
+    @BindView(R.id.textViewAddPromoCode)
+    TextView textViewAddPromoCode;
 
     public InviteFragment() {
         // Required empty public constructor
@@ -76,8 +84,31 @@ public class InviteFragment extends MyBaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mListener.changeUIAccToFragment(AppConstants.TAG_INVITE_FRAGMENT,"");
+        initView();
     }
 
+    private void initView() {
+
+        textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null,AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
+    }
+
+
+    @OnClick(R.id.imageViewWhatsapp)
+    void shareOnWhatsApp()
+    {
+        try {
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+            sendIntent.setPackage("com.whatsapp");
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast("Please install whatsapp");
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

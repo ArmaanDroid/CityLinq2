@@ -1,7 +1,10 @@
 package fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +25,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import api.RetrofitClient;
 import api.WebRequestData;
 import models.CommonPojo;
@@ -28,6 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
+import utils.AppPreference;
 
 
 public class MyBaseFragment extends Fragment {
@@ -41,18 +50,19 @@ public class MyBaseFragment extends Fragment {
     private String mParam2;
 
     public OnFragmentInteractionListener mListener;
+    public AppPreference mPreference;
     protected Dialog progressDialog;
+    public Activity activity;
     public MyBaseFragment() {
         // Required empty public constructor
     }
+    protected DateFormat journeyDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mPreference=new AppPreference(getContext());
     }
 
     @Override
@@ -97,6 +107,9 @@ public class MyBaseFragment extends Fragment {
         return cm.getActiveNetworkInfo() != null;
     }
 
+    public String setPriceAsText(String price){
+        return "$"+price;
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -115,6 +128,7 @@ public class MyBaseFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            activity=getActivity();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -141,6 +155,7 @@ public class MyBaseFragment extends Fragment {
         // TODO: Update argument type and name
         void changeUIAccToFragment(String fragmentTag, String s);
         void backPressed();
+
     }
 
     public interface WeResponseCallback {
@@ -181,5 +196,88 @@ public class MyBaseFragment extends Fragment {
                 }
             }
         });
+    }
+
+    protected void makeGetRequest(final WebRequestData webRequestData,
+                               final WeResponseCallback webResponseCallback) {
+        progressDialog.show();
+        Log.v("requesttttt", new Gson().toJson(webRequestData));
+        Call<CommonPojo> call = RetrofitClient.getRestClient().makeGetRequest(AppConstants.BASE_URL+webRequestData.getRequestEndPoint());
+        call.enqueue(new Callback<CommonPojo>() {
+            @Override
+            public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
+                try {
+                    progressDialog.dismiss();
+                    if (response.body().getMessage() != null && !response.body().getMessage().equalsIgnoreCase("Successful"))
+                        showToast(response.body().getMessage());
+                    if (response.isSuccessful() && response.body().isSuccess()) {
+                        webResponseCallback.onResponse(response.body());
+                    } else webResponseCallback.failure();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonPojo> call, Throwable t) {
+                try {
+                    progressDialog.dismiss();
+//                    showToast(t.toString());
+                    webResponseCallback.failure();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+    protected void updateData(WebRequestData webRequestData,
+                              final WeResponseCallback webResponseCallback) {
+        progressDialog.show();
+        Call<CommonPojo> call = RetrofitClient.getRestClient().updateData(webRequestData.getRequestEndPoint(), webRequestData);
+        call.enqueue(new Callback<CommonPojo>() {
+            @Override
+            public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
+                try {
+                    progressDialog.dismiss();
+                    if (response.body().getMessage() != null && !response.body().getMessage().equalsIgnoreCase("Successful"))
+                        showToast(response.body().getMessage());
+                    if (response.isSuccessful() && response.body().isSuccess()) {
+                        webResponseCallback.onResponse(response.body());
+                    } else webResponseCallback.failure();
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonPojo> call, Throwable t) {
+                try {
+                    progressDialog.dismiss();
+                    // showToast(t.toString());
+                    webResponseCallback.failure();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    public void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        getActivity().finish();
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }

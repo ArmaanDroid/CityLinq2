@@ -3,6 +3,7 @@ package fragments.route_detail;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import adapters.RouteDetailListAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
 import listners.AdapterItemClickListner;
+import models.Station;
 import sanguinebits.com.citylinq.R;
-import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +40,7 @@ public class ListViewFragment extends MyBaseFragment {
 
     @BindView(R.id.recycleViewRoutesListView)
     RecyclerView recyclerView;
+    private ArrayList<Station> stationList;
 
     public ListViewFragment() {
         // Required empty public constructor
@@ -51,10 +55,10 @@ public class ListViewFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListViewFragment newInstance(String param1, String param2) {
+    public static ListViewFragment newInstance(ArrayList<Station> param1, String param2) {
         ListViewFragment fragment = new ListViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelableArrayList(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +68,7 @@ public class ListViewFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            stationList = getArguments().getParcelableArrayList(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -86,7 +90,7 @@ public class ListViewFragment extends MyBaseFragment {
 
     private void initView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new RouteDetailListAdapter(new AdapterItemClickListner() {
+        recyclerView.setAdapter(new RouteDetailListAdapter(stationList,new AdapterItemClickListner() {
             @Override
             public void onClick(int position,String tag) {
 

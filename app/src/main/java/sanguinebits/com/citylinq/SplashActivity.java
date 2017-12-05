@@ -6,6 +6,8 @@ import android.os.Bundle;
 import butterknife.ButterKnife;
 import fragments.MyBaseFragment;
 import fragments.login_signup.WelcomeFragment;
+import services.SingleShotLocationProvider;
+import utils.AppConstants;
 import utils.FragTransactFucntion;
 
 public class SplashActivity extends AppCompatActivity implements MyBaseFragment.OnFragmentInteractionListener {
@@ -15,10 +17,9 @@ public class SplashActivity extends AppCompatActivity implements MyBaseFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
-//        finish();
+        getWindow().setBackgroundDrawableResource(R.drawable.login_bg);
+
+
         FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new WelcomeFragment(), R.id.fragment_container_home);
     }
 
