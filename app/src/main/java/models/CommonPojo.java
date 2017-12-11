@@ -23,14 +23,32 @@ public class CommonPojo {
     private List<Completed> completed = null;
 
     private List<Pass> passes = null;
-    private List<Pass> purchasePasses  = null;
+    private List<PurchasePass> purchasePasses = null;
+    private Ticket ticket;
+    private PurchasePass pass;
 
 
-    public List<Pass> getPurchasePasses() {
+    public PurchasePass getPass() {
+        return pass;
+    }
+
+    public void setPass(PurchasePass pass) {
+        this.pass = pass;
+    }
+
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
+    public List<PurchasePass> getPurchasePasses() {
         return purchasePasses;
     }
 
-    public void setPurchasePasses(List<Pass> purchasePasses) {
+    public void setPurchasePasses(List<PurchasePass> purchasePasses) {
         this.purchasePasses = purchasePasses;
     }
 

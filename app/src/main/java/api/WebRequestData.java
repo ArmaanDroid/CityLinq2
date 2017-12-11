@@ -34,7 +34,22 @@ public class WebRequestData {
     private String source ;
     private String destination ;
     private String date ;
+    private String expiaryDate ;
+    private String passId ;
+    private String routeId ;
 
+
+    public void setExpiaryDate(String expiaryDate) {
+        this.expiaryDate = expiaryDate;
+    }
+
+    public void setPassId(String passId) {
+        this.passId = passId;
+    }
+
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
+    }
 
     public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;

@@ -14,14 +14,46 @@ public class AppPreference {
 
     // keys
     private String KEY_USER_ID = "KEY_USER_ID";
-    private String KEY_TOP_FRAGMENT = "KEY_TOP_FRAGMENT";
+    private String KEY_USER_NAME = "KEY_USER_NAME";
+    private String KEY_USER_EMAIL = "KEY_USER_EMAIL";
+    private String KEY_USER_MOBILE_NUMBER = "KEY_USER_MOBILE_NUMBER";
 
     //Values to save
     private String userID;
+    private String name;
+    private String email;
+    private String mobileNumber;
 
     public AppPreference(Context context) {
         sharedPreferences = context.getSharedPreferences(AppConstants.SHARED_PREFERENCE_NAME, 0);
         editor = sharedPreferences.edit();
+    }
+
+    public String getMobileNumber() {
+        return sharedPreferences.getString(KEY_USER_MOBILE_NUMBER, "");
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        editor.putString(KEY_USER_MOBILE_NUMBER, mobileNumber);
+        editor.commit();
+    }
+
+    public String getEmail() {
+        return sharedPreferences.getString(KEY_USER_EMAIL, "");
+    }
+
+    public void setEmail(String email) {
+        editor.putString(KEY_USER_EMAIL, email);
+        editor.commit();
+    }
+
+    public String getName() {
+        return sharedPreferences.getString(KEY_USER_NAME, "");
+    }
+
+    public void setName(String name) {
+       editor.putString(KEY_USER_NAME, name);
+        editor.commit();
     }
 
     public String getUserID() {

@@ -80,7 +80,7 @@ public class TextViewWithSideLine extends TextView {
         string1.setSpan(new RelativeSizeSpan(0.8f), 0, string1.length(), 0);
         //color span
         string.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColorDark)), 0, string.length(), 0);
-        string1.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColorLabelGrey)), 0, string.length(), 0);
+        string1.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColorLabelGrey)), 0, string1.length(), 0);
 
 
             setText(TextUtils.concat(string,"\n" ,string1));

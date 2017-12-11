@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import listners.AdapterItemClickListner;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
 
 /**
  * Created by Armaan on 04-12-2017.
@@ -22,8 +23,11 @@ import sanguinebits.com.citylinq.R;
 @SuppressLint("ValidFragment")
 public class PayByWalletDialog extends DialogFragment {
     AdapterItemClickListner adapterItemClickListner;
-    private TextView textViewAmountPayable;
     private String fare;
+
+    private TextView textViewAmountPayable;
+    private TextView textViewRemainingBalance;
+    private TextView textViewWalletBalance;
 
     @SuppressLint("ValidFragment")
     public PayByWalletDialog(String fare, AdapterItemClickListner adapterItemClickListner) {
@@ -39,8 +43,13 @@ public class PayByWalletDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
       View view=  inflater.inflate(R.layout.dialog_wallet_payment, null);
         textViewAmountPayable=view.findViewById(R.id.textViewAmountPayable);
+        textViewRemainingBalance=view.findViewById(R.id.textViewRemainingBalance);
+        textViewWalletBalance=view.findViewById(R.id.textViewWalletBalance);
 
-        textViewAmountPayable.setText(fare);
+        int remainingBalance= (int) (AppConstants.WALLET_BALANCE-Float.valueOf(fare));
+        textViewAmountPayable.setText(setPriceAsText(fare));
+        textViewWalletBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
+        textViewRemainingBalance.setText(setPriceAsText(String.valueOf(remainingBalance)));
         builder.setCancelable(false);
         builder.setTitle(getString(R.string.payment));
         // Inflate and set the layout for the dialog
@@ -62,4 +71,9 @@ public class PayByWalletDialog extends DialogFragment {
 
         return builder.create();
     }
+
+    public String setPriceAsText(String price){
+        return "$"+price;
+    }
+
 }

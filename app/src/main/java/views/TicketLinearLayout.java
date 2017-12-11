@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -21,12 +20,12 @@ import sanguinebits.com.citylinq.R;
  * Created by Armaan on 14-11-2017.
  */
 
-public class CustomLinearLayout extends LinearLayout {
+public class TicketLinearLayout extends LinearLayout {
     private final int circleRadius;
     private Paint eraser;
     private int holesBottomMargin = 70;
 
-    public CustomLinearLayout(Context context, @Nullable AttributeSet attrs) {
+    public TicketLinearLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         circleRadius = getContext().getResources().getDimensionPixelOffset(R.dimen.ten_dp);
         Init();
@@ -40,7 +39,8 @@ public class CustomLinearLayout extends LinearLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        View view = getChildAt(1);
+        View view = getChildAt(2);
+        View view1 = getChildAt(1);
 
         Point lineStartPoint = new Point(view.getLeft(), view.getTop());
         Point lineEndPoint = new Point(view.getRight(), view.getTop());
@@ -77,12 +77,22 @@ public class CustomLinearLayout extends LinearLayout {
         path.close();
         canvas.drawPath(path, paint);
 
+        lineStartPoint = new Point(view1.getLeft(), view1.getTop());
+        lineEndPoint = new Point(view1.getRight(), view1.getTop());
+
+        Path path2 = new Path();
+        path2.setFillType(Path.FillType.EVEN_ODD);
+        path2.moveTo(lineStartPoint.x, lineStartPoint.y);
+        path2.lineTo(lineEndPoint.x, lineEndPoint.y);
+        path2.close();
+        canvas.drawPath(path2, paint);
+
 
         super.onDraw(canvas);
     }
 
     public static float pxFromDp(final Context context, final float dp) {
-            return dp * context.getResources().getDisplayMetrics().density;
+        return dp * context.getResources().getDisplayMetrics().density;
     }
 
 }

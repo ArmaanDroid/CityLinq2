@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCsQx2C2UsS2Pi51JcSyk68Peyxlt3gGcA"/>
+            android:value="AIzaSyAW00SDbOh6ob5RMcLSjX7Drxs_x0V-SZU"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -40,7 +40,6 @@
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/LoginScreenTheme">
-
         </activity>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"

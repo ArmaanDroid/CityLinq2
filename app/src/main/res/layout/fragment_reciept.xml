@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/continueButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/btnColorDark"
+            android:padding="16dp"
+            android:text="BOOK ANOTHER TRIP"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1" />
+
+        <views.TicketLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/drawable_blue_box_4_corner"
+            android:orientation="vertical"
+            android:paddingEnd="24dp"
+            android:paddingStart="24dp"
+            android:paddingTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBookingConfirmed">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="24dp"
+                android:elevation="1dp">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:text="NYC 23 3556"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView25"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView22"
+                    app:srcCompat="@drawable/ic_bus_white" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/sans_pro_regular"
+                    android:text="New Bay Rides"
+                    android:textColor="@color/white_80"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="24dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/sans_pro_regular"
+                        android:text="Boarding Location"
+                        android:textColor="@color/white_80"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/textViewSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/sans_pro_semi_bold"
+                        android:minLines="2"
+                        android:text="3435 Kuhlman
+ Parks"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.5"
+                    android:background="@android:color/transparent"
+
+                    app:srcCompat="@drawable/ic_to_from_white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+
+                        android:fontFamily="@font/sans_pro_regular"
+                        android:gravity="right"
+                        android:text="Drop Location"
+                        android:textColor="@color/white_80"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/textViewDestination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/sans_pro_semi_bold"
+                        android:gravity="right"
+                        android:minLines="2"
+                        android:text="3435 Kuhlman
+ Parks"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:paddingTop="18dp">
+
+                <TextView
+                    android:id="@+id/textViewDateBookTicket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:text="August 16, 201"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/textViewTiming"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/sans_pro_semi_bold"
+                    android:gravity="right"
+                    android:text="11:15 AM"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/imageQrCode"
+                    android:layout_width="@dimen/qr_code_dp"
+                    android:layout_height="@dimen/qr_code_dp"
+                    android:scaleType="centerCrop"
+                    android:layout_below="@+id/textViewDateBookTicket"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="24dp" />
+            </RelativeLayout>
+
+        </views.TicketLinearLayout>
+
+        <TextView
+            android:id="@+id/textViewBookingConfirmed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Booking Confirmed"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:fontFamily="@font/sans_pro_semi_bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

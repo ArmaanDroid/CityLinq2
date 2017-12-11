@@ -2,28 +2,23 @@ package fragments;
 
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
-import views.MyEditTextUnderline;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link ExploreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends MyBaseFragment {
+public class ExploreFragment extends MyBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,16 +29,8 @@ public class ProfileFragment extends MyBaseFragment {
     private String mParam2;
     private Unbinder unbinder;
 
-    @BindView(R.id.editTextName)
-    MyEditTextUnderline editTextName;
 
-    @BindView(R.id.editTextPhone)
-    MyEditTextUnderline editTextPhone;
-
-    @BindView(R.id.textViewUserName)
-    TextView textViewUserName;
-
-    public ProfileFragment() {
+    public ExploreFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +43,8 @@ public class ProfileFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static ExploreFragment newInstance(String param1, String param2) {
+        ExploreFragment fragment = new ExploreFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,38 +65,15 @@ public class ProfileFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_with_recycler, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initView();
         return view;
-    }
-
-    private void initView() {
-        editTextName.setText(mPreference.getEmail());
-        editTextPhone.setText(mPreference.getMobileNumber());
-        textViewUserName.setText(mPreference.getName());
-    }
-
-    @OnClick(R.id.textViewEditProfile)
-    void editOrSaveProfile(View view) {
-        if(view.getTag().toString().equalsIgnoreCase("edit")){
-            ((TextView)view).setText("Edit Profile");
-            view.setTag("");
-            editTextPhone.setEnabled(true);
-            editTextName.setEnabled(true);
-        }else{
-            ((TextView)view).setText("Save Profile");
-            view.setTag("edit");
-            editTextPhone.setEnabled(false);
-            editTextName.setEnabled(false);
-
-        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_PROFILE_FRAGMENT, "");
+        mListener.changeUIAccToFragment(AppConstants.TAG_EXPLORE_FRAGMENT,"");
     }
 
     @Override

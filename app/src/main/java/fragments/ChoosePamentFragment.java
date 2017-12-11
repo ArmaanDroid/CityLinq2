@@ -2,7 +2,9 @@ package fragments;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.view.LayoutInflater;
@@ -37,10 +39,15 @@ public class ChoosePamentFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static String ARG_PARAM4="param4";
+    private static String ARG_PARAMTicket="ARG_PARAMTicket";
 
     // TODO: Rename and change types of parameters
     private String fare;
-    private String mParam2;
+    private Station stationSource;
+    private Station stationDest;
+    private TransportList transportList;
+    private String ticketCount;
+
     private Unbinder unbinder;
 
     @BindView(R.id.textViewAddPromoCode)
@@ -54,7 +61,6 @@ public class ChoosePamentFragment extends MyBaseFragment {
 
     @BindView(R.id.textViewCard)
     TextView textViewCard;
-
     @BindView(R.id.textViewNetBanking)
     TextView textViewNetBanking;
 
@@ -70,10 +76,11 @@ public class ChoosePamentFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChoosePamentFragment newInstance(String param1, Station stationSource, Station stationDest, TransportList transportList) {
+    public static ChoosePamentFragment newInstance(String param1,String ticketCount ,Station stationSource, Station stationDest, TransportList transportList) {
         ChoosePamentFragment fragment = new ChoosePamentFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAMTicket, ticketCount);
         args.putParcelable(ARG_PARAM2, stationSource);
         args.putParcelable(ARG_PARAM3, stationDest);
         args.putParcelable(ARG_PARAM4, transportList);
@@ -85,8 +92,11 @@ public class ChoosePamentFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            fare = getArguments().getParcelable(ARG_PARAM1);
-            mParam2 = getArguments().getParcelable(ARG_PARAM2);
+            fare = getArguments().getString(ARG_PARAM1);
+            ticketCount = getArguments().getString(ARG_PARAMTicket);
+            stationSource = getArguments().getParcelable(ARG_PARAM2);
+            stationDest = getArguments().getParcelable(ARG_PARAM3);
+            transportList = getArguments().getParcelable(ARG_PARAM4);
         }
     }
 
@@ -109,12 +119,11 @@ public class ChoosePamentFragment extends MyBaseFragment {
     public void onResume() {
         super.onResume();
         mListener.changeUIAccToFragment(AppConstants.TAG_CHOOSE_PAYMENT_FRAGMENT, "");
-
     }
 
     private void initView() {
 
-        amountPayableWallet.setText(setPriceAsText(fare));
+        amountPayableWallet.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
         textViewAmountPayable.setText(setPriceAsText(fare));
 
         textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
@@ -162,9 +171,32 @@ public class ChoosePamentFragment extends MyBaseFragment {
     private void bookTicket() {
 
         WebRequestData webRequestData=new WebRequestData();
-        webRequestData.setAmount(fare);
         webRequestData.setUserId(AppConstants.USER_ID);
+        webRequestData.setVehicleId(transportList.getId());
+        webRequestData.setVehicleNumber(transportList.getVehicleNumber());
+        webRequestData.setTransportName(transportList.getTransportName());
+        webRequestData.setTime(transportList.getTimings());
+        webRequestData.setPayment(fare);
+        webRequestData.setTicket(ticketCount);
+        webRequestData.setSource(stationSource.getId());
+        webRequestData.setDestination(stationDest.getId());
+        webRequestData.setDate("1506796200000");
+
         webRequestData.setRequestEndPoint(RequestEndPoints.BOOK_A_RIDE);
+
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragTransactFucntion.replaceFragFromFadeWithoutHistory(getFragmentManager()
+                        , RecieptFragment.newInstance(commonPojo.getTicket(),stationDest.getName(),stationSource.getName()),R.id.frame_container_main);
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
     }
 
     @Override

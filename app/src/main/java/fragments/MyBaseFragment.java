@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import api.RetrofitClient;
 import api.WebRequestData;
@@ -53,10 +54,12 @@ public class MyBaseFragment extends Fragment {
     public AppPreference mPreference;
     protected Dialog progressDialog;
     public Activity activity;
+    public Calendar calendar=Calendar.getInstance();
     public MyBaseFragment() {
         // Required empty public constructor
     }
     protected DateFormat journeyDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
+    protected DateFormat monthNameDateFormat = new SimpleDateFormat("MMMM d, yyyy");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class MyBaseFragment extends Fragment {
     public String setPriceAsText(String price){
         return "$"+price;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -223,6 +227,7 @@ public class MyBaseFragment extends Fragment {
                 try {
                     progressDialog.dismiss();
 //                    showToast(t.toString());
+                    t.printStackTrace();
                     webResponseCallback.failure();
                 } catch (Exception e) {
 

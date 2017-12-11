@@ -11,6 +11,7 @@ import fragments.passes.AvailabelFragment;
 import fragments.passes.PurchasedFragment;
 import models.CommonPojo;
 import models.Pass;
+import models.PurchasePass;
 import sanguinebits.com.citylinq.R;
 
 public class PassesPagerAdapter extends FragmentPagerAdapter {
@@ -28,7 +29,7 @@ public class PassesPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         if (position == 0) {
             if (commonPojo == null)
-                fragment = PurchasedFragment.newInstance(new ArrayList<Pass>(), "");
+                fragment = PurchasedFragment.newInstance(new ArrayList<PurchasePass>(), "");
             else
                 fragment = PurchasedFragment.newInstance(commonPojo.getPurchasePasses(), "");
 

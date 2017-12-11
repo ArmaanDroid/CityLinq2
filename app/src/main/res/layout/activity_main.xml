@@ -50,9 +50,8 @@
                         android:id="@+id/imageViewProfile"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:background="@android:color/transparent"
-                        android:paddingTop="@dimen/nav_header_vertical_spacing"
-                        android:src="@mipmap/ic_launcher_round" />
+                        android:background="@drawable/drawable_circle_black_bound"
+                        android:src="@drawable/ic_person_black" />
 
                     <TextView
                         android:background="@android:color/transparent"

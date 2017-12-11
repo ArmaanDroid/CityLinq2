@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 mainContent.setTranslationX(drawerView.getWidth() * slideOffset);
-                Log.d("TAG", "onDrawerSlide: " + slideOffset);
                 if (slideOffset > 0.7) {
                     mainContent.setScaleY(getScaleRatio(slideOffset));
                     mainContent.setScaleX(getScaleRatio(slideOffset));
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     private float maximise(float slideOffset) {
         float asd = slideOffset * 100;
         float result = (float) (100 - (20 - (100 - asd)));
-        Log.d("TAG", "maximise: " + result);
         if (result > 100)
             result = 100;
         return result / 100;
@@ -190,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     private float minimise(float slideOffset) {
         float asd = slideOffset * 100;
         float result = (float) (100 - (20 - (100 - asd)));
-//        Log.d("TAG", "minimise: asd" + asd+" result"+result);
         if (result > 100)
             result = 100;
 
@@ -283,12 +280,10 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     @Override
     public void onResume() {
         super.onResume();
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-        } else {
-            mGetCurrentLocation();
-        }
+//        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            buildAlertMessageNoGps();
+//        }
     }
 
     private void buildAlertMessageNoGps() {
@@ -297,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.dismiss();
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
@@ -309,20 +305,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         alert.show();
     }
 
-    private void mGetCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE);
-            return;
-        }
-        SingleShotLocationProvider.requestSingleUpdate(getApplicationContext(), new SingleShotLocationProvider.LocationCallback() {
-            @Override
-            public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                AppConstants.CURRENT_LOCATION = location;
-                if (homeFragment != null)
-                    homeFragment.mGetStations();
-            }
-        });
-    }
 
     @Override
     protected void onPause() {
@@ -390,6 +372,15 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 showDarkToolbar();
                 textViewTitle.setText(R.string.add_card);
                 break;
+            case AppConstants.TAG_RECIEPT_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.reciept);
+                imageViewMenu.setVisibility(View.GONE);
+                break;
+            case AppConstants.TAG_EXPLORE_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.explore_routes);
+                break;
         }
     }
 
@@ -425,7 +416,9 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mGetCurrentLocation();
+                    if (homeFragment != null)
+                        if (!homeFragment.isDetached())
+                            homeFragment.mGetCurrentLocation();
                 }
             } else {
                 Toast.makeText(this, R.string.provide_permissions, Toast.LENGTH_SHORT).show();

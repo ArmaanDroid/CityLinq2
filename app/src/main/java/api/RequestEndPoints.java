@@ -19,4 +19,6 @@ public class RequestEndPoints {
     public static final String ADD_TO_WALLET = "user/addwallet";
     public static final String PAY_BY_WALLET = "user/walletpayment";
     public static final String BOOK_A_RIDE = "user/booking";
+    public static final String PURCHASE_PASS = "user/purchasepass";
+    public static final String EXPLORE_ROUTE = "user/exploreroute";
 }

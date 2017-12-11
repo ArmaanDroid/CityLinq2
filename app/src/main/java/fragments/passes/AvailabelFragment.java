@@ -12,16 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import adapters.AvailablePassesAdapter;
+import api.RequestEndPoints;
+import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dialog.PayByWalletDialog;
 import fragments.MyBaseFragment;
+import listners.AdapterItemClickListner;
+import models.CommonPojo;
 import models.Pass;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,7 +103,20 @@ public class AvailabelFragment extends MyBaseFragment {
     private void initView() {
         if (passList.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new AvailablePassesAdapter(passList));
+            recyclerView.setAdapter(new AvailablePassesAdapter(passList, new AdapterItemClickListner() {
+                @Override
+                public void onClick(int position, String tag) {
+                    final Pass itemSelected = passList.get(position);
+                    PayByWalletDialog payByWalletDialog = new PayByWalletDialog(String.valueOf(itemSelected.getAmount()), new AdapterItemClickListner() {
+                        @Override
+                        public void onClick(int position, String tag) {
+                            initiatePamentByWallet(itemSelected);
+                        }
+                    });
+                    payByWalletDialog.show(getFragmentManager(), "PayByWallet");
+                }
+            }));
+
             no_record_text2.setVisibility(View.GONE);
         } else {
             no_record_text2.setVisibility(View.VISIBLE);
@@ -102,6 +124,51 @@ public class AvailabelFragment extends MyBaseFragment {
 
     }
 
+    private void initiatePamentByWallet(final Pass pass) {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setAmount(String.valueOf(pass.getAmount()));
+        webRequestData.setUserId(AppConstants.USER_ID);
+        webRequestData.setRequestEndPoint(RequestEndPoints.PAY_BY_WALLET);
+        updateData(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                buyPass(pass);
+            }
+
+            @Override
+            public void failure() throws Exception {
+                showToast("Payment Failed");
+            }
+        });
+    }
+
+    private void buyPass(Pass pass) {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.PURCHASE_PASS);
+        webRequestData.setUserId(AppConstants.USER_ID);
+        webRequestData.setPayment(String.valueOf(pass.getAmount()));
+        webRequestData.setExpiaryDate(String.valueOf(getExpiryDate(pass.getValidity())));
+        webRequestData.setPassId(pass.getId());
+        webRequestData.setRouteId(pass.getRoute().getId());
+
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                EventBus.getDefault().post(new PassBoughtEvent(commonPojo.getPass()));
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
+    }
+
+
+    private long getExpiryDate(String validity){
+        calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(validity));
+        return calendar.getTimeInMillis();
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -2,6 +2,10 @@ package utils;
 
 import android.location.Location;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import models.Station;
 import services.SingleShotLocationProvider;
 
 /**
@@ -19,6 +23,7 @@ public class AppConstants {
 
     //fragment tags
     public static final String TAG_LOGIN_FRAGMENT = "TAG_LOGIN_FRAGMENT";
+    public static final String TAG_EXPLORE_FRAGMENT = "TAG_EXPLORE_FRAGMENT";
     public static final String TAG_SIGNUP_FRAGMENT = "TAG_SIGNUP_FRAGMENT";
     public static final String TAG_VERIFY_PHONE_FRAGMENT = "TAG_VERIFY_PHONE_FRAGMENT";
     public static final String TAG_MY_TRIPS_FRAGMENT = "TAG_MY_TRIPS_FRAGMENT";
@@ -35,6 +40,8 @@ public class AppConstants {
     public static final String TAG_CHOOSE_PAYMENT_FRAGMENT = "TAG_CHOOSE_PAYMENT_FRAGMENT";
     public static final String TAG_SELECT_CARD_FRAGMENT = "TAG_SELECT_CARD_FRAGMENT";
     public static final String TAG_ADD_CARD_FRAGMENT = "TAG_ADD_CARD_FRAGMENT";
+    public static final String TAG_RECIEPT_FRAGMENT = "TAG_RECIEPT_FRAGMENT";
+
 
     //Shared Preference stuff
     public static final String SHARED_PREFERENCE_NAME = "sanguinebits.com.citylinq.preference";
@@ -42,4 +49,16 @@ public class AppConstants {
 
     //map
     public static final int MAP_LEVEL_CITY= 13;
+    public static Integer WALLET_BALANCE;
+
+
+    private static List<Station> stations;
+
+    public static void setStations(List<Station> stations) {
+        AppConstants.stations = stations;
+    }
+
+    public static List<Station> getStations() {
+        return stations;
+    }
 }

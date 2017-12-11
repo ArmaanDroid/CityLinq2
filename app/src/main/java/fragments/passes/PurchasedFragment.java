@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
 import models.Pass;
+import models.PurchasePass;
 import sanguinebits.com.citylinq.R;
 
 /**
@@ -35,7 +40,7 @@ public class PurchasedFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private List<Pass> passList;
+    private List<PurchasePass> passList;
     private String mParam2;
     private Unbinder unbinder;
 
@@ -43,6 +48,7 @@ public class PurchasedFragment extends MyBaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.no_record_text2)
     TextView no_record_text2;
+    private PurchasedPassesAdapter adapter;
 
     public PurchasedFragment() {
         // Required empty public constructor
@@ -57,13 +63,25 @@ public class PurchasedFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PurchasedFragment newInstance(List<Pass> param1, String param2) {
+    public static PurchasedFragment newInstance(List<PurchasePass> param1, String param2) {
         PurchasedFragment fragment = new PurchasedFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_PARAM1, (ArrayList<? extends Parcelable>) param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PassBoughtEvent event) {
+        passList.add(event.newPass);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -93,13 +111,20 @@ public class PurchasedFragment extends MyBaseFragment {
     private void initView() {
         if (passList.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new PurchasedPassesAdapter(passList));
+            adapter = new PurchasedPassesAdapter(passList);
+            recyclerView.setAdapter(adapter);
             no_record_text2.setVisibility(View.GONE);
         } else {
             no_record_text2.setVisibility(View.VISIBLE);
         }
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onDestroy() {

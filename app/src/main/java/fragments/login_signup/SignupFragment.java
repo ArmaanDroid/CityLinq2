@@ -205,6 +205,9 @@ public class SignupFragment extends MyBaseFragment {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
                 mPreference.setUserID(commonPojo.getUser().getId());
+                mPreference.setName(commonPojo.getUser().getName());
+                mPreference.setEmail(commonPojo.getUser().getEmail());
+                mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 AppConstants.USER_ID=commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -287,6 +290,9 @@ public class SignupFragment extends MyBaseFragment {
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
+                mPreference.setName(commonPojo.getUser().getName());
+                mPreference.setEmail(commonPojo.getUser().getEmail());
+                mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
 
                 FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager(), VerifyPhoneFragment.newInstance(completePhoneNumber, commonPojo.getUser().getId()), R.id.fragment_container_login);
             }

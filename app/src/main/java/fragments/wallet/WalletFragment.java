@@ -48,7 +48,7 @@ public class WalletFragment extends MyBaseFragment {
 
     @BindView(R.id.textView11)
     MyEditTextUnderline editTextAmount;
-    private String availableAmount="100";
+    private String availableAmount;
 
     public WalletFragment() {
         // Required empty public constructor
@@ -93,12 +93,18 @@ public class WalletFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mListener.changeUIAccToFragment(AppConstants.TAG_WALLET_FRAGMENT,"");
+        availableAmount= String.valueOf(AppConstants.WALLET_BALANCE);
         initView();
     }
 
     private void initView() {
-        textViewAvailableBalance.setText(availableAmount);
+        textViewAvailableBalance.setText(setPriceAsText(availableAmount));
         textViewTransactionHistory.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
     }
 
@@ -117,7 +123,8 @@ public class WalletFragment extends MyBaseFragment {
                 @Override
                 public void onResponse(CommonPojo commonPojo) throws Exception {
                     editTextAmount.setText("");
-//                    textViewAvailableBalance.setText(availableAmount+amount);
+                    AppConstants.WALLET_BALANCE = AppConstants.WALLET_BALANCE + Integer.valueOf(amount);
+                    textViewAvailableBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
                 }
 
                 @Override

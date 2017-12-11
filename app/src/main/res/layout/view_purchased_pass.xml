@@ -32,6 +32,7 @@
 
 
             <TextView
+                android:id="@+id/textViewPassPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sans_pro_semi_bold"
@@ -42,6 +43,7 @@
                 android:textSize="20dp" />
 
             <TextView
+                android:id="@+id/textViewPassPricePErRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -80,6 +82,7 @@
                     android:textSize="14dp" />
 
                 <TextView
+                    android:id="@+id/textViewPassTotalRides"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -110,6 +113,7 @@
                     android:textSize="14dp" />
 
                 <TextView
+                    android:id="@+id/textViewPassValidity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

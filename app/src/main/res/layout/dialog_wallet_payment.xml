@@ -36,7 +36,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="right"
                 android:padding="16dp"
-                android:text="$34"
+                android:text="$0"
                 android:textColor="@color/moneyColor"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -67,7 +67,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="right"
                 android:padding="16dp"
-                android:text="$34"
+                android:text="$0"
                 android:textColor="@color/moneyColor"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -96,7 +96,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="right"
                 android:padding="16dp"
-                android:text="$34"
+                android:text="$0"
                 android:textColor="@color/moneyColor"
                 android:textSize="16dp" />
         </RelativeLayout>

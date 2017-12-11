@@ -151,7 +151,9 @@ public class BookMyTripFragment extends MyBaseFragment {
     @OnClick(R.id.continueButton)
     void continueToPayment() {
         String fare=textViewFare.getText().toString().replace("$","");
-        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(),  ChoosePamentFragment.newInstance(fare,stationSource,stationDestination,transportList), R.id.frame_container_main);
+        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(),
+                ChoosePamentFragment.newInstance(fare, String.valueOf(passengerCount),stationSource
+                        ,stationDestination,transportList), R.id.frame_container_main);
     }
 
     @Override

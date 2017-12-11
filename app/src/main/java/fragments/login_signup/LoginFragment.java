@@ -189,6 +189,9 @@ public class LoginFragment extends MyBaseFragment {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
                 mPreference.setUserID(commonPojo.getUser().getId());
+                mPreference.setName(commonPojo.getUser().getName());
+                mPreference.setEmail(commonPojo.getUser().getEmail());
+                mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 AppConstants.USER_ID = commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -237,6 +240,9 @@ public class LoginFragment extends MyBaseFragment {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
                 mPreference.setUserID(commonPojo.getUser().getId());
+                mPreference.setName(commonPojo.getUser().getName());
+                mPreference.setEmail(commonPojo.getUser().getEmail());
+                mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 AppConstants.USER_ID = commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

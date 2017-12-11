@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email_address"
+            android:enabled="false"
             android:inputType="textPersonName"
             android:maxLength="30"
             android:maxLines="1"
@@ -49,6 +50,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone"
             android:inputType="textPersonName"
+            android:enabled="false"
             android:maxLength="30"
             android:maxLines="1"
             android:padding="8dp"
@@ -58,7 +60,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:id="@+id/textViewUserName"
+            android:id="@+id/textViewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -75,6 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/edit_profile"
+        android:tag="edit"
         android:textColor="@color/colorAccent"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,8 +97,9 @@
         android:id="@+id/circleImageViewProfile"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:src="@color/colorAccent"
-        android:background="@android:color/transparent"
+
+        android:background="@drawable/drawable_circle_black_bound"
+        android:src="@drawable/ic_person_black"
         app:layout_constraintBottom_toBottomOf="@+id/textView12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
