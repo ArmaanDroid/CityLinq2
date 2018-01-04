@@ -134,7 +134,7 @@ public class SignupFragment extends MyBaseFragment {
 
     }
 
-    private void setFaceBookButton(){
+    private void setFaceBookButton() {
         callbackManager = CallbackManager.Factory.create();
 
         final LoginManager loginManager = LoginManager.getInstance();
@@ -200,15 +200,27 @@ public class SignupFragment extends MyBaseFragment {
     }
 
     private void performLoginByFaceBook(WebRequestData webRequestData) {
-
+        webRequestData.setType(AppConstants.TYPE_USER);
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                mPreference.setUserID(commonPojo.getUser().getId());
                 mPreference.setName(commonPojo.getUser().getName());
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
-                AppConstants.USER_ID=commonPojo.getUser().getId();
+                mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+
+                if (commonPojo.getUser().getPhoneVerified() == 0) {
+                    if (commonPojo.getUser().getMobileNumber() == null)
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , AddNumberFragment.newInstance(commonPojo.getUser().getId(), ""), R.id.fragment_container_login);
+                    else
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , VerifyPhoneFragment.newInstance(commonPojo.getUser().getMobileNumber()
+                                        , commonPojo.getUser().getId()), R.id.fragment_container_login);
+                    return;
+                }
+                mPreference.setUserID(commonPojo.getUser().getId());
+                AppConstants.USER_ID = commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -227,6 +239,12 @@ public class SignupFragment extends MyBaseFragment {
         if (country != null) {
             imageViewFlag.setImageResource(country.getFlag());
             textViewPhoneCode.setText(country.getDialCode());
+        } else {
+            country = Country.getCountryByName("United States");
+            if (country != null) {
+                imageViewFlag.setImageResource(country.getFlag());
+                textViewPhoneCode.setText(country.getDialCode());
+            }
         }
     }
 
@@ -287,6 +305,10 @@ public class SignupFragment extends MyBaseFragment {
         webRequestData.setPassword(password);
         webRequestData.setDeviceId(FirebaseInstanceId.getInstance().getToken());
         webRequestData.setRequestEndPoint(RequestEndPoints.SIGNUP_URL);
+        if(!isNetworkConnected()){
+            showToast("No Internet Connection");
+            return;
+        }
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {

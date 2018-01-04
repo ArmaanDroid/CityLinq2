@@ -33,18 +33,20 @@
             android:textSize="16dp" />
 
         <TextView
+            android:id="@+id/textTiming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@drawable/drawable_dark_box_4_corner"
-            android:text="$349.69"
+            android:text="11:50 AM"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:paddingLeft="8dp"
             android:fontFamily="@font/sans_pro_semi_bold"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
     </RelativeLayout>
 
     <ImageView
@@ -52,6 +54,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
 
+        android:layout_marginBottom="8dp"
         android:background="@drawable/drawable_circle_green"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
@@ -64,7 +67,6 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
@@ -113,9 +115,7 @@
         android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
+       android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -136,6 +136,7 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:id="@+id/textViewFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sans_pro_semi_bold"
@@ -169,6 +170,7 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:id="@+id/textViewTO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sans_pro_semi_bold"

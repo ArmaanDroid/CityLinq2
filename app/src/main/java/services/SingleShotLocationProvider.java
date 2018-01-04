@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 public class SingleShotLocationProvider {
 
@@ -22,19 +23,22 @@ public class SingleShotLocationProvider {
     public static void requestSingleUpdate(final Context context, final LocationCallback callback) {
         final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (isNetworkEnabled) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (isGPSEnabled) {
             Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
             locationManager.requestSingleUpdate(criteria, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
@@ -53,39 +57,49 @@ public class SingleShotLocationProvider {
                 public void onProviderDisabled(String provider) {
                 }
             }, null);
-      } else {
-          boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-          if (isGPSEnabled) {
-              Criteria criteria = new Criteria();
-              criteria.setAccuracy(Criteria.ACCURACY_FINE);
-              locationManager.requestSingleUpdate(criteria, new LocationListener() {
-                  @Override
-                  public void onLocationChanged(Location location) {
-                      callback.onNewLocationAvailable(new GPSCoordinates(location.getLatitude(), location.getLongitude()));
-                  }
+        } else if (isNetworkEnabled) {
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
 
-                  @Override public void onStatusChanged(String provider, int status, Bundle extras) { }
-                  @Override public void onProviderEnabled(String provider) { }
-                  @Override public void onProviderDisabled(String provider) { }
-              }, null);
-          }
-      }
-  }
+            locationManager.requestSingleUpdate(criteria, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    callback.onNewLocationAvailable(new GPSCoordinates(location.getLatitude(), location.getLongitude()));
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    Log.d("TAG", "onStatusChanged: ");
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                    Log.d("TAG", "onProviderEnabled: ");
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    Log.d("TAG", "onProviderEnabled: ");
+                }
+            }, null);
+        }
+    }
 
 
-  // consider returning Location instead of this dummy wrapper class
-  public static class GPSCoordinates {
-      public float longitude = -1;
-      public float latitude = -1;
+    // consider returning Location instead of this dummy wrapper class
+    public static class GPSCoordinates {
+        public float longitude = -1;
+        public float latitude = -1;
 
-      public GPSCoordinates(float theLatitude, float theLongitude) {
-          longitude = theLongitude;
-          latitude = theLatitude;
-      }
+        public GPSCoordinates(float theLatitude, float theLongitude) {
+            longitude = theLongitude;
+            latitude = theLatitude;
+        }
 
-      public GPSCoordinates(double theLatitude, double theLongitude) {
-          longitude = (float) theLongitude;
-          latitude = (float) theLatitude;
-      }
-  }  
+        public GPSCoordinates(double theLatitude, double theLongitude) {
+            longitude = (float) theLongitude;
+            latitude = (float) theLatitude;
+        }
+    }
 }

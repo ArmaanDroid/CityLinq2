@@ -1,10 +1,13 @@
 package utils;
 
 import android.location.Location;
+import android.os.Environment;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import models.Scheduled;
 import models.Station;
 import services.SingleShotLocationProvider;
 
@@ -15,14 +18,18 @@ import services.SingleShotLocationProvider;
 public class AppConstants {
 
     public static final String BASE_URL = "http://ec2-35-165-220-224.us-west-2.compute.amazonaws.com:8081/";
+    public static final String BASE_URL_image = "http://ec2-35-165-220-224.us-west-2.compute.amazonaws.com:8081/static/user/";
     public static SingleShotLocationProvider.GPSCoordinates CURRENT_LOCATION ;
     public static  String USER_ID   ;
 
 
     public static final String TYPE_USER = "user";
 
+    public static Date JOURNEY_DATE;
     //fragment tags
+    public static final String TAG_VIEW_TRIP = "TAG_VIEW_TRIP";
     public static final String TAG_LOGIN_FRAGMENT = "TAG_LOGIN_FRAGMENT";
+    public static final String TAG_ADD_NUMBER_FRAGMENT = "TAG_ADD_NUMBER_FRAGMENT";
     public static final String TAG_EXPLORE_FRAGMENT = "TAG_EXPLORE_FRAGMENT";
     public static final String TAG_SIGNUP_FRAGMENT = "TAG_SIGNUP_FRAGMENT";
     public static final String TAG_VERIFY_PHONE_FRAGMENT = "TAG_VERIFY_PHONE_FRAGMENT";
@@ -41,6 +48,7 @@ public class AppConstants {
     public static final String TAG_SELECT_CARD_FRAGMENT = "TAG_SELECT_CARD_FRAGMENT";
     public static final String TAG_ADD_CARD_FRAGMENT = "TAG_ADD_CARD_FRAGMENT";
     public static final String TAG_RECIEPT_FRAGMENT = "TAG_RECIEPT_FRAGMENT";
+    public static final String TAG_SUBMIT_CODE_FRAGMENT = "TAG_SUBMIT_CODE_FRAGMENT";
 
 
     //Shared Preference stuff
@@ -51,8 +59,17 @@ public class AppConstants {
     public static final int MAP_LEVEL_CITY= 13;
     public static Integer WALLET_BALANCE;
 
-
     private static List<Station> stations;
+    private static List<Scheduled> scheduleList;
+    public static String No_Internet="No_Internet";
+
+    public static List<Scheduled> getScheduleList() {
+        return scheduleList;
+    }
+
+    public static void setScheduleList(List<Scheduled> scheduleList) {
+        AppConstants.scheduleList = scheduleList;
+    }
 
     public static void setStations(List<Station> stations) {
         AppConstants.stations = stations;
@@ -61,4 +78,16 @@ public class AppConstants {
     public static List<Station> getStations() {
         return stations;
     }
+
+    public static final String APP_NAME = "CityLinq";
+
+    public static final String LOCAL_STORAGE_BASE_PATH_FOR_MEDIA = Environment
+            .getExternalStorageDirectory() + "/" + APP_NAME;
+
+    public static final String LOCAL_STORAGE_BASE_PATH_FOR_USER_PHOTOS =
+            LOCAL_STORAGE_BASE_PATH_FOR_MEDIA + "/Photos/";
+
+    public static final String JPEG_FILE_PREFIX = "IMG_";
+    public static final String JPEG_FILE_SUFFIX = ".jpg";
+    public static final String LOCAL_FILE_PREFIX = "file://";
 }

@@ -137,6 +137,7 @@
                 android:textSize="12dp" />
 
             <TextView
+            android:id="@+id/textViewFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sans_pro_semi_bold"
@@ -170,6 +171,7 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:id="@+id/textViewTO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sans_pro_semi_bold"

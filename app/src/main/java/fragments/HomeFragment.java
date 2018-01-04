@@ -2,17 +2,16 @@ package fragments;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +30,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,10 +42,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.zxing.BarcodeFormat;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -68,7 +70,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dialog.DatePickerFragment;
+import events.TripCanceledEvent;
 import models.CommonPojo;
+import models.Scheduled;
 import models.Station;
 import sanguinebits.com.citylinq.R;
 import services.SingleShotLocationProvider;
@@ -112,8 +116,11 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
     @BindView(R.id.buttonLinqs)
     Button buttonLinqs;
 
-    private static Station stationDestination;
-    private static Station stationSource;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+
+    public static Station stationDestination;
+    public static Station stationSource;
     private GoogleMap mMap;
     private Calendar calendar = Calendar.getInstance();
 
@@ -178,15 +185,30 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
         super.onResume();
         mListener.changeUIAccToFragment(AppConstants.TAG_HOME_FRAGMENT, "");
         final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!isLocationServiceEnabled()) {
             buildAlertMessageNoGps();
         } else {
+            if(isGooglePlayServicesAvailable(getActivity()))
+            progressDialog.show();
             mGetCurrentLocation();
         }
     }
 
+    public boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if(status != ConnectionResult.SUCCESS) {
+            if(googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
     public void mGetCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            progressDialog.dismiss();
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE);
             return;
         }
@@ -194,7 +216,9 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
             @Override
             public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
                 AppConstants.CURRENT_LOCATION = location;
+                progressDialog.dismiss();
                 mGetStations();
+
             }
         });
     }
@@ -202,27 +226,32 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
     private void intiView() {
         textViewJourneyDate.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_calendar_light), null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
         textViewJourneyDate.setText(journeyDateFormat.format(calendar.getTime()));
+        AppConstants.JOURNEY_DATE = calendar.getTime();
+
         if (stationDestination != null
                 && stationSource != null) {
             buttonLinqs.setVisibility(View.VISIBLE);
             recyclerFavorite.setVisibility(View.GONE);
         }
 
-        viewPager.setAdapter(new ScheduleRidesPagerAdapter());
         recyclerFavorite.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerFavorite.setAdapter(new FavRideHomeAdapter());
     }
 
     public void mGetStations() {
-        LatLng latLng = new LatLng(AppConstants.CURRENT_LOCATION.latitude, AppConstants.CURRENT_LOCATION.longitude);
-        mMap.clear();
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        if (stationDestination != null & stationSource != null) {
+            showTrack();
+        } else {
+            LatLng latLng = new LatLng(AppConstants.CURRENT_LOCATION.latitude, AppConstants.CURRENT_LOCATION.longitude);
+            mMap.clear();
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-        mMap.addMarker(new MarkerOptions().position(latLng)
-                .title("You are here"));
+            mMap.addMarker(new MarkerOptions().position(latLng)
+                    .title("You are here"));
+        }
 
         //check if the stations list is available
-        if(AppConstants.getStations()!=null){
+        if (AppConstants.getStations() != null) {
             setAutoCompleteAdapters();
             return;
         }
@@ -233,20 +262,17 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
                 AppConstants.WALLET_BALANCE = commonPojo.getWallet();
-                if (commonPojo.getSchedule().size() > 0) {
-                    viewPager.setVisibility(View.VISIBLE);
+                AppConstants.setScheduleList(commonPojo.getSchedule());
+                AppConstants.setStations(commonPojo.getStations());
 
-                } else {
-                    viewPager.setVisibility(View.GONE);
-                }
                 if (commonPojo.getFavTrips().size() > 0) {
                     recyclerFavorite.setVisibility(View.VISIBLE);
+                    tabLayout.setVisibility(View.GONE);
 
                 } else {
                     recyclerFavorite.setVisibility(View.GONE);
                 }
 
-                AppConstants.setStations(commonPojo.getStations());
                 setAutoCompleteAdapters();
             }
 
@@ -258,14 +284,26 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
     }
 
     private void setAutoCompleteAdapters() {
+//set schedule adapter
+        if (AppConstants.getScheduleList() != null)
+            if (AppConstants.getScheduleList().size() > 0) {
+                viewPager.setVisibility(View.VISIBLE);
+                tabLayout.setVisibility(View.VISIBLE);
+                viewPager.setAdapter(new ScheduleRidesPagerAdapter(AppConstants.getScheduleList()));
+                tabLayout.setupWithViewPager(viewPager, true);
+            } else {
+                viewPager.setVisibility(View.GONE);
+            }
 
-        if(editTextDestination.getAdapter()!=null && editTextSource.getAdapter()!=null){
+        //check if adapter is already bound
+        if (editTextDestination.getAdapter() != null && editTextSource.getAdapter() != null) {
             return;
         }
 
-
-        editTextSource.setText(AppConstants.getStations().get(0).getName());
-        stationSource = AppConstants.getStations().get(0);
+        if (stationSource == null) {
+            editTextSource.setText(AppConstants.getStations().get(0).getName());
+            stationSource = AppConstants.getStations().get(0);
+        }
 
         final ArrayAdapter<Station> adapter = new ArrayAdapter<Station>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, AppConstants.getStations());
@@ -436,17 +474,17 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask",jsonData[0].toString());
+                Log.d("ParserTask", jsonData[0].toString());
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.d("ParserTask","Executing routes");
-                Log.d("ParserTask",routes.toString());
+                Log.d("ParserTask", "Executing routes");
+                Log.d("ParserTask", routes.toString());
 
             } catch (Exception e) {
-                Log.d("ParserTask",e.toString());
+                Log.d("ParserTask", e.toString());
                 e.printStackTrace();
             }
             return routes;
@@ -480,18 +518,17 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(10);
-                lineOptions.color(ContextCompat.getColor(getActivity(),R.color.polylineColor));
+                lineOptions.color(ContextCompat.getColor(getActivity(), R.color.polylineColor));
 
-                Log.d("onPostExecute","onPostExecute lineoptions decoded");
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded");
 
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            if(lineOptions != null) {
+            if (lineOptions != null) {
                 mMap.addPolyline(lineOptions);
-            }
-            else {
-                Log.d("onPostExecute","without Polylines drawn");
+            } else {
+                Log.d("onPostExecute", "without Polylines drawn");
             }
         }
     }
@@ -502,6 +539,7 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
             @Override
             public void onDateSelected(Date date) {
                 textViewJourneyDate.setText(journeyDateFormat.format(date));
+                AppConstants.JOURNEY_DATE = date;
 
             }
         });
@@ -510,7 +548,8 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
 
     @OnClick(R.id.buttonLinqs)
     void browseLinqs() {
-        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(), BrowseLinqsFragment.newInstance(stationSource, stationDestination), R.id.frame_container_main);
+        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager()
+                , BrowseLinqsFragment.newInstance(stationSource, stationDestination), R.id.frame_container_main);
     }
 
     @Override

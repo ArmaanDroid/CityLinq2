@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/changeNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
@@ -95,7 +96,7 @@
         android:cursorVisible="false"
         android:gravity="center_horizontal"
         android:inputType="number"
-        android:maxLength="5"
+        android:maxLength="4"
         android:textColor="#00000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

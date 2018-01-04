@@ -11,7 +11,7 @@
         android:layout_height="44dp"
         android:background="@drawable/drawable_white_box"
         android:elevation="2dp"
-
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,4 +34,16 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1" />
+
+    <ImageView
+        android:id="@+id/no_record_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/no_data_found"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+        app:layout_constraintLeft_toLeftOf="@+id/viewpager"
+        app:layout_constraintRight_toRightOf="@+id/viewpager"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout_group" />
 </android.support.constraint.ConstraintLayout>

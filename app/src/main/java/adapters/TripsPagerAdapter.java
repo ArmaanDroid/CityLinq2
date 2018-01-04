@@ -16,27 +16,28 @@ import sanguinebits.com.citylinq.R;
 
 public class TripsPagerAdapter extends FragmentPagerAdapter {
     Context context;
-    CommonPojo  commonPojo;
+    CommonPojo commonPojo;
+
     public TripsPagerAdapter(FragmentManager fm, Context context, CommonPojo commonPojo) {
         super(fm);
         this.context = context;
-        this.commonPojo=commonPojo;
+        this.commonPojo = commonPojo;
     }
 
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
         if (position == 0) {
-            if(commonPojo==null)
-                fragment = ScheduleTripsFragment.newInstance(new ArrayList<Scheduled>(),null);
-                else
-                fragment = ScheduleTripsFragment.newInstance(commonPojo.getScheduled(),null);
+            if (commonPojo == null)
+                fragment = ScheduleTripsFragment.newInstance(new ArrayList<Scheduled>(), null);
+            else
+                fragment = ScheduleTripsFragment.newInstance(commonPojo.getScheduled(), null);
 
         } else if (position == 1) {
-            if(commonPojo==null)
-                fragment =  CompleteTripFragment.newInstance(new ArrayList<Completed>(),null);
+            if (commonPojo == null)
+                fragment = CompleteTripFragment.newInstance(new ArrayList<Completed>(), null);
             else
-            fragment =  CompleteTripFragment.newInstance(commonPojo.getCompleted(),null);
+                fragment = CompleteTripFragment.newInstance(commonPojo.getCompleted(), null);
 
         }
         return fragment;

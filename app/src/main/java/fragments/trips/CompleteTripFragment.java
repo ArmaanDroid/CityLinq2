@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,8 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fragments.MyBaseFragment;
+import fragments.RecieptFragment;
+import listners.AdapterItemClickListner;
 import models.Completed;
+import models.Scheduled;
+import models.Ticket;
 import sanguinebits.com.citylinq.R;
+import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +47,7 @@ public class CompleteTripFragment extends MyBaseFragment {
     @BindView(R.id.recycleView)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_record_text2)
-    TextView no_record_text2;
+    ImageView no_record_text2;
 
     public CompleteTripFragment() {
         // Required empty public constructor
@@ -92,10 +98,29 @@ public class CompleteTripFragment extends MyBaseFragment {
     private void initViews() {
         if(tripList.size()>0){
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRecyclerView.setAdapter(new CompletedTripsAdapter(getContext(),tripList));
+            mRecyclerView.setAdapter(new CompletedTripsAdapter(getContext(),tripList,new AdapterItemClickListner() {
+                @Override
+                public void onClick(int position, String tag) {
+                    Completed currentTrip = tripList.get(position);
+                    Ticket ticket = new Ticket();
+                    ticket.setId(currentTrip.getId());
+                    ticket.setQrCode(currentTrip.getQrCode());
+                    ticket.setDate(currentTrip.getDate());
+                    ticket.setTransportName(currentTrip.getTransportName());
+                    ticket.setVehicleNumber(currentTrip.getVehicleNumber());
+                    ticket.setTimings(currentTrip.getTimings());
+                    ticket.setPayment(currentTrip.getPayment());
+                    ticket.setTicket(currentTrip.getTicket());
+                    ticket.setAdapterPosition(position);
+                    FragTransactFucntion.addFragFromFadeHistory(getParentFragment().getFragmentManager()
+                            , RecieptFragment.newInstance(ticket, currentTrip.getSource().getName()
+                                    , currentTrip.getDestination().getName(), false,true), R.id.frame_container_main);
+
+                }
+            }));
             no_record_text2.setVisibility(View.GONE);
         }else
-            no_record_text2.setVisibility(View.VISIBLE);
+            showNoDataFound(no_record_text2);
     }
 
 

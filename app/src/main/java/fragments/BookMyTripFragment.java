@@ -62,6 +62,9 @@ public class BookMyTripFragment extends MyBaseFragment {
     @BindView(R.id.textView261)
     TextView textViewFare;
 
+    @BindView(R.id.tourTiming)
+    TextView tourTiming;
+
     private int passengerCount;
 
     public BookMyTripFragment() {
@@ -122,7 +125,8 @@ public class BookMyTripFragment extends MyBaseFragment {
 
     private void initView() {
         textViewDateBookTicket.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_calendar_white), null, null, null);
-
+        textViewDateBookTicket.setText(monthNameDateFormat.format(AppConstants.JOURNEY_DATE));
+        tourTiming.setText(transportList.getTimings());
         textViewSource.setText(stationSource.getName());
         textViewDestination.setText(stationDestination.getName());
         textViewTransportName.setText(transportList.getTransportName());
@@ -151,7 +155,7 @@ public class BookMyTripFragment extends MyBaseFragment {
     @OnClick(R.id.continueButton)
     void continueToPayment() {
         String fare=textViewFare.getText().toString().replace("$","");
-        FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(),
+        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(),
                 ChoosePamentFragment.newInstance(fare, String.valueOf(passengerCount),stationSource
                         ,stationDestination,transportList), R.id.frame_container_main);
     }

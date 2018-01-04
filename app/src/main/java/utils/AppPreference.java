@@ -17,16 +17,28 @@ public class AppPreference {
     private String KEY_USER_NAME = "KEY_USER_NAME";
     private String KEY_USER_EMAIL = "KEY_USER_EMAIL";
     private String KEY_USER_MOBILE_NUMBER = "KEY_USER_MOBILE_NUMBER";
+    private String KEY_USER_PROFILE_PIC = "KEY_USER_PROFILE_PIC";
 
     //Values to save
     private String userID;
     private String name;
     private String email;
     private String mobileNumber;
+    private String profilePic;
+
 
     public AppPreference(Context context) {
         sharedPreferences = context.getSharedPreferences(AppConstants.SHARED_PREFERENCE_NAME, 0);
         editor = sharedPreferences.edit();
+    }
+
+    public String getProfilePic() {
+        return sharedPreferences.getString(KEY_USER_PROFILE_PIC, "");
+    }
+
+    public void setProfilePic(String profilePic) {
+        editor.putString(KEY_USER_PROFILE_PIC, profilePic);
+        editor.commit();
     }
 
     public String getMobileNumber() {
@@ -48,7 +60,7 @@ public class AppPreference {
     }
 
     public String getName() {
-        return sharedPreferences.getString(KEY_USER_NAME, "");
+        return sharedPreferences.getString(KEY_USER_NAME, "User Name");
     }
 
     public void setName(String name) {

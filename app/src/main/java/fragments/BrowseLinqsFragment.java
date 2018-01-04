@@ -8,11 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 import adapters.BrowseLinqsAdapter;
 import api.RequestEndPoints;
@@ -57,6 +61,9 @@ public class BrowseLinqsFragment extends MyBaseFragment {
 
     @BindView(R.id.no_record_text)
     TextView no_record_text;
+
+    @BindView(R.id.no_record_image)
+    ImageView no_record_image;
 
     @BindView(R.id.textViewDestination)
     TextView textViewDestination;
@@ -111,61 +118,80 @@ public class BrowseLinqsFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        textViewSource.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_source_location_white), null, null, null);
+        textViewDestination.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_destination_white), null, null, null);
+        textViewSource.setText(stationSource.getName());
+        textViewDestination.setText(stationDestination.getName());
         initViews();
 
     }
 
     private void initViews() {
 
-        textViewSource.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(),R.drawable.ic_source_location_white), null,null, null);
-        textViewDestination.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(),R.drawable.ic_destination_white), null,null, null);
-        textViewSource.setText(stationSource.getName());
-        textViewDestination.setText(stationDestination.getName());
-
-        //make routes request
-        progressDialog.show();
-        RetrofitClient.getRestClient().getRoutes(stationSource.getId(), stationDestination.getId()).enqueue(new Callback<CommonPojo>() {
-            @Override
-            public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
-                try {
-                    progressDialog.dismiss();
-                    final CommonPojo commonPojo = response.body();
-                    if (commonPojo != null) {
-                        if (commonPojo.getTransportList().size() > 0) {
-                            no_record_text.setVisibility(View.GONE);
-                        } else {
-                            no_record_text.setVisibility(View.VISIBLE);
-                        }
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
-                        recyclerView.setAdapter(new BrowseLinqsAdapter(commonPojo.getTransportList(), new AdapterItemClickListner() {
-                            @Override
-                            public void onClick(int position, String Tag) {
-                                if (Tag.isEmpty())
-                                    FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(),
-                                            RouteDetailFragment.newInstance(commonPojo.getTransportList().get(position).getRoute().getStations(), null), R.id.frame_container_main);
-                                else
-                                    FragTransactFucntion.addFragFromFadeHistory(getFragmentManager()
-                                            , BookMyTripFragment.newInstance(stationSource,stationDestination,commonPojo.getTransportList().get(position)), R.id.frame_container_main);
-
-                            }
-                        }));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (isNetworkConnected()) {
+            no_record_image.setVisibility(View.GONE);
+            getServerData();
+        } else {
+            showNoInternetConnection(no_record_image);
+            no_record_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getTag().toString().equalsIgnoreCase(AppConstants.No_Internet))
+                        initViews();
                 }
+            });
+        }
+
+
+    }
+
+    private void getServerData() {
+        progressDialog.show();
+        //make routes request
+        try {
+            calendar.setTime(AppConstants.JOURNEY_DATE);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Log.d("TAG", "bookTicket: " + calendar.getTimeInMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.GET_ROUTES + "?source=" + stationSource.getId()
+                + "&destination=" + stationDestination.getId() + "&date=" + calendar.getTimeInMillis());
+
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(final CommonPojo commonPojo) throws Exception {
+                no_record_image.setVisibility(View.GONE);
+                if (commonPojo.getTransportList().size() > 0) {
+                    no_record_text.setVisibility(View.GONE);
+                } else {
+                    no_record_text.setVisibility(View.VISIBLE);
+                }
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
+                recyclerView.setAdapter(new BrowseLinqsAdapter(commonPojo.getTransportList(), new AdapterItemClickListner() {
+                    @Override
+                    public void onClick(int position, String Tag) {
+                        if (Tag.isEmpty())
+                            FragTransactFucntion.addFragFromFadeHistory(getFragmentManager(),
+                                    RouteDetailFragment.newInstance(commonPojo.getTransportList().get(position).getRoute().getStations(), AppConstants.TAG_BROWSE_LINQS_FRAGMENT), R.id.frame_container_main);
+                        else
+                            FragTransactFucntion.addFragFromBottomFadeHistory(getFragmentManager()
+                                    , BookMyTripFragment.newInstance(stationSource, stationDestination, commonPojo.getTransportList().get(position)), R.id.frame_container_main);
+                    }
+                }));
             }
 
             @Override
-            public void onFailure(Call<CommonPojo> call, Throwable t) {
-                try {
-                    progressDialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void failure() throws Exception {
+                showServerDown(no_record_image);
             }
         });
-
-
     }
 
     @OnClick(R.id.imageViewMenu)
@@ -182,6 +208,6 @@ public class BrowseLinqsFragment extends MyBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mListener.changeUIAccToFragment(AppConstants.TAG_HOME_FRAGMENT,"");
+        mListener.changeUIAccToFragment(AppConstants.TAG_HOME_FRAGMENT, "");
     }
 }

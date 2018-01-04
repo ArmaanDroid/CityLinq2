@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CityLinq</string>
+    <string name="app_name">SkipOut</string>
     <string name="facebook_app_id">156074315126766</string>
     <string name="fb_login_protocol_scheme">fb156074315126766</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -7,7 +7,7 @@
     <string name="login">LOGIN</string>
     <string name="signup">SIGN UP</string>
     <string name="app_name1">CITY LINQ</string>
-    <string name="moto">app motto goes here</string>
+    <string name="moto">App Base Commuter Shuttle</string>
     <string name="login_small">Login</string>
     <string name="create_account">Create Account</string>
     <string name="continueNe">CONTINUE</string>
@@ -94,4 +94,15 @@
     <string name="payment">Payment</string>
     <string name="please_enter_amount">Please enter some amount</string>
     <string name="reciept">Receipt</string>
+    <string name="change_number">Change Number</string>
+    <string name="add_mobile_number">Add Mobile Number</string>
+
+    <string name="term_condition1">"By continuing, you agree to "</string>
+    <string name="term_condition2">Terms &amp; Conditions</string>
+    <string name="cancel_trip">CANCEL TRIP</string>
+    <string name="book_another_trip">BOOK ANOTHER TRIP</string>
+    <string name="view_trip">View Trip</string>
+    <string name="submit">Submit</string>
+    <string name="add_code">ADD PROMO CODE</string>
+    <string name="logout">Logout</string>
 </resources>

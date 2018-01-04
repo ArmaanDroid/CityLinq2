@@ -90,7 +90,7 @@
             android:fontFamily="@font/sans_pro_semi_bold"
             android:padding="16dp"
             android:background="@android:color/transparent"
-            android:text="@string/net_banking"
+            android:text="@string/bt_descriptor_android_pay"
             android:textColor="@color/textColorDark"
             android:textSize="16dp" />
     </LinearLayout>

@@ -37,7 +37,21 @@ public class WebRequestData {
     private String expiaryDate ;
     private String passId ;
     private String routeId ;
+    private String bookId ;
+    private String starttime ;
+    private String promocode ;
 
+    public void setPromocode(String promocode) {
+        this.promocode = promocode;
+    }
+
+    public void setStarttime(String starttime) {
+        this.starttime = starttime;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
+    }
 
     public void setExpiaryDate(String expiaryDate) {
         this.expiaryDate = expiaryDate;

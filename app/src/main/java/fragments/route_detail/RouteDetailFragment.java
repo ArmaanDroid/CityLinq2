@@ -35,7 +35,7 @@ public class RouteDetailFragment extends MyBaseFragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
+    private String callingFragment;
     private Unbinder unbinder;
     private RouteDetailPagerAdapter viewPagerAdapter;
 
@@ -73,7 +73,7 @@ public class RouteDetailFragment extends MyBaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             stationList = getArguments().getParcelableArrayList(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            callingFragment = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -109,6 +109,6 @@ public class RouteDetailFragment extends MyBaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mListener.changeUIAccToFragment(AppConstants.TAG_BROWSE_LINQS_FRAGMENT, "");
+        mListener.changeUIAccToFragment(callingFragment, "");
     }
 }

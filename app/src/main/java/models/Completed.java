@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 public class Completed implements Parcelable{
 
 @SerializedName("updatedAt")
@@ -19,7 +20,7 @@ private String createdAt;
 private String user;
 @SerializedName("driver")
 @Expose
-private String driver;
+private Driver driver;
 @SerializedName("vehicle")
 @Expose
 private String vehicle;
@@ -47,6 +48,9 @@ private Destination destination;
 @SerializedName("date")
 @Expose
 private String date;
+@SerializedName("timings")
+@Expose
+private String timings;
 @SerializedName("__v")
 @Expose
 private Integer v;
@@ -60,11 +64,11 @@ private Integer ticket;
 @Expose
 private String id;
 
+
     protected Completed(Parcel in) {
         updatedAt = in.readString();
         createdAt = in.readString();
         user = in.readString();
-        driver = in.readString();
         vehicle = in.readString();
         vehicleNumber = in.readString();
         transportName = in.readString();
@@ -72,6 +76,7 @@ private String id;
         payment = in.readString();
         qrCode = in.readString();
         date = in.readString();
+        timings = in.readString();
         if (in.readByte() == 0) {
             v = null;
         } else {
@@ -102,6 +107,14 @@ private String id;
         }
     };
 
+    public String getTimings() {
+        return timings;
+    }
+
+    public void setTimings(String timings) {
+        this.timings = timings;
+    }
+
     public String getUpdatedAt() {
 return updatedAt;
 }
@@ -117,7 +130,6 @@ return createdAt;
 public void setCreatedAt(String createdAt) {
 this.createdAt = createdAt;
 }
-
 public String getUser() {
 return user;
 }
@@ -126,11 +138,11 @@ public void setUser(String user) {
 this.user = user;
 }
 
-public String getDriver() {
+public Driver getDriver() {
 return driver;
 }
 
-public void setDriver(String driver) {
+public void setDriver(Driver driver) {
 this.driver = driver;
 }
 
@@ -246,10 +258,10 @@ this.id = id;
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeString(updatedAt);
         dest.writeString(createdAt);
         dest.writeString(user);
-        dest.writeString(driver);
         dest.writeString(vehicle);
         dest.writeString(vehicleNumber);
         dest.writeString(transportName);
@@ -257,6 +269,7 @@ this.id = id;
         dest.writeString(payment);
         dest.writeString(qrCode);
         dest.writeString(date);
+        dest.writeString(timings);
         if (v == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -277,4 +290,5 @@ this.id = id;
         }
         dest.writeString(id);
     }
+
 }

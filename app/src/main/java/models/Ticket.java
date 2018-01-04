@@ -53,9 +53,17 @@ private Integer status;
 @SerializedName("ticket")
 @Expose
 private Integer ticket;
+
+
+private Integer adapterPosition;
+
+
 @SerializedName("id")
 @Expose
 private String id;
+
+    public Ticket() {
+    }
 
     protected Ticket(Parcel in) {
         updatedAt = in.readString();
@@ -81,7 +89,13 @@ private String id;
         } else {
             ticket = in.readInt();
         }
+        if (in.readByte() == 0) {
+            adapterPosition= null;
+        } else {
+            adapterPosition = in.readInt();
+        }
         id = in.readString();
+
     }
 
     public static final Creator<Ticket> CREATOR = new Creator<Ticket>() {
@@ -255,7 +269,20 @@ this.id = id;
         } else {
             dest.writeByte((byte) 1);
             dest.writeInt(ticket);
+        } if (adapterPosition == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(adapterPosition);
         }
         dest.writeString(id);
+    }
+
+    public Integer getAdapterPosition() {
+        return adapterPosition;
+    }
+
+    public void setAdapterPosition(Integer adapterPosition) {
+        this.adapterPosition = adapterPosition;
     }
 }

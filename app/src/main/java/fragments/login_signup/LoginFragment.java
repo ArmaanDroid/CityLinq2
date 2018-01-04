@@ -32,11 +32,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import dialog.ForgetPasswordFragment;
 import fragments.MyBaseFragment;
+import listners.AdapterItemClickListner;
 import models.CommonPojo;
 import sanguinebits.com.citylinq.MainActivity;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import utils.FragTransactFucntion;
 import views.MyEditTextUnderline;
 
 /**
@@ -66,6 +69,7 @@ public class LoginFragment extends MyBaseFragment {
     LoginButton fbLogin;
     private static boolean FACEBOOK_LOGINED;
     private static WebRequestData facebookRequest;
+    private String firebaseId;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -96,6 +100,7 @@ public class LoginFragment extends MyBaseFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        firebaseId = FirebaseInstanceId.getInstance().getToken();
     }
 
     @Override
@@ -112,7 +117,6 @@ public class LoginFragment extends MyBaseFragment {
         unbinder = ButterKnife.bind(this, view);
         setFaceBookButton();
     }
-
 
 
     private void setFaceBookButton() {
@@ -188,15 +192,25 @@ public class LoginFragment extends MyBaseFragment {
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                mPreference.setUserID(commonPojo.getUser().getId());
                 mPreference.setName(commonPojo.getUser().getName());
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
+                mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+                if (commonPojo.getUser().getPhoneVerified() == 0) {
+                    if (commonPojo.getUser().getMobileNumber() == null)
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , AddNumberFragment.newInstance(commonPojo.getUser().getId(), ""), R.id.fragment_container_login);
+                    else
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , VerifyPhoneFragment.newInstance(commonPojo.getUser().getMobileNumber()
+                                        , commonPojo.getUser().getId()), R.id.fragment_container_login);
+                    return;
+                }
+                mPreference.setUserID(commonPojo.getUser().getId());
                 AppConstants.USER_ID = commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                getActivity().finish();
             }
 
             @Override
@@ -209,6 +223,33 @@ public class LoginFragment extends MyBaseFragment {
     @OnClick(R.id.linearLayout)
     void facebookLogin() {
         fbLogin.performClick();
+    }
+
+
+    @OnClick(R.id.textView4)
+    void forgetPassword() {
+        ForgetPasswordFragment forgetPasswordFragment = new ForgetPasswordFragment(new AdapterItemClickListner() {
+            @Override
+            public void onClick(int position, String tag) {
+                WebRequestData webRequestData = new WebRequestData();
+                webRequestData.setRequestEndPoint(RequestEndPoints.USER_FORGET_PASSWORD);
+                webRequestData.setEmail(tag);
+                makeRequest(webRequestData, new WeResponseCallback() {
+                    @Override
+                    public void onResponse(CommonPojo commonPojo) throws Exception {
+                        showToast("An email containing a link for recovering your password has been sent to your submitted email id");
+                    }
+
+                    @Override
+                    public void failure() throws Exception {
+
+                    }
+                });
+
+            }
+        });
+
+        forgetPasswordFragment.show(getFragmentManager(),"forgot password");
     }
 
     @OnClick(R.id.buttonLogin)
@@ -231,18 +272,36 @@ public class LoginFragment extends MyBaseFragment {
         webRequestData.setRequestEndPoint(RequestEndPoints.LOGIN);
         webRequestData.setEmail(emailAddress);
         webRequestData.setPassword(password);
-        webRequestData.setDeviceId(FirebaseInstanceId.getInstance().getToken());
+        webRequestData.setDeviceId(firebaseId);
         if (AppConstants.CURRENT_LOCATION != null) {
             webRequestData.setLongitude(String.valueOf(AppConstants.CURRENT_LOCATION.longitude));
             webRequestData.setLatitude(String.valueOf(AppConstants.CURRENT_LOCATION.latitude));
         }
+
+        if (!isNetworkConnected()) {
+            showToast("No Internet Connection");
+
+            return;
+        }
+
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                mPreference.setUserID(commonPojo.getUser().getId());
                 mPreference.setName(commonPojo.getUser().getName());
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
+                mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+                if (commonPojo.getUser().getPhoneVerified() == 0) {
+                    if (commonPojo.getUser().getMobileNumber() == null)
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , AddNumberFragment.newInstance(commonPojo.getUser().getId(), ""), R.id.fragment_container_login);
+                    else
+                        FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
+                                , VerifyPhoneFragment.newInstance(commonPojo.getUser().getMobileNumber()
+                                        , commonPojo.getUser().getId()), R.id.fragment_container_login);
+                    return;
+                }
+                mPreference.setUserID(commonPojo.getUser().getId());
                 AppConstants.USER_ID = commonPojo.getUser().getId();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

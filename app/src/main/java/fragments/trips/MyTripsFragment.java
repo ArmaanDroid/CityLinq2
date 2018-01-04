@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import adapters.TripsPagerAdapter;
 import api.RequestEndPoints;
@@ -36,7 +37,6 @@ public class MyTripsFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
-    private Intent intentLoginSignup;
 
     private TripsPagerAdapter viewPagerAdapter;
     @BindView(R.id.tablayout_group)
@@ -44,6 +44,9 @@ public class MyTripsFragment extends MyBaseFragment {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+
+    @BindView(R.id.no_record_text2)
+    ImageView no_record_text2;
 
     public MyTripsFragment() {
         // Required empty public constructor
@@ -90,13 +93,27 @@ public class MyTripsFragment extends MyBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initViews();
         mListener.changeUIAccToFragment(AppConstants.TAG_MY_TRIPS_FRAGMENT, "");
-
     }
 
     private void initViews() {
-        viewPagerAdapter = new TripsPagerAdapter(getChildFragmentManager(), getActivity(),null);
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        if (isNetworkConnected()){
+            no_record_text2.setVisibility(View.GONE);
+            getServerData();
+        }
+        else {
+            showNoInternetConnection(no_record_text2);
+            tabLayout.setVisibility(View.GONE);
+            no_record_text2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initViews();
+                }
+            });
+        }
+
+    }
+
+    private void getServerData() {
         WebRequestData webRequestData=new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.GET_MY_TRIPS+AppConstants.USER_ID);
         makeGetRequest(webRequestData, new WeResponseCallback() {
@@ -104,12 +121,14 @@ public class MyTripsFragment extends MyBaseFragment {
             public void onResponse(CommonPojo commonPojo) throws Exception {
                 viewPagerAdapter = new TripsPagerAdapter(getChildFragmentManager(), getActivity(),commonPojo);
                 viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setVisibility(View.VISIBLE);
                 tabLayout.setupWithViewPager(viewPager);
             }
 
             @Override
             public void failure() throws Exception {
-
+                tabLayout.setVisibility(View.GONE);
+                showServerDown(no_record_text2);
             }
         });
     }

@@ -29,9 +29,9 @@ private String vehicleNumber;
 @SerializedName("transportName")
 @Expose
 private String transportName;
-@SerializedName("time")
+@SerializedName("timings")
 @Expose
-private String time;
+private String timings;
 @SerializedName("payment")
 @Expose
 private String payment;
@@ -47,6 +47,9 @@ private Destination destination;
 @SerializedName("date")
 @Expose
 private String date;
+@SerializedName("paymentDate")
+@Expose
+private String paymentDate;
 @SerializedName("__v")
 @Expose
 private Integer v;
@@ -68,10 +71,11 @@ private String id;
         vehicle = in.readString();
         vehicleNumber = in.readString();
         transportName = in.readString();
-        time = in.readString();
+        timings = in.readString();
         payment = in.readString();
         qrCode = in.readString();
         date = in.readString();
+        paymentDate = in.readString();
         if (in.readByte() == 0) {
             v = null;
         } else {
@@ -159,11 +163,11 @@ this.transportName = transportName;
 }
 
 public String getTime() {
-return time;
+return timings;
 }
 
 public void setTime(String time) {
-this.time = time;
+this.timings = time;
 }
 
 public String getPayment() {
@@ -238,6 +242,22 @@ public void setId(String id) {
 this.id = id;
 }
 
+    public String getTimings() {
+        return timings;
+    }
+
+    public void setTimings(String timings) {
+        this.timings = timings;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -252,10 +272,11 @@ this.id = id;
         dest.writeString(vehicle);
         dest.writeString(vehicleNumber);
         dest.writeString(transportName);
-        dest.writeString(time);
+        dest.writeString(timings);
         dest.writeString(payment);
         dest.writeString(qrCode);
         dest.writeString(date);
+        dest.writeString(paymentDate);
         if (v == null) {
             dest.writeByte((byte) 0);
         } else {

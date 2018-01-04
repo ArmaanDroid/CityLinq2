@@ -2,16 +2,32 @@ package fragments;
 
 
 import android.app.Fragment;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import adapters.ExploreRouteAdapter;
+import api.RequestEndPoints;
+import api.WebRequestData;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import fragments.route_detail.RouteDetailFragment;
+import listners.AdapterItemClickListner;
+import models.CommonPojo;
+import models.RouteList;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +44,12 @@ public class ExploreFragment extends MyBaseFragment {
     private String mParam1;
     private String mParam2;
     private Unbinder unbinder;
+    @BindView(R.id.recycleView)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.no_record_text2)
+    ImageView no_record_text2;
+    private ArrayList<RouteList> routeList;
+    private ExploreRouteAdapter adapter;
 
 
     public ExploreFragment() {
@@ -73,7 +95,67 @@ public class ExploreFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_EXPLORE_FRAGMENT,"");
+        routeList = new ArrayList<RouteList>();
+
+        adapter = new ExploreRouteAdapter(routeList, new AdapterItemClickListner() {
+            @Override
+            public void onClick(int position, String tag) {
+                FragTransactFucntion.addFragFromFadeHistory(getFragmentManager()
+                        , RouteDetailFragment.newInstance(routeList.get(position).getStations(), AppConstants.TAG_EXPLORE_FRAGMENT)
+                        , R.id.frame_container_main);
+            }
+        });
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(adapter);
+
+        initViews();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mListener.changeUIAccToFragment(AppConstants.TAG_EXPLORE_FRAGMENT, "");
+    }
+
+    private void initViews() {
+
+        if (isNetworkConnected()) {
+
+            no_record_text2.setVisibility(View.GONE);
+            getServerData();
+        } else {
+            showNoInternetConnection(no_record_text2);
+            no_record_text2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getTag().toString().equalsIgnoreCase(AppConstants.No_Internet))
+                        initViews();
+                }
+            });
+        }
+
+    }
+
+    private void getServerData() {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.EXPLORE_ROUTE);
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                routeList.addAll(commonPojo.getRouteList());
+                adapter.notifyDataSetChanged();
+                if (routeList.size() > 0)
+                    no_record_text2.setVisibility(View.GONE);
+                else
+                    showNoDataFound(no_record_text2);
+            }
+
+            @Override
+            public void failure() throws Exception {
+                showServerDown(no_record_text2);
+            }
+        });
     }
 
     @Override

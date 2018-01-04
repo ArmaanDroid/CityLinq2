@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,6 +93,10 @@ public class InviteFragment extends MyBaseFragment {
         textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null,AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
     }
 
+    @OnClick(R.id.textViewAddPromoCode)
+    void openAddFragment(){
+        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(),new SubmitCodeFragment(),R.id.frame_container_main);
+    }
 
     @OnClick(R.id.imageViewWhatsapp)
     void shareOnWhatsApp()

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dialog.PayByWalletDialog;
+import events.PassBoughtEvent;
 import fragments.MyBaseFragment;
 import listners.AdapterItemClickListner;
 import models.CommonPojo;
@@ -52,7 +54,7 @@ public class AvailabelFragment extends MyBaseFragment {
     RecyclerView recyclerView;
 
     @BindView(R.id.no_record_text2)
-    TextView no_record_text2;
+    ImageView no_record_text2;
 
     public AvailabelFragment() {
         // Required empty public constructor
@@ -119,7 +121,7 @@ public class AvailabelFragment extends MyBaseFragment {
 
             no_record_text2.setVisibility(View.GONE);
         } else {
-            no_record_text2.setVisibility(View.VISIBLE);
+            showNoDataFound(no_record_text2);
         }
 
     }

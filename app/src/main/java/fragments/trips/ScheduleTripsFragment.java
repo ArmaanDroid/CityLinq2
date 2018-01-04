@@ -7,10 +7,15 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +24,15 @@ import adapters.ScheduledTripsAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import events.TripCanceledEvent;
 import fragments.MyBaseFragment;
+import fragments.RecieptFragment;
+import listners.AdapterItemClickListner;
 import models.Scheduled;
+import models.Ticket;
 import sanguinebits.com.citylinq.R;
+import utils.AppConstants;
+import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,13 +46,14 @@ public class ScheduleTripsFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private List<Scheduled> tripList;
+    private ArrayList<Scheduled> tripList = new ArrayList<>();
     private String mParam2;
     private Unbinder unbinder;
     @BindView(R.id.recycleView)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_record_text2)
-    TextView no_record_text2;
+    ImageView no_record_text2;
+    private ScheduledTripsAdapter adapter;
 
     public ScheduleTripsFragment() {
         // Required empty public constructor
@@ -89,16 +101,68 @@ public class ScheduleTripsFragment extends MyBaseFragment {
         initViews();
     }
 
-    private void initViews() {
-        if (tripList.size() > 0) {
-
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRecyclerView.setAdapter(new ScheduledTripsAdapter(getContext(), (ArrayList<Scheduled>) tripList));
-            no_record_text2.setVisibility(View.GONE);
-        } else
-            no_record_text2.setVisibility(View.VISIBLE);
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
+    private void initViews() {
+        if (tripList.size() > 0) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new ScheduledTripsAdapter(getContext(), tripList, new AdapterItemClickListner() {
+                @Override
+                public void onClick(int position, String tag) {
+                    Scheduled currentTrip = tripList.get(position);
+                    Ticket ticket = new Ticket();
+                    ticket.setId(currentTrip.getId());
+                    ticket.setQrCode(currentTrip.getQrCode());
+                    ticket.setDate(currentTrip.getDate());
+                    ticket.setTransportName(currentTrip.getTransportName());
+                    ticket.setVehicleNumber(currentTrip.getVehicleNumber());
+                    ticket.setTimings(currentTrip.getTimings());
+                    ticket.setPayment(currentTrip.getPayment());
+                    ticket.setTicket(currentTrip.getTicket());
+                    ticket.setAdapterPosition(position);
+                    FragTransactFucntion.addFragFromFadeHistory(getParentFragment().getFragmentManager()
+                            , RecieptFragment.newInstance(ticket, currentTrip.getSource().getName()
+                                    , currentTrip.getDestination().getName(), false, false), R.id.frame_container_main);
+
+                }
+            });
+
+            mRecyclerView.setAdapter(adapter);
+            no_record_text2.setVisibility(View.GONE);
+        } else
+            showNoDataFound(no_record_text2);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(TripCanceledEvent event) {
+        Log.d("TAG", "onMessageEvent: " + event.position);
+        deleteEntry(event.position);
+
+        for (Scheduled scheduled : AppConstants.getScheduleList()) {
+            if (scheduled.getId().equalsIgnoreCase(event.id)) {
+                AppConstants.getScheduleList().remove(scheduled);
+                break;
+            }
+        }
+    }
+
+    void deleteEntry(int position) {
+        tripList.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position,tripList.size());
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onDestroy() {

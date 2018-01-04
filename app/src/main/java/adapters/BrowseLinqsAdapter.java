@@ -46,7 +46,7 @@ public class BrowseLinqsAdapter extends RecyclerView.Adapter<BrowseLinqsAdapter.
                 listner.onClick(position, "");
             }
         });
-        holder.textViewStatus.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listner.onClick(position, "book");
@@ -77,14 +77,40 @@ public class BrowseLinqsAdapter extends RecyclerView.Adapter<BrowseLinqsAdapter.
             textViewTime = itemView.findViewById(R.id.textView21);
             textViewPrice = itemView.findViewById(R.id.textView19);
 
-            textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(),R.drawable.ic_available), null,null, null);
+            textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_available), null, null, null);
         }
 
         public void bindData(int position) {
             currentItem = transportList.get(position);
+            String duration = currentItem.getApproxTimeDuration();
+            duration.split("");
+            String finalDuration;
+            if (Integer.valueOf(duration) < 60) {
+                finalDuration = duration + " minutes";
+            } else {
+                int hours = Integer.valueOf(duration) / 60;
+                int minutes = Integer.valueOf(duration) % 60;
+                finalDuration = hours + " hrs " + minutes + " min";
+            }
+
             textViewLinqName.setText(currentItem.getTransportName());
-            textViewSeatAndTime.setText(currentItem.getSeats() + "seats." + currentItem.getApproxTimeDuration());
+            textViewSeatAndTime.setText(currentItem.getSeats() + " seats • " + finalDuration);
             textViewTime.setText(currentItem.getTimings());
+
+            int availablepercentage = (int) ((Float.valueOf(currentItem.getAvailableSeats()) / Float.valueOf(currentItem.getSeats())) * 100);
+            if (availablepercentage < 20) {
+                textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_almost_filled), null, null, null);
+                textViewStatus.setTextColor(itemView.getContext().getResources().getColor(R.color.yellow_squash));
+                textViewStatus.setText("Almost Filled");
+            } else if (availablepercentage == 0) {
+                textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_not_available), null, null, null);
+                textViewStatus.setText("Not Available");
+                textViewStatus.setTextColor(itemView.getContext().getResources().getColor(R.color.pale_red));
+            } else {
+                textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_available), null, null, null);
+                textViewStatus.setText("Available");
+                textViewStatus.setTextColor(itemView.getContext().getResources().getColor(R.color.windows_blue));
+            }
         }
     }
 }

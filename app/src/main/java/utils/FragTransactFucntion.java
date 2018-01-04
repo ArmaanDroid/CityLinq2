@@ -47,25 +47,26 @@ public class FragTransactFucntion {
 
     public static void addFragFromFadeHistory(FragmentManager fragmentManager, Fragment fragment,
                                               int containerId) {
-        fragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in, 0, 0,
-                R.animator.fade_out).addToBackStack(null).add(containerId, fragment).commit();
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                R.anim.fade_out).addToBackStack(null).add(containerId, fragment).commit();
     }
+
+    public static void addFragFromBottomFadeHistory(FragmentManager fragmentManager, Fragment fragment,
+                                                    int containerId) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.bt_bottom_sheet_dialog_open, R.anim.fade_out, R.anim.fade_in,
+                R.anim.bt_bottom_sheet_dialog_close).addToBackStack(null).add(containerId, fragment).commit();
+    }
+
+    public static void addFragFromRightFadeHistory(FragmentManager fragmentManager, Fragment fragment,
+                                                   int containerId) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.right_to_left, R.anim.fade_out, R.anim.left_to_right,
+                R.anim.back_left_to_right).addToBackStack(null).add(containerId, fragment).commit();
+    }
+
     public static void addFragFromFadeWithoutHistory(FragmentManager fragmentManager, Fragment fragment,
-                                              int containerId) {
+                                                     int containerId) {
         fragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in, 0, 0,
                 R.animator.fade_out).add(containerId, fragment).commit();
-    }
-
-    public static void replaceFragFromRightWithoutHistry(FragmentManager fragmentManager, Fragment fragment,
-                                                         int containerId) {
-        fragmentManager.beginTransaction().setCustomAnimations(R.animator.slide_right_in, 0, 0,
-                R.animator.slide_right_out).replace(containerId, fragment, fragment.getClass().getSimpleName()).commit();
-    }
-
-    public static void replaceFragFromRightWithTag(FragmentManager fragmentManager, Fragment fragment,
-                                                   int containerId) {
-        fragmentManager.beginTransaction().setCustomAnimations(R.animator.slide_right_in, 0, 0,
-                R.animator.slide_right_out).addToBackStack(null).replace(containerId, fragment).commit();
     }
 
 }

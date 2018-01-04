@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 public class TransportList implements Parcelable {
@@ -22,6 +23,9 @@ public class TransportList implements Parcelable {
     @SerializedName("vehicleNumber")
     @Expose
     private String vehicleNumber;
+    @SerializedName("driver")
+    @Expose
+    private Driver driver;
     @SerializedName("transportName")
     @Expose
     private String transportName;
@@ -34,9 +38,6 @@ public class TransportList implements Parcelable {
     @SerializedName("timings")
     @Expose
     private String timings;
-    @SerializedName("driver")
-    @Expose
-    private String driver;
     @SerializedName("__v")
     @Expose
     private Integer v;
@@ -56,6 +57,7 @@ public class TransportList implements Parcelable {
     @Expose
     private String id;
 
+
     private String fare;
     private Integer availableSeats;
 
@@ -71,7 +73,6 @@ public class TransportList implements Parcelable {
             seats = in.readInt();
         }
         timings = in.readString();
-        driver = in.readString();
         if (in.readByte() == 0) {
             v = null;
         } else {
@@ -83,7 +84,11 @@ public class TransportList implements Parcelable {
         features = in.createStringArrayList();
         id = in.readString();
         fare = in.readString();
-        availableSeats = in.readInt();
+        if (in.readByte() == 0) {
+            availableSeats = null;
+        } else {
+            availableSeats = in.readInt();
+        }
     }
 
     public static final Creator<TransportList> CREATOR = new Creator<TransportList>() {
@@ -97,23 +102,6 @@ public class TransportList implements Parcelable {
             return new TransportList[size];
         }
     };
-
-
-    public String getFare() {
-        return fare;
-    }
-
-    public void setFare(String fare) {
-        this.fare = fare;
-    }
-
-    public Integer getAvailableSeats() {
-        return availableSeats;
-    }
-
-    public void setAvailableSeats(Integer availableSeats) {
-        this.availableSeats = availableSeats;
-    }
 
     public String getUpdatedAt() {
         return updatedAt;
@@ -147,6 +135,14 @@ public class TransportList implements Parcelable {
         this.vehicleNumber = vehicleNumber;
     }
 
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
     public String getTransportName() {
         return transportName;
     }
@@ -177,14 +173,6 @@ public class TransportList implements Parcelable {
 
     public void setTimings(String timings) {
         this.timings = timings;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
     }
 
     public Integer getV() {
@@ -235,6 +223,22 @@ public class TransportList implements Parcelable {
         this.id = id;
     }
 
+    public String getFare() {
+        return fare;
+    }
+
+    public void setFare(String fare) {
+        this.fare = fare;
+    }
+
+    public Integer getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -254,7 +258,6 @@ public class TransportList implements Parcelable {
             dest.writeInt(seats);
         }
         dest.writeString(timings);
-        dest.writeString(driver);
         if (v == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -267,6 +270,11 @@ public class TransportList implements Parcelable {
         dest.writeStringList(features);
         dest.writeString(id);
         dest.writeString(fare);
-        dest.writeInt(availableSeats);
+        if (availableSeats == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(availableSeats);
+        }
     }
 }

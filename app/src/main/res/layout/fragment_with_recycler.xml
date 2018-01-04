@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/no_record_text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No records"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/recycleView"
-        app:layout_constraintLeft_toLeftOf="@+id/recycleView"
-        app:layout_constraintRight_toRightOf="@+id/recycleView"
-        app:layout_constraintTop_toTopOf="@+id/recycleView" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleView"
@@ -28,5 +18,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/no_record_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/no_data_found"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/recycleView"
+        app:layout_constraintLeft_toLeftOf="@+id/recycleView"
+        app:layout_constraintRight_toRightOf="@+id/recycleView"
+        app:layout_constraintTop_toTopOf="@+id/recycleView" />
 
 </android.support.constraint.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import dialog.ChangeNumberFragment;
 import fragments.MyBaseFragment;
+import listners.AdapterItemClickListner;
 import models.CommonPojo;
 import sanguinebits.com.citylinq.MainActivity;
 import sanguinebits.com.citylinq.R;
@@ -98,6 +101,20 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
         return inflater.inflate(R.layout.fragment_verify_phone, container, false);
     }
 
+
+    @OnClick(R.id.changeNumber)
+    void changeNumber(){
+        ChangeNumberFragment changeNumberFragment=new ChangeNumberFragment(new AdapterItemClickListner() {
+            @Override
+            public void onClick(int position, String tag) {
+                phoneNumber=tag;
+                COUNT_DOWN_DONE=true;
+                resendCode();
+            }
+        });
+        changeNumberFragment.show(getFragmentManager(),"changeNumber");
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -160,17 +177,24 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
             showToast("Please enter 4 digit code");
             return;
         }
+        if(!isNetworkConnected()){
+            showToast("No Internet Connection");
 
+            return;
+        }
         WebRequestData webRequestData = new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.VERIFY_OTP);
         webRequestData.setRequestId(requestId);
         webRequestData.setUserId(userID);
+        webRequestData.setMobileNumber(phoneNumber);
         webRequestData.setType(AppConstants.TYPE_USER);
         webRequestData.setCode(pin);
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                AppConstants.USER_ID=commonPojo.getUser().getId();
+                mPreference.setUserID(userID);
+                AppConstants.USER_ID=userID;
+                mPreference.setMobileNumber(phoneNumber);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -302,6 +326,8 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        Log.d("TAG", "beforeTextChanged: "+s);
+        mPinHiddenEditText.setSelection(s.length());
 
     }
 
@@ -311,7 +337,7 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
 //        setDefaultPinBackground(mPinSecondDigitEditText);
 //        setDefaultPinBackground(mPinThirdDigitEditText);
 //        setDefaultPinBackground(mPinForthDigitEditText);
-
+        mPinHiddenEditText.setSelection(s.length());
         if (s.length() == 0) {
 //            setFocusedPinBackground(mPinFirstDigitEditText);
             mPinFirstDigitEditText.setText("");
@@ -337,30 +363,11 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
 
     @Override
     public void afterTextChanged(Editable s) {
+        Log.d("TAG", "afterTextChanged: "+s);
 
     }
 
-    /**
-     * Hides soft keyboard.
-     *
-     * @param editText EditText which has focus
-     */
-    public void hideSoftKeyboard(EditText editText) {
-        if (editText == null)
-            return;
 
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
-
-    /**
-     * Sets default PIN background.
-     *
-     * @param editText edit text to change
-     */
-    private void setDefaultPinBackground(EditText editText) {
-        editText.setCompoundDrawables(null, null, null, getResources().getDrawable(R.drawable.drawable_pin_edittext));
-    }
 
     /**
      * Sets focus on a specific EditText field.
@@ -376,33 +383,7 @@ public class VerifyPhoneFragment extends MyBaseFragment implements View.OnFocusC
         editText.requestFocus();
     }
 
-    /**
-     * Sets focused PIN field background.
-     *
-     * @param editText edit text to change
-     */
-    private void setFocusedPinBackground(EditText editText) {
-        editText.setCompoundDrawables(null, null, null, getResources().getDrawable(R.drawable.drawable_pin_highlighted_edittext));
-    }
 
-    /**
-     * Sets background of the view.
-     * This method varies in implementation depending on Android SDK version.
-     *
-     * @param view       View to which set background
-     * @param background Background to set to view
-     */
-    @SuppressWarnings("deprecation")
-    public void setViewBackground(View view, Drawable background) {
-        if (view == null || background == null)
-            return;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(background);
-        } else {
-            view.setBackgroundDrawable(background);
-        }
-    }
 
     /**
      * Shows soft keyboard.

@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import adapters.FavouriteTripsAdapter;
 import api.RequestEndPoints;
@@ -17,6 +22,7 @@ import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import events.TripCanceledEvent;
 import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
@@ -40,7 +46,7 @@ public class FavouriteFragment extends MyBaseFragment {
     @BindView(R.id.recycleView)
     RecyclerView recyclerView;
     @BindView(R.id.no_record_text2)
-    TextView no_record_text2;
+    ImageView no_record_text2;
 
 
     public FavouriteFragment() {
@@ -91,6 +97,21 @@ public class FavouriteFragment extends MyBaseFragment {
     }
 
     private void initViews() {
+        if (isNetworkConnected())
+            getDataFromServer();
+        else {
+            showNoInternetConnection(no_record_text2);
+            no_record_text2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getTag().toString().equalsIgnoreCase(AppConstants.No_Internet))
+                        initViews();
+                }
+            });
+        }
+    }
+
+    private void getDataFromServer() {
         WebRequestData webRequestData = new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.GET_FAVOURITE_TRIPS + AppConstants.USER_ID);
         makeGetRequest(webRequestData, new WeResponseCallback() {
@@ -101,17 +122,17 @@ public class FavouriteFragment extends MyBaseFragment {
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerView.setAdapter(new FavouriteTripsAdapter(commonPojo.getFavTrips()));
                 } else {
-                    no_record_text2.setVisibility(View.VISIBLE);
+                    showNoDataFound(no_record_text2);
                 }
             }
 
             @Override
             public void failure() throws Exception {
-
+                showServerDown(no_record_text2);
             }
         });
-
     }
+
 
     @Override
     public void onDestroy() {

@@ -15,10 +15,10 @@ public class CommonPojo {
     private Integer wallet;
     private User user;
     private List<Station> stations = null;
-    private List<Object> schedule = null;
-        private List<Object> favTrips = null;
+    private List<Scheduled> schedule = null;
+    private List<Object> favTrips = null;
     private List<TransportList> transportList = null;
-
+    private List<RouteList> routeList = null;
     private List<Scheduled> scheduled = null;
     private List<Completed> completed = null;
 
@@ -27,6 +27,14 @@ public class CommonPojo {
     private Ticket ticket;
     private PurchasePass pass;
 
+
+    public List<RouteList> getRouteList() {
+        return routeList;
+    }
+
+    public void setRouteList(List<RouteList> routeList) {
+        this.routeList = routeList;
+    }
 
     public PurchasePass getPass() {
         return pass;
@@ -95,6 +103,7 @@ public class CommonPojo {
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
+
     public String getRequestId() {
         return requestId;
     }
@@ -110,6 +119,7 @@ public class CommonPojo {
     public List<Station> getStations() {
         return stations;
     }
+
     public void setStations(List<Station> stations) {
         this.stations = stations;
     }
@@ -122,11 +132,11 @@ public class CommonPojo {
         this.transportList = transportList;
     }
 
-    public List<Object> getSchedule() {
+    public List<Scheduled> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<Object> schedule) {
+    public void setSchedule(List<Scheduled> schedule) {
         this.schedule = schedule;
     }
 

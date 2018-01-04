@@ -33,10 +33,12 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import fragments.ExploreFragment;
 import fragments.FavouriteFragment;
 import fragments.HomeFragment;
 import fragments.InviteFragment;
@@ -77,8 +79,15 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     @BindView(R.id.imageViewNotification)
     ImageView imageViewNotification;
 
+    @BindView(R.id.imageViewProfile)
+    ImageView imageViewProfile;
+
     @BindView(R.id.textViewTitle)
     TextView textViewTitle;
+
+    @BindView(R.id.userName)
+    TextView textViewuserName;
+
     private Typeface typefaceSemiBold;
     private Typeface typefaceTitle;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -116,7 +125,10 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
             @Override
             public void onDrawerOpened(View drawerView) {
-
+                textViewuserName.setText(preference.getName());
+                Picasso.with(getApplicationContext()).load(AppConstants.BASE_URL_image + preference.getProfilePic())
+                        .placeholder(R.drawable.user)
+                        .into(imageViewProfile);
             }
 
             @Override
@@ -158,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ReviewFleetFragment(), R.id.frame_container_main);
                 break;
             case R.id.myExploreRoutes:
-                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new LoginFragment(), R.id.frame_container_main);
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ExploreFragment(), R.id.frame_container_main);
                 break;
             case R.id.imageViewProfile:
                 FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ProfileFragment(), R.id.frame_container_main);
@@ -167,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
     }
 
     private float getScaleRatio(float slideOffset) {
-
+        Log.d("TAG", "getScaleRatio: "+slideOffset);
         if (previousSlideOffset > slideOffset) {
             previousSlideOffset = slideOffset;
             return maximise(slideOffset);
@@ -201,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         } else {
             if (drawer.isEnabled()) {
                 drawer.openDrawer(GravityCompat.START);
-                nav_view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.activityBackgroundMain));
 
             } else
                 onBackPressed();
@@ -381,6 +392,15 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 showDarkToolbar();
                 textViewTitle.setText(R.string.explore_routes);
                 break;
+            case AppConstants.TAG_VIEW_TRIP:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.view_trip);
+                break;
+                case AppConstants.TAG_SUBMIT_CODE_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.add_code);
+                break;
+
         }
     }
 

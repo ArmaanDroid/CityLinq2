@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,8 +24,8 @@ import adapters.PurchasedPassesAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import events.PassBoughtEvent;
 import fragments.MyBaseFragment;
-import models.Pass;
 import models.PurchasePass;
 import sanguinebits.com.citylinq.R;
 
@@ -47,7 +48,7 @@ public class PurchasedFragment extends MyBaseFragment {
     @BindView(R.id.recycleView)
     RecyclerView recyclerView;
     @BindView(R.id.no_record_text2)
-    TextView no_record_text2;
+    ImageView no_record_text2;
     private PurchasedPassesAdapter adapter;
 
     public PurchasedFragment() {
@@ -115,7 +116,7 @@ public class PurchasedFragment extends MyBaseFragment {
             recyclerView.setAdapter(adapter);
             no_record_text2.setVisibility(View.GONE);
         } else {
-            no_record_text2.setVisibility(View.VISIBLE);
+            showNoDataFound(no_record_text2);
         }
     }
 

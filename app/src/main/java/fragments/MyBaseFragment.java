@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,11 +21,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.wallet.Cart;
+import com.google.android.gms.wallet.LineItem;
+import com.google.android.gms.wallet.MaskedWalletRequest;
+import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
+import com.google.android.gms.wallet.PaymentMethodTokenizationType;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,6 +43,9 @@ import java.util.Calendar;
 import api.RetrofitClient;
 import api.WebRequestData;
 import models.CommonPojo;
+import models.PaymentDetails;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,18 +68,21 @@ public class MyBaseFragment extends Fragment {
     public AppPreference mPreference;
     protected Dialog progressDialog;
     public Activity activity;
-    public Calendar calendar=Calendar.getInstance();
+    public Calendar calendar = Calendar.getInstance();
+
     public MyBaseFragment() {
         // Required empty public constructor
     }
+
     protected DateFormat journeyDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
     protected DateFormat monthNameDateFormat = new SimpleDateFormat("MMMM d, yyyy");
+    protected DateFormat FormatDateMonthYear = new SimpleDateFormat("dd mm yyyy");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreference=new AppPreference(getContext());
+        mPreference = new AppPreference(getContext());
     }
 
     @Override
@@ -85,12 +102,15 @@ public class MyBaseFragment extends Fragment {
     protected int getColor(int colorCode) {
         return ContextCompat.getColor(getActivity(), colorCode);
     }
+
     protected void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
+
     public Drawable getDrawable(int drawableId) {
         return ContextCompat.getDrawable(getActivity(), drawableId);
     }
+
     private Typeface getFont(String assetName) {
         return Typeface.createFromAsset(getActivity().getAssets(), assetName);
     }
@@ -104,14 +124,38 @@ public class MyBaseFragment extends Fragment {
     protected void setTypeFace(TextView tv, String fontName) {
         tv.setTypeface(getFont(fontName));
     }
+
     protected boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
 
-    public String setPriceAsText(String price){
-        return "$"+price;
+    public String setPriceAsText(String price) {
+        return "$" + price;
+    }
+
+
+    public void showNoInternetConnection(ImageView imageView) {
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setTag(AppConstants.No_Internet);
+        Picasso.with(getActivity()).load(R.drawable.no_internet_connection)
+                .into(imageView);
+    }
+
+    public void showNoDataFound(ImageView imageView) {
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setTag("");
+
+        Picasso.with(getActivity()).load(R.drawable.no_data_found)
+                .into(imageView);
+    }
+
+    public void showServerDown(ImageView imageView) {
+        imageView.setTag("");
+        imageView.setVisibility(View.VISIBLE);
+        Picasso.with(getActivity()).load(R.drawable.network_down)
+                .into(imageView);
     }
 
     @Override
@@ -127,12 +171,13 @@ public class MyBaseFragment extends Fragment {
 
         }
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            activity=getActivity();
+            activity = getActivity();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -158,12 +203,14 @@ public class MyBaseFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void changeUIAccToFragment(String fragmentTag, String s);
+
         void backPressed();
 
     }
 
     public interface WeResponseCallback {
         void onResponse(CommonPojo commonPojo) throws Exception;
+
         void failure() throws Exception;
     }
 
@@ -171,6 +218,11 @@ public class MyBaseFragment extends Fragment {
 
     protected void makeRequest(final WebRequestData webRequestData,
                                final WeResponseCallback webResponseCallback) {
+
+        if (!isNetworkConnected()) {
+            showToast("Internet connection not available. Please try later");
+            return;
+        }
         progressDialog.show();
         Log.v("requesttttt", new Gson().toJson(webRequestData));
         Call<CommonPojo> call = RetrofitClient.getRestClient().makeRequest(webRequestData, webRequestData.getRequestEndPoint());
@@ -193,8 +245,12 @@ public class MyBaseFragment extends Fragment {
             public void onFailure(Call<CommonPojo> call, Throwable t) {
                 try {
                     progressDialog.dismiss();
-//                    showToast(t.toString());
                     webResponseCallback.failure();
+                    t.printStackTrace();
+                    FirebaseCrash.logcat(Log.ERROR, "API_ERROR", "NPE caught");
+                    FirebaseCrash.report(t);
+                    if (t instanceof SocketTimeoutException || t instanceof ConnectException)
+                        showToast("Error Connecting to server");
                 } catch (Exception e) {
 
                 }
@@ -203,10 +259,10 @@ public class MyBaseFragment extends Fragment {
     }
 
     protected void makeGetRequest(final WebRequestData webRequestData,
-                               final WeResponseCallback webResponseCallback) {
+                                  final WeResponseCallback webResponseCallback) {
         progressDialog.show();
         Log.v("requesttttt", new Gson().toJson(webRequestData));
-        Call<CommonPojo> call = RetrofitClient.getRestClient().makeGetRequest(AppConstants.BASE_URL+webRequestData.getRequestEndPoint());
+        Call<CommonPojo> call = RetrofitClient.getRestClient().makeGetRequest(AppConstants.BASE_URL + webRequestData.getRequestEndPoint());
         call.enqueue(new Callback<CommonPojo>() {
             @Override
             public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
@@ -226,15 +282,21 @@ public class MyBaseFragment extends Fragment {
             public void onFailure(Call<CommonPojo> call, Throwable t) {
                 try {
                     progressDialog.dismiss();
-//                    showToast(t.toString());
-                    t.printStackTrace();
                     webResponseCallback.failure();
+
+                    FirebaseCrash.logcat(Log.ERROR, "API_ERROR", "NPE caught");
+                    FirebaseCrash.report(t);
+                    if (t instanceof SocketTimeoutException || t instanceof ConnectException) {
+                        showToast("Error Connecting to server");
+                    }
+                    t.printStackTrace();
                 } catch (Exception e) {
 
                 }
             }
         });
     }
+
     protected void updateData(WebRequestData webRequestData,
                               final WeResponseCallback webResponseCallback) {
         progressDialog.show();
@@ -258,13 +320,95 @@ public class MyBaseFragment extends Fragment {
             public void onFailure(Call<CommonPojo> call, Throwable t) {
                 try {
                     progressDialog.dismiss();
-                    // showToast(t.toString());
+                    t.printStackTrace();
+
+                    FirebaseCrash.logcat(Log.ERROR, "API_ERROR", "NPE caught");
+                    FirebaseCrash.report(t);
+                    if (t instanceof SocketTimeoutException || t instanceof ConnectException)
+                        showToast("Error Connecting to server");
                     webResponseCallback.failure();
                 } catch (Exception e) {
 
                 }
             }
         });
+    }
+
+
+    protected void updateProfile(String endPoint, final RequestBody webRequestData, MultipartBody.Part file,
+                                 final WeResponseCallback webResponseCallback) {
+
+        Call<CommonPojo> call = RetrofitClient.getRestClient().updateProfile(endPoint, file, webRequestData);
+        call.enqueue(new Callback<CommonPojo>() {
+            @Override
+            public void onResponse(Call<CommonPojo> call, Response<CommonPojo> response) {
+                try {
+                    progressDialog.dismiss();
+                    if (response.body().getMessage() != null && !response.body().getMessage().equalsIgnoreCase("Successful"))
+                        showToast(response.body().getMessage());
+                    if (response.isSuccessful() && response.body().isSuccess()) {
+                        webResponseCallback.onResponse(response.body());
+                    } else webResponseCallback.failure();
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonPojo> call, Throwable t) {
+                try {
+                    progressDialog.dismiss();
+                    webResponseCallback.failure();
+                    //   showToast(t.toString());
+                    t.printStackTrace();
+
+                    FirebaseCrash.logcat(Log.ERROR, "API_ERROR", "NPE caught");
+                    FirebaseCrash.report(t);
+                    if (t instanceof SocketTimeoutException || t instanceof ConnectException) {
+                        showToast("Error Connecting to server");
+                    }
+                } catch (Exception e) {
+
+
+                }
+            }
+        });
+    }
+
+    private MaskedWalletRequest l(PaymentDetails details) {
+        // This is just an example publicKey for the purpose of this codelab.
+        // To learn how to generate your own visit:
+        // https://github.com/android-pay/androidpay-quickstart
+        String publicKey = "BO39Rh43UGXMQy5PAWWe7UGWd2a9YRjNLPEEVe+zWIbdIgALcDcnYCuHbmrrzl7h8FZjl6RCzoi5/cDrqXNRVSo=";
+        PaymentMethodTokenizationParameters parameters =
+                PaymentMethodTokenizationParameters.newBuilder()
+                        .setPaymentMethodTokenizationType(
+                                PaymentMethodTokenizationType.NETWORK_TOKEN)
+                        .addParameter("publicKey", publicKey)
+                        .build();
+
+        MaskedWalletRequest maskedWalletRequest =
+                MaskedWalletRequest.newBuilder()
+                        .setMerchantName(details.getMerchantName())
+                        .setPhoneNumberRequired(true)
+                        .setShippingAddressRequired(true)
+                        .setCurrencyCode(details.getCurrencyCode())
+                        .setCart(Cart.newBuilder()
+                                .setCurrencyCode(details.getCurrencyCode())
+                                .setTotalPrice(details.getTotalPrice())
+                                .addLineItem(LineItem.newBuilder()
+                                        .setCurrencyCode(details.getCurrencyCode())
+                                        .setDescription(details.getDescription())
+                                        .setQuantity(details.getQuantity())
+                                        .setUnitPrice(details.getUnitPrice())
+                                        .setTotalPrice(details.getTotalPrice())
+                                        .build())
+                                .build())
+                        .setEstimatedTotalPrice(details.getTotalPrice())
+                        .setPaymentMethodTokenizationParameters(parameters)
+                        .build();
+        return maskedWalletRequest;
+
     }
 
     public void buildAlertMessageNoGps() {
@@ -285,4 +429,28 @@ public class MyBaseFragment extends Fragment {
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
+
+    public boolean isLocationServiceEnabled() {
+        LocationManager locationManager = null;
+        boolean gps_enabled = false, network_enabled = false;
+
+        if (locationManager == null)
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+            //do nothing...
+        }
+
+        try {
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {
+            //do nothing...
+        }
+
+        return gps_enabled || network_enabled;
+
+    }
+
 }

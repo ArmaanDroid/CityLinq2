@@ -101,4 +101,14 @@
         app:layout_constraintLeft_toLeftOf="@+id/recycleViewRoutes"
         app:layout_constraintRight_toRightOf="@+id/recycleViewRoutes"
         app:layout_constraintTop_toTopOf="@+id/recycleViewRoutes" />
+    <ImageView
+        android:id="@+id/no_record_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No transport on this route"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/recycleViewRoutes"
+        app:layout_constraintLeft_toLeftOf="@+id/recycleViewRoutes"
+        app:layout_constraintRight_toRightOf="@+id/recycleViewRoutes"
+        app:layout_constraintTop_toTopOf="@+id/recycleViewRoutes" />
 </android.support.constraint.ConstraintLayout>

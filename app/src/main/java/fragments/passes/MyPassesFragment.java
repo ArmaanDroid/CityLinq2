@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import adapters.PassesPagerAdapter;
 import api.RequestEndPoints;
@@ -43,6 +44,9 @@ public class MyPassesFragment extends MyBaseFragment {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+
+    @BindView(R.id.no_record_text2)
+    ImageView no_record_text2;
 
     public MyPassesFragment() {
         // Required empty public constructor
@@ -92,6 +96,23 @@ public class MyPassesFragment extends MyBaseFragment {
     }
 
     private void initViews() {
+        if (isNetworkConnected()){
+            no_record_text2.setVisibility(View.GONE);
+            getDataServer();
+        }
+        else {
+            showNoInternetConnection(no_record_text2);
+            tabLayout.setVisibility(View.GONE);
+            no_record_text2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    initViews();
+                }
+            });
+        }
+    }
+
+    private void getDataServer() {
         WebRequestData webRequestData = new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.GET_MY_PASSES + AppConstants.USER_ID);
         makeGetRequest(webRequestData, new WeResponseCallback() {
@@ -100,19 +121,18 @@ public class MyPassesFragment extends MyBaseFragment {
 
                 viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity(), commonPojo);
                 viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setVisibility(View.VISIBLE);
                 tabLayout.setupWithViewPager(viewPager);
             }
 
             @Override
             public void failure() throws Exception {
-                viewPagerAdapter = new PassesPagerAdapter(getChildFragmentManager(), getActivity(), null);
-                viewPager.setAdapter(viewPagerAdapter);
-                tabLayout.setupWithViewPager(viewPager);
+                tabLayout.setVisibility(View.GONE);
+                showServerDown(no_record_text2);
             }
         });
-
-
     }
+
 
     @Override
     public void onPause() {
