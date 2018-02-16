@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import listners.AdapterItemClickListner;
 import models.Scheduled;
 import sanguinebits.com.citylinq.R;
 
@@ -32,9 +33,12 @@ public class ScheduleRidesPagerAdapter extends PagerAdapter {
     private TextView textViewTiming;
     private TextView textViewBoardingStation;
     private Scheduled currentItem;
+    static final   String PAGER_ITEM_CLICK_TAG="pagerItemClicked";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy", Locale.US);
+    private AdapterItemClickListner adapterItemClickListner;
 
-    public ScheduleRidesPagerAdapter(List<Scheduled> scheduleList) {
+    public ScheduleRidesPagerAdapter(List<Scheduled> scheduleList, AdapterItemClickListner adapterItemClickListner) {
+        this.adapterItemClickListner = adapterItemClickListner;
         this.scheduleList = scheduleList;
     }
 
@@ -48,11 +52,19 @@ public class ScheduleRidesPagerAdapter extends PagerAdapter {
         return view == ((RelativeLayout) object);
     }
 
+    View itemView;
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.view_schedule_ride_pager_item, container, false);
+    public Object instantiateItem(ViewGroup container, final int position) {
 
+            itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.view_schedule_ride_pager_item, container, false);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterItemClickListner.onClick(position,PAGER_ITEM_CLICK_TAG);
+            }
+        });
         textViewDate = itemView.findViewById(R.id.textView15);
         textViewTiming = itemView.findViewById(R.id.textView14);
         textViewBoardingStation = itemView.findViewById(R.id.textView18);
@@ -66,6 +78,7 @@ public class ScheduleRidesPagerAdapter extends PagerAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         container.addView(itemView);
         return itemView;
     }

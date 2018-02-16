@@ -210,4 +210,6 @@ public class BrowseLinqsFragment extends MyBaseFragment {
         super.onDestroyView();
         mListener.changeUIAccToFragment(AppConstants.TAG_HOME_FRAGMENT, "");
     }
+
+
 }

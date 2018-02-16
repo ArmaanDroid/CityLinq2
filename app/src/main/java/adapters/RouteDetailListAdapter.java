@@ -42,7 +42,7 @@ public class RouteDetailListAdapter extends RecyclerView.Adapter<RouteDetailList
             holder.textViewWithSideLine.setIsLast(true);
 
 
-        holder.textViewWithSideLine.customSetText(currentItem.getName(), "Estd. Reach Time 10:00 AM");
+        holder.textViewWithSideLine.customSetText(currentItem.getName(), currentItem.getDescription());
     }
 
     @Override

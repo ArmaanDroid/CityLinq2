@@ -143,7 +143,8 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
 
 
         showTrack(new LatLng(stationStart.getLatitude(), stationStart.getLongitude())
-                , new LatLng(stationDest.getLatitude(), stationDest.getLongitude()));
+                , new LatLng(stationDest.getLatitude(), stationDest.getLongitude()), stationStart.getName(), stationDest.getName()
+                ,stationStart.getDescription(),stationDest.getDescription());
     }
 
     private void drawFinalPath() {
@@ -157,19 +158,22 @@ public class MapViewFragment extends MyBaseFragment implements OnMapReadyCallbac
             builder.include(latLng);
         LatLngBounds bounds = builder.build();
 
-            mMap.addPolyline(lineOptions);
+        mMap.addPolyline(lineOptions);
 
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 50);
         mMap.animateCamera(cameraUpdate);
     }
 
-    private void showTrack(LatLng latLngSource, LatLng latLngDestiation) {
+    private void showTrack(LatLng latLngSource, LatLng latLngDestiation, String sourceName, String destinationName,String srcDesc,String destDesc) {
 
-    if(index==1){
-        Marker marker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.route_pointer)).position(latLngSource));
-    }
-        Marker marker = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.route_pointer)).position(latLngDestiation));
+        if (index == 1) {
+          mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.route_pointer))
+                    .position(latLngSource).title(sourceName).snippet(srcDesc));
+        }
+         mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.route_pointer))
+                .position(latLngDestiation).title(destinationName).snippet(destDesc));
+
 
 // Getting URL to the Google Directions API
         String url = getUrl(latLngSource, latLngDestiation);

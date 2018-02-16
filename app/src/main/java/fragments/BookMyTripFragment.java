@@ -65,7 +65,7 @@ public class BookMyTripFragment extends MyBaseFragment {
     @BindView(R.id.tourTiming)
     TextView tourTiming;
 
-    private int passengerCount;
+    private int passengerCount=1;
 
     public BookMyTripFragment() {
         // Required empty public constructor

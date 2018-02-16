@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dialog.PayByWalletDialog;
+import fragments.passes.SelectPassFragment;
 import listners.AdapterItemClickListner;
 import models.CommonPojo;
 import models.Station;
@@ -47,6 +49,7 @@ public class ChoosePamentFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final int REQUEST_CODE = 3214;
+    private static final int SELECT_PASS_REQUEST_CODE = 2564;
     private static String ARG_PARAM4 = "param4";
     private static String ARG_PARAMTicket = "ARG_PARAMTicket";
 
@@ -70,8 +73,6 @@ public class ChoosePamentFragment extends MyBaseFragment {
 
     @BindView(R.id.textViewCard)
     TextView textViewCard;
-    @BindView(R.id.textViewNetBanking)
-    TextView textViewNetBanking;
 
     public ChoosePamentFragment() {
         // Required empty public constructor
@@ -138,13 +139,80 @@ public class ChoosePamentFragment extends MyBaseFragment {
 
         textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
         textViewCard.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
-        textViewNetBanking.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
+//        textViewNetBanking.setC   ompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
         amountPayableWallet.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
     }
 
+    @OnClick(R.id.textViewAddPromoCode)
+    void usePasses() {
+        SelectPassFragment fragment = new SelectPassFragment();
+        fragment.setTargetFragment(this,SELECT_PASS_REQUEST_CODE);
+
+        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(), fragment, R.id.frame_container_main);
+    }
+
+
     @OnClick(R.id.textViewCard)
-    void payUsingCard() {
-        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(), SelectCardFragment.newInstance(fare, ""), R.id.frame_container_main);
+    public void onBraintreeSubmit(View v) {
+        DropInRequest dropInRequest = new DropInRequest()
+                .clientToken(AppConstants.BRAINTREE_TOKEN);
+        dropInRequest.amount(fare);
+        startActivityForResult(dropInRequest.getIntent(getActivity()), REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                sendNonceToServer(result);
+                // use the result to update your UI and send the payment method nonce to your server
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // the user canceled
+            } else {
+                // handle errors here, an exception may be available in
+                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+            }
+        }else if(requestCode==SELECT_PASS_REQUEST_CODE){
+
+            WebRequestData webRequestData = new WebRequestData();
+            webRequestData.setRequestEndPoint(RequestEndPoints.USE_PASS);
+            webRequestData.setPassId(data.getStringExtra("pass_id"));
+            webRequestData.setRides(ticketCount);
+            updateData(webRequestData, new WeResponseCallback() {
+                @Override
+                public void onResponse(CommonPojo commonPojo) throws Exception {
+                    bookTicket();
+                }
+
+                @Override
+                public void failure() throws Exception {
+
+                }
+            });
+
+        }
+    }
+
+    private void sendNonceToServer(DropInResult result) {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.BRAIN_TREE_PAYMENT);
+//        webRequestData.setNounce(result.getPaymentMethodNonce().getNonce());
+        webRequestData.setNounce("fake-valid-nonce");
+        webRequestData.setAmount(fare);
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                if (commonPojo.getTransactionId() != null) {
+                    bookTicket();
+                }
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
     }
 
     @OnClick(R.id.amountPayableWallet)
@@ -221,29 +289,6 @@ public class ChoosePamentFragment extends MyBaseFragment {
         });
     }
 
-    @OnClick(R.id.textViewNetBanking)
-    public void onBraintreeSubmit(View v) {
-
-//        DropInRequest dropInRequest = new DropInRequest()
-//                .clientToken("eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI2MGQ2MTQ5YjgzZGUzNmNmMzhiNjBlYmViYjk2YmE2YjZjZDlhYzdlNTU0NTI4YThkMDA3ZjYwNDU5NjZiNjQyfGNyZWF0ZWRfYXQ9MjAxNy0xMi0xOVQxMDozNTo0OC4xMjY4MjAzNjArMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0=");
-//
-//        startActivityForResult(dropInRequest.getIntent(getActivity()), REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-                // use the result to update your UI and send the payment method nonce to your server
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // the user canceled
-            } else {
-                // handle errors here, an exception may be available in
-                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
-            }
-        }
-    }
 
     @Override
     public void onDestroy() {

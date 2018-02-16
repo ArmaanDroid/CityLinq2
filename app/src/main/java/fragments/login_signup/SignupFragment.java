@@ -196,7 +196,6 @@ public class SignupFragment extends MyBaseFragment {
                 showToast("Login with facebook failed. Please try again.");
             }
         });
-
     }
 
     private void performLoginByFaceBook(WebRequestData webRequestData) {
@@ -208,6 +207,7 @@ public class SignupFragment extends MyBaseFragment {
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+                mPreference.setPromoCode(commonPojo.getUser().getPromocode());
 
                 if (commonPojo.getUser().getPhoneVerified() == 0) {
                     if (commonPojo.getUser().getMobileNumber() == null)
@@ -315,6 +315,7 @@ public class SignupFragment extends MyBaseFragment {
                 mPreference.setName(commonPojo.getUser().getName());
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
+                mPreference.setPromoCode(commonPojo.getUser().getPromocode());
 
                 FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager(), VerifyPhoneFragment.newInstance(completePhoneNumber, commonPojo.getUser().getId()), R.id.fragment_container_login);
             }

@@ -110,10 +110,12 @@ public class PurchasedFragment extends MyBaseFragment {
     }
 
     private void initView() {
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new PurchasedPassesAdapter(passList);
+        recyclerView.setAdapter(adapter);
+
         if (passList.size() > 0) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new PurchasedPassesAdapter(passList);
-            recyclerView.setAdapter(adapter);
             no_record_text2.setVisibility(View.GONE);
         } else {
             showNoDataFound(no_record_text2);

@@ -196,6 +196,7 @@ public class LoginFragment extends MyBaseFragment {
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+                mPreference.setPromoCode(commonPojo.getUser().getPromocode());
                 if (commonPojo.getUser().getPhoneVerified() == 0) {
                     if (commonPojo.getUser().getMobileNumber() == null)
                         FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()
@@ -249,7 +250,7 @@ public class LoginFragment extends MyBaseFragment {
             }
         });
 
-        forgetPasswordFragment.show(getFragmentManager(),"forgot password");
+        forgetPasswordFragment.show(getFragmentManager(), "forgot password");
     }
 
     @OnClick(R.id.buttonLogin)
@@ -291,6 +292,7 @@ public class LoginFragment extends MyBaseFragment {
                 mPreference.setEmail(commonPojo.getUser().getEmail());
                 mPreference.setMobileNumber(commonPojo.getUser().getMobileNumber());
                 mPreference.setProfilePic(commonPojo.getUser().getProfilePic());
+                mPreference.setPromoCode(commonPojo.getUser().getPromocode());
                 if (commonPojo.getUser().getPhoneVerified() == 0) {
                     if (commonPojo.getUser().getMobileNumber() == null)
                         FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager()

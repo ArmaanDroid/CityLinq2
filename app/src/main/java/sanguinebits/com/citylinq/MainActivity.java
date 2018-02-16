@@ -1,21 +1,15 @@
 package sanguinebits.com.citylinq;
 
-import android.*;
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
@@ -24,32 +18,31 @@ import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fragments.ExploreFragment;
+import dialog.LogoutDialog;
+import fragments.explore_routes.CitiesFragment;
 import fragments.FavouriteFragment;
+import fragments.HelpFragment;
 import fragments.HomeFragment;
 import fragments.InviteFragment;
 import fragments.ProfileFragment;
-import fragments.ReviewFleetFragment;
-import fragments.login_signup.LoginFragment;
+import fragments.WebViewFragment;
 import fragments.MyBaseFragment;
 import fragments.wallet.WalletFragment;
 import fragments.passes.MyPassesFragment;
 import fragments.trips.MyTripsFragment;
-import services.SingleShotLocationProvider;
+import listners.AdapterItemClickListner;
 import utils.AppConstants;
 import utils.AppPreference;
 import utils.FragTransactFucntion;
@@ -102,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         homeFragment = new HomeFragment();
         preference = new AppPreference(this);
         FragTransactFucntion.addFragFromFadeWithoutHistory(getSupportFragmentManager(), homeFragment, R.id.frame_container_main);
@@ -167,19 +161,43 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new InviteFragment(), R.id.frame_container_main);
                 break;
             case R.id.myHelp:
-                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ReviewFleetFragment(), R.id.frame_container_main);
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new HelpFragment(), R.id.frame_container_main);
                 break;
             case R.id.myExploreRoutes:
-                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ExploreFragment(), R.id.frame_container_main);
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new CitiesFragment(), R.id.frame_container_main);
                 break;
             case R.id.imageViewProfile:
                 FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager(), new ProfileFragment(), R.id.frame_container_main);
                 break;
+
+            case R.id.contact_us:
+                FragTransactFucntion.replaceFragFromFadeHistory(getSupportFragmentManager()
+                        , WebViewFragment.newInstance(getString(R.string.contact_us)
+                        ,AppConstants.CONTACT_US_URL),R.id.frame_container_main);
+                break;
+
+            case R.id.logout:
+                LogoutDialog logoutDialog = new LogoutDialog(new AdapterItemClickListner() {
+                    @Override
+                    public void onClick(int position, String tag) {
+                        LoginManager.getInstance().logOut();
+                        AppConstants.USER_ID = null;
+                        preference.clearAllPref();
+
+                        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        MainActivity.this.startActivity(intent);
+                        MainActivity.this.finish();
+                    }
+                });
+                logoutDialog.show(getFragmentManager(), "logoutFragment");
+                break;
         }
+
     }
 
     private float getScaleRatio(float slideOffset) {
-        Log.d("TAG", "getScaleRatio: "+slideOffset);
+        Log.d("TAG", "getScaleRatio: " + slideOffset);
         if (previousSlideOffset > slideOffset) {
             previousSlideOffset = slideOffset;
             return maximise(slideOffset);
@@ -236,6 +254,13 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    @OnClick(R.id.contact_us)
+    void contactUS(View view) {
+        isDrawerItemSelected = true;
+        drawerSelectedItemId = view.getId();
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
     @OnClick(R.id.myFavTrips)
     void myFavTrips(View view) {
         isDrawerItemSelected = true;
@@ -245,6 +270,13 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
 
     @OnClick(R.id.myWallet)
     void myWallet(View view) {
+        isDrawerItemSelected = true;
+        drawerSelectedItemId = view.getId();
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @OnClick(R.id.logout)
+    void logout(View view) {
         isDrawerItemSelected = true;
         drawerSelectedItemId = view.getId();
         drawer.closeDrawer(GravityCompat.START);
@@ -349,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 break;
             case AppConstants.TAG_INVITE_FRAGMENT:
                 showDarkToolbar();
-                textViewTitle.setText(R.string.invite);
+                textViewTitle.setText(R.string.refer);
                 break;
             case AppConstants.TAG_PROFILE_FRAGMENT:
                 showDarkToolbar();
@@ -358,7 +390,6 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
             case AppConstants.TAG_REVIEW_FRAGMENT:
                 showDarkToolbar();
                 textViewTitle.setText(R.string.reviewFleet);
-                imageViewMenu.setVisibility(View.GONE);
                 break;
             case AppConstants.TAG_BROWSE_LINQS_FRAGMENT:
                 toolbar.setVisibility(View.GONE);
@@ -392,13 +423,34 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 showDarkToolbar();
                 textViewTitle.setText(R.string.explore_routes);
                 break;
+                case AppConstants.TAG_SELECT_CITY_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.select_city);
+                break;
             case AppConstants.TAG_VIEW_TRIP:
                 showDarkToolbar();
                 textViewTitle.setText(R.string.view_trip);
                 break;
-                case AppConstants.TAG_SUBMIT_CODE_FRAGMENT:
+            case AppConstants.TAG_SUBMIT_CODE_FRAGMENT:
                 showDarkToolbar();
                 textViewTitle.setText(R.string.add_code);
+                break;
+
+            case AppConstants.TAG_HELP_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.help_or_faq);
+                break;
+            case AppConstants.TAG_SELECT_PASS:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.select_pass);
+                break;
+            case AppConstants.TAG_TRANSACTION_HISTORY_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.transactionHistory);
+                break;
+            case AppConstants.TAG_WEB_VIEW_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(s);
                 break;
 
         }
@@ -411,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
         toolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         imageViewMenu.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_menu));
         textViewTitle.setTextColor(ContextCompat.getColor(this, R.color.textColorDark));
-        imageViewNotification.setVisibility(View.VISIBLE);
+        imageViewNotification.setVisibility(View.GONE);
     }
 
     private void showDarkToolbar() {

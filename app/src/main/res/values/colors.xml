@@ -25,6 +25,7 @@
 
     <!--extra colors-->
     <color name="lineGrey">#dfe2e5</color>
+    <color name="checkGrey">#50dfe2e5</color>
     <color name="dotColor">#18bae2</color>
     <color name="moneyColor">#31a0ad</color>
     <color name="windows_blue">#31a0ad</color>

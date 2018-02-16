@@ -6,7 +6,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">LOGIN</string>
     <string name="signup">SIGN UP</string>
-    <string name="app_name1">CITY LINQ</string>
+    <string name="app_name1">SkipOut</string>
     <string name="moto">App Base Commuter Shuttle</string>
     <string name="login_small">Login</string>
     <string name="create_account">Create Account</string>
@@ -27,11 +27,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="explore_routes">Explore Routes</string>
-    <string name="help_or_faq">Help or FAQ</string>
+    <string name="help_or_faq">Help &amp; FAQ</string>
     <string name="refer_amp_earn"><![CDATA[Refer & Earn]]></string>
     <string name="my_passes">My Passes</string>
     <string name="my_wallet">My Wallet</string>
-    <string name="my_favorite_trips">My Favorite Trips</string>
+    <string name="my_favorite_trips">Favorite Trips</string>
     <string name="my_trips">My Trips</string>
     <string name="schedule">SCHEDULED</string>
     <string name="complete">COMPLETED</string>
@@ -52,8 +52,8 @@
     <string name="profile">Profile</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="phone">Phone</string>
-    <string name="reviewFleet">Review Fleet</string>
-    <string name="add_to_favourites">ADD TO FAVOURITES</string>
+    <string name="reviewFleet">Review Trip</string>
+    <string name="add_to_favourites">ADD TO FAVORITES</string>
     <string name="care_to_give_a_complement">Care to give a complement...</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="continue_via_facebook">CONTINUE VIA FACEBOOK</string>
@@ -64,7 +64,7 @@
     <string name="please_enter_phone_umber">Please enter phone number</string>
     <string name="source_location">Source Location</string>
     <string name="destination">Choose a Destination</string>
-    <string name="browse_linqs">BROWSE LINQS</string>
+    <string name="browse_linqs">BROWSE SHUTTLE</string>
     <string name="route_details">Route Details</string>
     <string name="map_view">MAP VIEW</string>
     <string name="list_view">LIST VIEW</string>
@@ -105,4 +105,18 @@
     <string name="submit">Submit</string>
     <string name="add_code">ADD PROMO CODE</string>
     <string name="logout">Logout</string>
+    <string name="bt_other_options">Other Payment Options</string>
+    <string name="origin">Origin</string>
+    <string name="refer">Refer</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_use">Terms Of Use</string>
+    <string name="about_us">About Us</string>
+    <string name="faq_s">FAQ\'s</string>
+    <string name="swap">Reverse Station</string>
+    <string name="no_route">No Route</string>
+    <string name="select_city">Select City</string>
+    <string name="change_city">Change Default City</string>
+    <string name="select_pass" >Select a Pass</string>
+    <string name="apply_pass">Apply Pass</string>
 </resources>

@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity implements MyBaseFragment.
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         FirebaseInstanceId.getInstance().getToken();
-        getWindow().setBackgroundDrawableResource(R.drawable.bg_splash);
+        getWindow().setBackgroundDrawableResource(R.color.white);
         FragTransactFucntion.replaceFragFromFadeWithoutHistory(getSupportFragmentManager(), new WelcomeFragment(), R.id.fragment_container_home);
     }
 

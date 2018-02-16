@@ -2,6 +2,7 @@ package fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,6 +70,7 @@ public class MyBaseFragment extends Fragment {
     protected Dialog progressDialog;
     public Activity activity;
     public Calendar calendar = Calendar.getInstance();
+    private AlertDialog alert;
 
     public MyBaseFragment() {
         // Required empty public constructor
@@ -125,14 +127,22 @@ public class MyBaseFragment extends Fragment {
         tv.setTypeface(getFont(fontName));
     }
 
+
+    public void hideSoftKeyboard(View editText) {
+        if (editText == null)
+            return;
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
     protected boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
 
-    public String setPriceAsText(String price) {
-        return "$" + price;
+    public static String setPriceAsText(String price) {
+        return  "$" +  String.format("%.2f",Float.valueOf( price));
+//        return "$" + price;
     }
 
 
@@ -426,10 +436,17 @@ public class MyBaseFragment extends Fragment {
                         dialog.cancel();
                     }
                 });
-        final AlertDialog alert = builder.create();
+        alert = builder.create();
         alert.show();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(alert!=null)
+       if( alert.isShowing())
+           alert.dismiss();
+    }
 
     public boolean isLocationServiceEnabled() {
         LocationManager locationManager = null;

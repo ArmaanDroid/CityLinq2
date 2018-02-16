@@ -32,7 +32,7 @@ public class PayByWalletDialog extends DialogFragment {
     @SuppressLint("ValidFragment")
     public PayByWalletDialog(String fare, AdapterItemClickListner adapterItemClickListner) {
         this.adapterItemClickListner = adapterItemClickListner;
-        this.fare=fare;
+        this.fare = fare;
     }
 
     @Override
@@ -41,15 +41,22 @@ public class PayByWalletDialog extends DialogFragment {
 
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-      View view=  inflater.inflate(R.layout.dialog_wallet_payment, null);
-        textViewAmountPayable=view.findViewById(R.id.textViewAmountPayable);
-        textViewRemainingBalance=view.findViewById(R.id.textViewRemainingBalance);
-        textViewWalletBalance=view.findViewById(R.id.textViewWalletBalance);
+        View view = inflater.inflate(R.layout.dialog_wallet_payment, null);
+        textViewAmountPayable = view.findViewById(R.id.textViewAmountPayable);
+        textViewRemainingBalance = view.findViewById(R.id.textViewRemainingBalance);
+        textViewWalletBalance = view.findViewById(R.id.textViewWalletBalance);
 
-        int remainingBalance= (int) (AppConstants.WALLET_BALANCE-Float.valueOf(fare));
+        if (AppConstants.WALLET_BALANCE != null) {
+            int remainingBalance = (int) (AppConstants.WALLET_BALANCE - Float.valueOf(fare));
+            textViewRemainingBalance.setText(setPriceAsText(String.valueOf(remainingBalance)));
+            textViewWalletBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
+        } else {
+            textViewRemainingBalance.setText(setPriceAsText("0"));
+            textViewWalletBalance.setText("Not Available");
+
+        }
+
         textViewAmountPayable.setText(setPriceAsText(fare));
-        textViewWalletBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
-        textViewRemainingBalance.setText(setPriceAsText(String.valueOf(remainingBalance)));
         builder.setCancelable(false);
         builder.setTitle(getString(R.string.payment));
         // Inflate and set the layout for the dialog
@@ -59,7 +66,10 @@ public class PayByWalletDialog extends DialogFragment {
                 .setPositiveButton(R.string.pay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        adapterItemClickListner.onClick(0,"pay");
+                        if (AppConstants.WALLET_BALANCE == null)
+                            dialog.cancel();
+
+                        adapterItemClickListner.onClick(0, "pay");
                         dialog.cancel();
                     }
                 })
@@ -72,8 +82,8 @@ public class PayByWalletDialog extends DialogFragment {
         return builder.create();
     }
 
-    public String setPriceAsText(String price){
-        return "$"+price;
+    public String setPriceAsText(String price) {
+        return "$" + price;
     }
 
 }

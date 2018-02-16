@@ -42,7 +42,13 @@ public class FragTransactFucntion {
     public static void replaceFragFromFadeHistory(FragmentManager fragmentManager, Fragment fragment,
                                                   int containerId) {
         fragmentManager.beginTransaction().setCustomAnimations(R.animator.fade_in, 0, 0,
-                R.animator.fade_out).addToBackStack(null).replace(containerId, fragment).commit();
+                R.animator.fade_out).addToBackStack(null).replace(containerId, fragment,fragment.getClass().getName()).commit();
+    }
+
+    public static void replaceFragFromRightHistory(FragmentManager fragmentManager, Fragment fragment,
+                                                  int containerId) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.right_to_left, R.anim.fade_out, R.anim.left_to_right,
+                R.anim.back_left_to_right).addToBackStack(null).replace(containerId, fragment,fragment.getClass().getName()).commit();
     }
 
     public static void addFragFromFadeHistory(FragmentManager fragmentManager, Fragment fragment,

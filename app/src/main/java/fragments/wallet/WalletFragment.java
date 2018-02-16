@@ -1,6 +1,7 @@
 package fragments.wallet;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
 
 import api.RequestEndPoints;
 import api.WebRequestData;
@@ -21,6 +26,7 @@ import fragments.MyBaseFragment;
 import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
+import utils.FragTransactFucntion;
 import views.MyEditTextUnderline;
 
 /**
@@ -49,6 +55,8 @@ public class WalletFragment extends MyBaseFragment {
     @BindView(R.id.textView11)
     MyEditTextUnderline editTextAmount;
     private String availableAmount;
+    private int REQUEST_CODE_paymemt=9087;
+    private String amount;
 
     public WalletFragment() {
         // Required empty public constructor
@@ -104,34 +112,94 @@ public class WalletFragment extends MyBaseFragment {
     }
 
     private void initView() {
+        if(AppConstants.WALLET_BALANCE!=null)
         textViewAvailableBalance.setText(setPriceAsText(availableAmount));
+       else
+            textViewAvailableBalance.setText("Not Available");
+
         textViewTransactionHistory.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
+    }
+
+    @OnClick(R.id.textViewTransactionHistory)
+    void transactionHistory(){
+        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(),new TransactionHistoryFragment(),R.id.frame_container_main);
     }
 
     @OnClick(R.id.continueButton)
     void addMoney(){
-        final String amount = editTextAmount.getText().toString().trim();
+       amount = editTextAmount.getText().toString().trim();
         if(amount.isEmpty() || amount.equalsIgnoreCase("0")){
             editTextAmount.setError(getString(R.string.please_enter_amount));
             return;
+        }else if(Integer.valueOf(amount)<10){
+            showToast("Amount can't be less than $10");
+            return;
         }
+        DropInRequest dropInRequest = new DropInRequest()
+                .clientToken(AppConstants.BRAINTREE_TOKEN);
+
+        dropInRequest.amount(amount);
+        startActivityForResult(dropInRequest.getIntent(getActivity()), REQUEST_CODE_paymemt);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_paymemt) {
+            if (resultCode == Activity.RESULT_OK) {
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                sendNonceToServer(result);
+                // use the result to update your UI and send the payment method nonce to your server
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // the user canceled
+            } else {
+                // handle errors here, an exception may be available in
+                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+            }
+        }
+    }
+
+    private void sendNonceToServer(DropInResult result) {
+        WebRequestData webRequestData=new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.BRAIN_TREE_PAYMENT);
+//        webRequestData.setNounce(result.getPaymentMethodNonce().getNonce());
+        webRequestData.setNounce("fake-valid-nonce");
+        webRequestData.setAmount(amount);
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                if(commonPojo.getTransactionId()!=null){
+                    addVerifiedMoneyToWallet(amount);
+                }
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
+    }
+
+    private void addVerifiedMoneyToWallet(final String amount) {
         WebRequestData webRequestData=new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.ADD_TO_WALLET);
         webRequestData.setUserId(AppConstants.USER_ID);
         webRequestData.setAmount(amount);
-            updateData(webRequestData, new WeResponseCallback() {
-                @Override
-                public void onResponse(CommonPojo commonPojo) throws Exception {
-                    editTextAmount.setText("");
-                    AppConstants.WALLET_BALANCE = AppConstants.WALLET_BALANCE + Integer.valueOf(amount);
-                    textViewAvailableBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
-                }
+        updateData(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                editTextAmount.setText("");
+                AppConstants.WALLET_BALANCE = AppConstants.WALLET_BALANCE + Integer.valueOf(amount);
+                textViewAvailableBalance.setText(setPriceAsText(String.valueOf(AppConstants.WALLET_BALANCE)));
+                showToast("$"+amount+" credited to your account");
+            }
 
-                @Override
-                public void failure() throws Exception {
+            @Override
+            public void failure() throws Exception {
+                showToast("Error adding amount to your wallet");
 
-                }
-            });
+            }
+        });
+
     }
 
     @Override

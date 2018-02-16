@@ -97,6 +97,7 @@ public class WelcomeFragment extends MyBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         intentLoginSignup = new Intent(getActivity(), LoginSignupActivity.class);
         AppConstants.USER_ID = mPreference.getUserID();
+        AppConstants.CITY_ID = mPreference.getDefaultCityId();
         if (AppConstants.USER_ID != null) {
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();

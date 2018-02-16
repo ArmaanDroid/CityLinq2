@@ -143,12 +143,7 @@ public class ScheduleTripsFragment extends MyBaseFragment {
         Log.d("TAG", "onMessageEvent: " + event.position);
         deleteEntry(event.position);
 
-        for (Scheduled scheduled : AppConstants.getScheduleList()) {
-            if (scheduled.getId().equalsIgnoreCase(event.id)) {
-                AppConstants.getScheduleList().remove(scheduled);
-                break;
-            }
-        }
+
     }
 
     void deleteEntry(int position) {

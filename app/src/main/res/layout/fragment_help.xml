@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewFaq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/drawable_white_box_4_corner"
+        android:elevation="2dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:text="@string/faq_s"
+        android:textColor="@color/textColorDark"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewAboutUs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/drawable_white_box_4_corner"
+        android:elevation="2dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:text="@string/about_us"
+        android:textColor="@color/textColorDark"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="12dp"-->
+    <!--android:background="@drawable/drawable_white_box_4_corner"-->
+    <!--android:drawableRight="@drawable/ic_arrow_right"-->
+    <!--android:elevation="2dp"-->
+    <!--android:paddingBottom="18dp"-->
+    <!--android:paddingLeft="16dp"-->
+    <!--android:paddingRight="16dp"-->
+    <!--android:paddingTop="18dp"-->
+    <!--android:text="@string/contact_us"-->
+    <!--android:textColor="@color/textColorDark"-->
+    <!--android:textSize="16dp"-->
+    <!--android:textStyle="bold" />-->
+
+    <TextView
+        android:id="@+id/textViewTerms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/drawable_white_box_4_corner"
+        android:elevation="2dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:text="@string/terms_of_use"
+        android:textColor="@color/textColorDark"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textViewPrivacyPolicy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/drawable_white_box_4_corner"
+        android:elevation="2dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="18dp"
+        android:text="@string/privacy_policy"
+        android:textColor="@color/textColorDark"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+</LinearLayout>

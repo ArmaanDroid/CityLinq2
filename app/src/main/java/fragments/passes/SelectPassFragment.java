@@ -1,8 +1,8 @@
-package fragments;
+package fragments.passes;
 
 
 import android.app.Fragment;
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,31 +10,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import adapters.ExploreRouteAdapter;
+import adapters.PassesPagerAdapter;
+import adapters.SelectPassAdapter;
 import api.RequestEndPoints;
 import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
-import fragments.route_detail.RouteDetailFragment;
+import fragments.MyBaseFragment;
 import listners.AdapterItemClickListner;
 import models.CommonPojo;
-import models.RouteList;
+import models.PurchasePass;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
-import utils.FragTransactFucntion;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ExploreFragment#newInstance} factory method to
+ * Use the {@link SelectPassFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ExploreFragment extends MyBaseFragment {
+public class SelectPassFragment extends MyBaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,14 +46,16 @@ public class ExploreFragment extends MyBaseFragment {
     private String mParam2;
     private Unbinder unbinder;
     @BindView(R.id.recycleView)
-    RecyclerView mRecyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.no_record_text2)
     ImageView no_record_text2;
-    private ArrayList<RouteList> routeList;
-    private ExploreRouteAdapter adapter;
+    @BindView(R.id.buttonLogin)
+    Button button;
 
+    ArrayList<PurchasePass> purchasePasses;
+    private SelectPassAdapter mAdapter;
 
-    public ExploreFragment() {
+    public SelectPassFragment() {
         // Required empty public constructor
     }
 
@@ -65,8 +68,8 @@ public class ExploreFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ExploreFragment newInstance(String param1, String param2) {
-        ExploreFragment fragment = new ExploreFragment();
+    public static SelectPassFragment newInstance(String param1, String param2) {
+        SelectPassFragment fragment = new SelectPassFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,7 +90,7 @@ public class ExploreFragment extends MyBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_with_recycler, container, false);
+        View view = inflater.inflate(R.layout.fragment_select_pass, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -95,72 +98,78 @@ public class ExploreFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        routeList = new ArrayList<RouteList>();
-
-        adapter = new ExploreRouteAdapter(routeList, new AdapterItemClickListner() {
+        mListener.changeUIAccToFragment(AppConstants.TAG_SELECT_PASS, "");
+        purchasePasses = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new SelectPassAdapter(purchasePasses, new AdapterItemClickListner() {
             @Override
             public void onClick(int position, String tag) {
-                FragTransactFucntion.addFragFromFadeHistory(getFragmentManager()
-                        , RouteDetailFragment.newInstance(routeList.get(position).getStations(), AppConstants.TAG_EXPLORE_FRAGMENT)
-                        , R.id.frame_container_main);
+
             }
         });
+        recyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(adapter);
-
-        initViews();
+        initView();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mListener.changeUIAccToFragment(AppConstants.TAG_EXPLORE_FRAGMENT, "");
-    }
-
-    private void initViews() {
-
+    private void initView() {
         if (isNetworkConnected()) {
-
             no_record_text2.setVisibility(View.GONE);
-            getServerData();
+            getDataServer();
         } else {
             showNoInternetConnection(no_record_text2);
-            no_record_text2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (v.getTag().toString().equalsIgnoreCase(AppConstants.No_Internet))
-                        initViews();
-                }
-            });
+            button.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         }
-
     }
 
-    private void getServerData() {
+    private void getDataServer() {
         WebRequestData webRequestData = new WebRequestData();
-        webRequestData.setRequestEndPoint(RequestEndPoints.EXPLORE_ROUTE);
+        webRequestData.setRequestEndPoint(RequestEndPoints.GET_MY_PASSES + AppConstants.USER_ID);
         makeGetRequest(webRequestData, new WeResponseCallback() {
             @Override
             public void onResponse(CommonPojo commonPojo) throws Exception {
-                routeList.addAll(commonPojo.getRouteList());
-                adapter.notifyDataSetChanged();
-                if (routeList.size() > 0)
-                    no_record_text2.setVisibility(View.GONE);
-                else
+                if(commonPojo.getPurchasePasses()!=null) {
+                    if(commonPojo.getPurchasePasses().size()<1){
+                        showNoDataFound(no_record_text2);
+                        button.setVisibility(View.GONE);
+                        return;
+                    }
+                    button.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    purchasePasses.addAll(commonPojo.getPurchasePasses());
+                    mAdapter.notifyDataSetChanged();
+                }else{
                     showNoDataFound(no_record_text2);
+                    button.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void failure() throws Exception {
+                recyclerView.setVisibility(View.GONE);
+                button.setVisibility(View.GONE);
+
                 showServerDown(no_record_text2);
             }
         });
     }
 
+    @OnClick(R.id.buttonLogin)
+    void applyPass() {
+        if (getTargetFragment() == null)
+            return;
+        Intent intent = new Intent();
+        intent.putExtra("pass_id", purchasePasses.get(mAdapter.selectedItem).getId());
+        getTargetFragment().onActivityResult(getTargetRequestCode(), 1, intent);
+        getFragmentManager().popBackStack();
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mListener.changeUIAccToFragment(AppConstants.TAG_CHOOSE_PAYMENT_FRAGMENT, "");
         unbinder.unbind();
     }
 

@@ -1,6 +1,7 @@
 package fragments;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.facebook.share.internal.ShareFeedContent;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.widget.ShareDialog;
 
 import org.w3c.dom.Text;
 
@@ -40,6 +45,9 @@ public class InviteFragment extends MyBaseFragment {
 
     @BindView(R.id.textViewAddPromoCode)
     TextView textViewAddPromoCode;
+
+    @BindView(R.id.textView6)
+    TextView textViewPromoCode;
 
     public InviteFragment() {
         // Required empty public constructor
@@ -84,36 +92,58 @@ public class InviteFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_INVITE_FRAGMENT,"");
+        mListener.changeUIAccToFragment(AppConstants.TAG_INVITE_FRAGMENT, "");
         initView();
     }
 
     private void initView() {
-
-        textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null,AppCompatResources.getDrawable(getContext(),R.drawable.ic_arrow_right), null);
+        textViewPromoCode.setText(mPreference.getPromoCode());
+        textViewAddPromoCode.setCompoundDrawablesWithIntrinsicBounds(null, null, AppCompatResources.getDrawable(getContext(), R.drawable.ic_arrow_right), null);
     }
 
     @OnClick(R.id.textViewAddPromoCode)
-    void openAddFragment(){
-        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(),new SubmitCodeFragment(),R.id.frame_container_main);
+    void openAddFragment() {
+        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager(), new SubmitCodeFragment(), R.id.frame_container_main);
     }
 
+
+    @OnClick(R.id.imageViewMessage)
+    void shareCodeMoreOption() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, mPreference.getPromoCode());
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
+
+    @OnClick(R.id.imageViewFacebooks)
+    void shareCodeFaceBook() {
+        ShareFeedContent shareFeedContent = new ShareFeedContent.Builder().setLink("https://www.mycitylinq.com")
+                .setLinkDescription("Promo Code : " + mPreference.getPromoCode())
+                .build();
+
+        ShareDialog shareDialog = new ShareDialog(getActivity());
+        shareDialog.show(shareFeedContent, ShareDialog.Mode.FEED);
+    }
+
+
     @OnClick(R.id.imageViewWhatsapp)
-    void shareOnWhatsApp()
-    {
+    void shareOnWhatsApp() {
         try {
 
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mPreference.getPromoCode());
             sendIntent.setPackage("com.whatsapp");
             sendIntent.setType("text/plain");
+
             startActivity(sendIntent);
         } catch (Exception e) {
             e.printStackTrace();
             showToast("Please install whatsapp");
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

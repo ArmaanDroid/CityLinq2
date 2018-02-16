@@ -1,11 +1,10 @@
 package utils;
 
-import android.location.Location;
 import android.os.Environment;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import models.Scheduled;
 import models.Station;
@@ -17,11 +16,19 @@ import services.SingleShotLocationProvider;
 
 public class AppConstants {
 
-    public static final String BASE_URL = "http://ec2-35-165-220-224.us-west-2.compute.amazonaws.com:8081/";
-    public static final String BASE_URL_image = "http://ec2-35-165-220-224.us-west-2.compute.amazonaws.com:8081/static/user/";
-    public static SingleShotLocationProvider.GPSCoordinates CURRENT_LOCATION ;
-    public static  String USER_ID   ;
+        public static final String BASE_URL = "http://34.215.120.189:8081/";
+    public static final String BASE_URL_image = "http://34.215.120.189:8081/static/user/";
+    public static final String CONTACT_US_URL = "https://www.mycitylinq.com";
+    public static final String FAQS_LINK = BASE_URL+"faq";
+    public static final String POLICY_LINK = BASE_URL+"private-policy";
+    public static final String ABOUT_US_LINK = BASE_URL+"aboutUs";
+    public static final String TERM_CONDITION_LINK = BASE_URL+"terms-condition";
 
+
+    public static SingleShotLocationProvider.GPSCoordinates CURRENT_LOCATION ;
+    public static  String USER_ID ;
+    public static  String CITY_ID ;
+    public static  String BRAINTREE_TOKEN ;
 
     public static final String TYPE_USER = "user";
 
@@ -31,6 +38,7 @@ public class AppConstants {
     public static final String TAG_LOGIN_FRAGMENT = "TAG_LOGIN_FRAGMENT";
     public static final String TAG_ADD_NUMBER_FRAGMENT = "TAG_ADD_NUMBER_FRAGMENT";
     public static final String TAG_EXPLORE_FRAGMENT = "TAG_EXPLORE_FRAGMENT";
+    public static final String TAG_SELECT_CITY_FRAGMENT = "TAG_SELECT_CITY_FRAGMENT";
     public static final String TAG_SIGNUP_FRAGMENT = "TAG_SIGNUP_FRAGMENT";
     public static final String TAG_VERIFY_PHONE_FRAGMENT = "TAG_VERIFY_PHONE_FRAGMENT";
     public static final String TAG_MY_TRIPS_FRAGMENT = "TAG_MY_TRIPS_FRAGMENT";
@@ -49,17 +57,22 @@ public class AppConstants {
     public static final String TAG_ADD_CARD_FRAGMENT = "TAG_ADD_CARD_FRAGMENT";
     public static final String TAG_RECIEPT_FRAGMENT = "TAG_RECIEPT_FRAGMENT";
     public static final String TAG_SUBMIT_CODE_FRAGMENT = "TAG_SUBMIT_CODE_FRAGMENT";
-
+    public static final String TAG_HELP_FRAGMENT = "TAG_HELP_FRAGMENT";
+    public static final String TAG_TRANSACTION_HISTORY_FRAGMENT = "TAG_TRANSACTION_HISTORY_FRAGMENT";
+    public static final String TAG_WEB_VIEW_FRAGMENT = "TAG_WEB_VIEW_FRAGMENT";
+    public static final String TAG_SELECT_PASS = "TAG_SELECT_PASS";
 
     //Shared Preference stuff
     public static final String SHARED_PREFERENCE_NAME = "sanguinebits.com.citylinq.preference";
-
 
     //map
     public static final int MAP_LEVEL_CITY= 13;
     public static Integer WALLET_BALANCE;
 
+    //home screen stations
     private static List<Station> stations;
+    private static List<Station> destinationStations=new ArrayList<>();
+
     private static List<Scheduled> scheduleList;
     public static String No_Internet="No_Internet";
 
@@ -70,6 +83,15 @@ public class AppConstants {
     public static void setScheduleList(List<Scheduled> scheduleList) {
         AppConstants.scheduleList = scheduleList;
     }
+
+    public static List<Station> getDestinationStations() {
+        return destinationStations;
+    }
+
+    public static void setDestinationStations(List<Station> destinationStations) {
+        AppConstants.destinationStations = destinationStations;
+    }
+
 
     public static void setStations(List<Station> stations) {
         AppConstants.stations = stations;
@@ -90,4 +112,5 @@ public class AppConstants {
     public static final String JPEG_FILE_PREFIX = "IMG_";
     public static final String JPEG_FILE_SUFFIX = ".jpg";
     public static final String LOCAL_FILE_PREFIX = "file://";
+
 }

@@ -5,12 +5,24 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import adapters.RatingAdapter;
+import api.RequestEndPoints;
+import api.WebRequestData;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+import models.CommonPojo;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -30,7 +42,14 @@ public class ReviewFleetFragment extends MyBaseFragment {
     private String mParam2;
     private Unbinder unbinder;
     private Intent intentLoginSignup;
+    @BindView(R.id.ratingBar)
+    RatingBar ratingBar;
 
+    @BindView(R.id.textViewReaction)
+    TextView textViewReaction;
+
+    @BindView(R.id.textView13)
+    TextView textViewAddedToFavourite;
 
     public ReviewFleetFragment() {
         // Required empty public constructor
@@ -75,7 +94,58 @@ public class ReviewFleetFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener.changeUIAccToFragment(AppConstants.TAG_REVIEW_FRAGMENT,"");
+        mListener.changeUIAccToFragment(AppConstants.TAG_REVIEW_FRAGMENT, "");
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+//        recyclerView.setAdapter(new RatingAdapter());
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (rating == 1) {
+                    textViewReaction.setText("Hated it");
+                } else if (rating == 2) {
+                    textViewReaction.setText("Not good");
+                } else if (rating == 3) {
+                    textViewReaction.setText("Average");
+
+                } else if (rating == 4) {
+                    textViewReaction.setText("Good");
+
+                } else if (rating == 5) {
+                    textViewReaction.setText("Awesome");
+
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.textView13)
+    void addTOFavorite() {
+        WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.ADD_TO_FAVOURITE);
+        webRequestData.setSource("");
+        webRequestData.setTransportName("");
+        webRequestData.setDestination("");
+        webRequestData.setVehicleNumber("");
+        webRequestData.setVehicleId("");
+        webRequestData.setTime("");
+        webRequestData.setBookId("");
+
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                showAddedToFavorite();
+            }
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
+    }
+
+    private void showAddedToFavorite() {
+        textViewAddedToFavourite.setText("Added to your favorites");
+        textViewAddedToFavourite.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.ic_confirmed), null, null, null);
     }
 
     @Override

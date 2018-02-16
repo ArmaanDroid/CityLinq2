@@ -1,13 +1,19 @@
 package fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import dialog.ErrorDialogFragment;
 import events.TripCanceledEvent;
+import fragments.trips.MyTripsFragment;
 import models.CommonPojo;
+import models.Scheduled;
 import models.Ticket;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
@@ -104,8 +113,8 @@ public class RecieptFragment extends MyBaseFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1          Parameter 1.
-     * @param destinationName Parameter 2.
+     * @param param1           Parameter 1.
+     * @param destinationName  Parameter 2.
      * @param sourceName
      * @param isCompleteTicket
      * @return A new instance of fragment WelcomeFragment.
@@ -165,11 +174,25 @@ public class RecieptFragment extends MyBaseFragment {
             continueButton.setBackgroundColor(getColor(R.color.pale_red));
 
             SpannableString spannableString = new SpannableString(getString(R.string.term_condition2));
-            spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.btnColorDark)), 0, spannableString.length(), 0);
+            spannableString.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    try {
+
+                        FragTransactFucntion.replaceFragFromRightHistory(getFragmentManager()
+                                , WebViewFragment.newInstance(getString(R.string.term_condition2), AppConstants.TERM_CONDITION_LINK), R.id.frame_container_main);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, 0, spannableString.length(), 0);
+            spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.black)), 0, spannableString.length(), 0);
+
             textViewTermsCondition.setText(TextUtils.concat(getString(R.string.term_condition1), spannableString)
             );
+            textViewTermsCondition.setMovementMethod(LinkMovementMethod.getInstance());
 
-            if(isCompleteTrip){
+            if (isCompleteTrip) {
                 continueButton.setVisibility(View.GONE);
                 textViewTermsCondition.setVisibility(View.GONE);
             }
@@ -239,24 +262,50 @@ public class RecieptFragment extends MyBaseFragment {
             AppConstants.setStations(null);
             FragTransactFucntion.replaceFragFromFadeWithoutHistory(getFragmentManager(), fragment, R.id.frame_container_main);
         } else {
-            WebRequestData webRequestData = new WebRequestData();
-            webRequestData.setRequestEndPoint(RequestEndPoints.CANCEL_TRIP);
-            webRequestData.setTicket(String.valueOf(ticket.getTicket()));
-            webRequestData.setPayment(ticket.getPayment());
-            webRequestData.setBookId(ticket.getId());
-            webRequestData.setStarttime(ticket.getTimings());
-            updateData(webRequestData, new WeResponseCallback() {
-                @Override
-                public void onResponse(CommonPojo commonPojo) throws Exception {
-                    EventBus.getDefault().post(new TripCanceledEvent(ticket.getAdapterPosition(),ticket.getId()));
-                    getFragmentManager().popBackStack();
-                }
 
-                @Override
-                public void failure() throws Exception {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Cancel Trip")
+                    .setMessage("Do you want to cancel this trip?")
+                    .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            WebRequestData webRequestData = new WebRequestData();
+                            webRequestData.setRequestEndPoint(RequestEndPoints.CANCEL_TRIP);
+                            webRequestData.setTicket(String.valueOf(ticket.getTicket()));
+                            webRequestData.setPayment(ticket.getPayment());
+                            webRequestData.setBookId(ticket.getId());
+                            webRequestData.setStarttime(ticket.getTimings());
+                            updateData(webRequestData, new WeResponseCallback() {
+                                @Override
+                                public void onResponse(CommonPojo commonPojo) throws Exception {
+                                    deleteFromAppConstants(ticket.getId());
+                                    EventBus.getDefault().post(new TripCanceledEvent(ticket.getAdapterPosition(), ticket.getId()));
+                                    getFragmentManager().popBackStack();
+                                }
 
+                                @Override
+                                public void failure() throws Exception {
+
+                                }
+                            });
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
-            });
+            })
+                    .show();
+        }
+    }
+
+    private void deleteFromAppConstants(String id) {
+        for (Scheduled scheduled : AppConstants.getScheduleList()) {
+            if (scheduled.getId().equalsIgnoreCase(id)) {
+                AppConstants.getScheduleList().remove(scheduled);
+                break;
+            }
         }
     }
 
@@ -265,7 +314,8 @@ public class RecieptFragment extends MyBaseFragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        mListener.changeUIAccToFragment(AppConstants.TAG_MY_TRIPS_FRAGMENT,"");
+        if (getFragmentManager().findFragmentByTag(MyTripsFragment.class.getName()) != null)
+            mListener.changeUIAccToFragment(AppConstants.TAG_MY_TRIPS_FRAGMENT, "");
     }
 
 

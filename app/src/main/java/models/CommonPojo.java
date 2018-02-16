@@ -2,6 +2,7 @@ package models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,21 +13,68 @@ public class CommonPojo {
     private boolean success;
     private String message;
     private String requestId;
+    private String transactionId;
+    private String token;
     private Integer wallet;
     private User user;
-    private List<Station> stations = null;
+    private List<Station> station = null;
+
+    private List<Station> destinationStations = null;
     private List<Scheduled> schedule = null;
     private List<Object> favTrips = null;
     private List<TransportList> transportList = null;
     private List<RouteList> routeList = null;
     private List<Scheduled> scheduled = null;
     private List<Completed> completed = null;
-
+    private List<WalletDetail> walletDetails = null;
     private List<Pass> passes = null;
     private List<PurchasePass> purchasePasses = null;
     private Ticket ticket;
     private PurchasePass pass;
 
+
+
+    private List<CityList> cityList = null;
+
+    public List<CityList> getCityList() {
+        return cityList;
+    }
+
+    public void setCityList(List<CityList> cityList) {
+        this.cityList = cityList;
+    }
+
+    public List<Station> getDestinationStations() {
+        return destinationStations;
+    }
+
+    public void setDestinationStations(List<Station> destinationStations) {
+        this.destinationStations = destinationStations;
+    }
+
+    public List<WalletDetail> getWalletDetails() {
+        return walletDetails;
+    }
+
+    public void setWalletDetails(List<WalletDetail> walletDetails) {
+        this.walletDetails = walletDetails;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public List<RouteList> getRouteList() {
         return routeList;
@@ -117,11 +165,11 @@ public class CommonPojo {
     }
 
     public List<Station> getStations() {
-        return stations;
+        return station;
     }
 
     public void setStations(List<Station> stations) {
-        this.stations = stations;
+        this.station = stations;
     }
 
     public List<TransportList> getTransportList() {

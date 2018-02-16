@@ -20,6 +20,7 @@ public class WebRequestData {
     private String to;
     private String requestId;
     private String code;
+    private String city;
     private String userId;
     private String type;
     private String latitude;
@@ -40,6 +41,25 @@ public class WebRequestData {
     private String bookId ;
     private String starttime ;
     private String promocode ;
+    private String nounce ;
+    private String station ;
+    private String rides ;
+
+    public void setRides(String rides) {
+        this.rides = rides;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
+    }
+
+    public void setNounce(String nounce) {
+        this.nounce = nounce;
+    }
 
     public void setPromocode(String promocode) {
         this.promocode = promocode;

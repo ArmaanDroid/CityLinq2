@@ -11,9 +11,18 @@ public class User {
     private String id;
     private String deviceId;
     private String profilePic;
+    private String promocode;
     private String reviewPending;
     private Integer ispromoUsed;
     private Integer phoneVerified;
+
+    public String getPromocode() {
+        return promocode;
+    }
+
+    public void setPromocode(String promocode) {
+        this.promocode = promocode;
+    }
 
     public String getProfilePic() {
         return profilePic;

@@ -103,7 +103,7 @@
 
                             android:fontFamily="@font/sans_pro_regular"
                             android:gravity="right"
-                            android:text="Drop Location"
+                            android:text="Drop Off Location"
                             android:textColor="@color/white_80"
                             android:textSize="12dp" />
 

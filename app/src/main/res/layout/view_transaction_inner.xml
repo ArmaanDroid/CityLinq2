@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:layout_marginBottom="14dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_transactionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_semi_bold"
+            android:text="Credited"
+            android:textColor="@color/windows_blue"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/tv_transactionDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sans_pro_regular"
+            android:text="july 19, 2017"
+            android:textColor="@color/textColorLabelGrey"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_transactionAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:fontFamily="@font/sans_pro_semi_bold"
+        android:text="$100"
+        android:layout_centerVertical="true"
+        android:textColor="@color/windows_blue"
+        android:textSize="18dp" />
+</RelativeLayout>

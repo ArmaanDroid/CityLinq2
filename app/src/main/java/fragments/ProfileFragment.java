@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import api.RequestEndPoints;
 import api.WebRequestData;
@@ -38,6 +39,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.SearchResultListener;
+import models.CityList;
 import models.CommonPojo;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -86,6 +91,7 @@ public class ProfileFragment extends MyBaseFragment implements GetSampledImage.S
     private String picturePath;
     private Uri newImagePath;
     private File imageFile;
+    private SimpleSearchDialogCompat selectCityDialog;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -143,6 +149,7 @@ public class ProfileFragment extends MyBaseFragment implements GetSampledImage.S
             ((TextView) view).setText("Save Profile");
             view.setTag("");
             textViewUserName.setEnabled(true);
+            textViewUserName.requestFocus();
             imageView9.setVisibility(View.VISIBLE);
         } else {
 
@@ -166,6 +173,7 @@ public class ProfileFragment extends MyBaseFragment implements GetSampledImage.S
             RequestBody token =
                     RequestBody.create(
                             okhttp3.MultipartBody.FORM, new Gson().toJson(webRequestData));
+
             updateProfile(RequestEndPoints.UPDATE_PROFILE, token, body, new WeResponseCallback() {
                 @Override
                 public void onResponse(CommonPojo commonPojo) throws Exception {
@@ -189,15 +197,60 @@ public class ProfileFragment extends MyBaseFragment implements GetSampledImage.S
     }
 
     @OnClick(R.id.buttonLogin)
-    void logout(){
-        progressDialog.show();
-        LoginManager.getInstance().logOut();
-        AppConstants.USER_ID=null;
-        mPreference.setUserID(null);
-        Intent intent=new Intent(getActivity(), SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        getActivity().startActivity(intent);
-        getActivity().finish();
+    void changeDefCity() {
+        if (selectCityDialog != null) {
+            if (!selectCityDialog.isShowing())
+                selectCityDialog.show();
+
+            return;
+        }
+
+        final WebRequestData webRequestData = new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.EXPLORE_ROUTE);
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                selectCityDialog = new SimpleSearchDialogCompat(getActivity(), "Select City",
+                        "Please select a city...", null, (ArrayList) commonPojo.getCityList(),
+                        new SearchResultListener<CityList>() {
+                            @Override
+                            public void onSelected(BaseSearchDialogCompat dialog,
+                                                   final CityList item, int position) {
+                                webRequestData.setRequestEndPoint(RequestEndPoints.MAKE_DEFAULT_CITIES);
+                                webRequestData.setUserId(AppConstants.USER_ID);
+                                webRequestData.setCity(item.getId());
+                                updateData(webRequestData, new WeResponseCallback() {
+                                    @Override
+                                    public void onResponse(CommonPojo commonPojo) throws Exception {
+                                        if (mPreference.getDefaultCity().equalsIgnoreCase(item.getTitle()))
+                                            return;
+                                        mPreference.setDefaultCity(item.getTitle());
+                                        mPreference.setDefaultCityId(item.getId());
+                                        AppConstants.setStations(null);
+                                        AppConstants.CITY_ID=item.getId();
+                                        HomeFragment.stationSource = null;
+                                        HomeFragment.stationDestination = null;
+                                        showToast(item.getName() + " is now your default city.");
+                                    }
+
+                                    @Override
+                                    public void failure() throws Exception {
+
+                                    }
+                                });
+                                dialog.dismiss();
+                            }
+                        });
+                selectCityDialog.setCancelable(false);
+                selectCityDialog.show();
+            }
+
+
+            @Override
+            public void failure() throws Exception {
+
+            }
+        });
     }
 
     @OnClick(R.id.circleImageViewProfile)

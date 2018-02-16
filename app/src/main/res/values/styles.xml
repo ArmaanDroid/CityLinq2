@@ -10,9 +10,9 @@
 
     <!--Theme for splash-->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <!--<item name="android:windowFullscreen">true</item>-->
-        <item name="android:windowBackground">@drawable/drawable_splash</item>
-    </style>
+    <!--<item name="android:windowFullscreen">true</item>-->
+    <item name="android:windowBackground">@drawable/drawable_splash</item>
+</style>
     <!--Theme for login screen-->
     <style name="LoginScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -58,5 +58,11 @@
         <item name="android:fontFamily">@font/sans_pro_semi_bold</item>
         <item name="colorControlNormal">@color/textColorLabelGrey</item>
         <item name="colorControlActivated">@color/textColorLabelGrey</item>
+    </style>
+
+    <style name="ratingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/food_rating_bar_full</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:maxHeight">44dp</item>
     </style>
 </resources>

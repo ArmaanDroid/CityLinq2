@@ -41,6 +41,16 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <!--<activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"-->
+            <!--android:launchMode="singleTask">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<data android:scheme="sanguinebits.com.citylinq.braintree" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme"
@@ -66,6 +76,10 @@
             android:theme="@style/LoginScreenTheme">
         </activity>
 
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider156074315126766  "
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 

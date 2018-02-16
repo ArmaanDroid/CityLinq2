@@ -1,10 +1,13 @@
 package models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RouteList {
+public class RouteList implements Parcelable {
 
 @SerializedName("updatedAt")
 @Expose
@@ -28,7 +31,33 @@ private List<Station> stations = null;
 @Expose
 private String id;
 
-public String getUpdatedAt() {
+    protected RouteList(Parcel in) {
+        updatedAt = in.readString();
+        createdAt = in.readString();
+        name = in.readString();
+        timing = in.readString();
+        if (in.readByte() == 0) {
+            v = null;
+        } else {
+            v = in.readInt();
+        }
+        stations = in.createTypedArrayList(Station.CREATOR);
+        id = in.readString();
+    }
+
+    public static final Creator<RouteList> CREATOR = new Creator<RouteList>() {
+        @Override
+        public RouteList createFromParcel(Parcel in) {
+            return new RouteList(in);
+        }
+
+        @Override
+        public RouteList[] newArray(int size) {
+            return new RouteList[size];
+        }
+    };
+
+    public String getUpdatedAt() {
 return updatedAt;
 }
 
@@ -84,4 +113,24 @@ public void setId(String id) {
 this.id = id;
 }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(updatedAt);
+        dest.writeString(createdAt);
+        dest.writeString(name);
+        dest.writeString(timing);
+        if (v == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(v);
+        }
+        dest.writeTypedList(stations);
+        dest.writeString(id);
+    }
 }
