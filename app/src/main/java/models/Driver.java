@@ -32,6 +32,9 @@ private String mobileNumber;
 @SerializedName("licence")
 @Expose
 private String licence;
+@SerializedName("profilePic")
+@Expose
+private String profilePic;
 @SerializedName("__v")
 @Expose
 private Integer v;
@@ -42,7 +45,15 @@ private Integer phoneVerified;
 @Expose
 private String id;
 
-public String getUpdatedAt() {
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getUpdatedAt() {
 return updatedAt;
 }
 

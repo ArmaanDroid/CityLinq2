@@ -77,7 +77,7 @@ public class MyBaseFragment extends Fragment {
     }
 
     protected DateFormat journeyDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
-    protected DateFormat monthNameDateFormat = new SimpleDateFormat("MMMM d, yyyy");
+    protected DateFormat monthNameDateFormat = new SimpleDateFormat("MMM d, yyyy");
     protected DateFormat FormatDateMonthYear = new SimpleDateFormat("dd mm yyyy");
 
     @Override
@@ -322,7 +322,7 @@ public class MyBaseFragment extends Fragment {
                         webResponseCallback.onResponse(response.body());
                     } else webResponseCallback.failure();
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
 

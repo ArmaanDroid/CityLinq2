@@ -69,10 +69,16 @@ class TransactionInnerAdapter extends RecyclerView.Adapter<TransactionInnerAdapt
                 tv_transactionAmount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pale_red));
                 tv_transactionType.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.pale_red));
                 tv_transactionType.setText("Debited");
-            } else {
+            } else if(currentItem.getTransactionType().equalsIgnoreCase("refund")){
+                tv_transactionAmount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.btnColorDark));
+                tv_transactionType.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.btnColorDark));
+                tv_transactionType.setText("Refund");
+            }
+            else{
                 tv_transactionAmount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.windows_blue));
                 tv_transactionType.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.windows_blue));
                 tv_transactionType.setText("Credited");
+
             }
         }
     }

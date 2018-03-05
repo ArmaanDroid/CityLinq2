@@ -62,6 +62,17 @@ private Integer ticket;
 @SerializedName("id")
 @Expose
 private String id;
+@SerializedName("route")
+@Expose
+private Route route;
+@SerializedName("vehicle_start_time")
+@Expose
+private String vehicle_start_time;
+
+@SerializedName("tripId")
+@Expose
+private String tripId;
+
 
     protected Scheduled(Parcel in) {
         updatedAt = in.readString();
@@ -92,6 +103,8 @@ private String id;
             ticket = in.readInt();
         }
         id = in.readString();
+        vehicle_start_time = in.readString();
+        tripId = in.readString();
     }
 
     public static final Creator<Scheduled> CREATOR = new Creator<Scheduled>() {
@@ -106,6 +119,14 @@ private String id;
         }
     };
 
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
+    }
+
     public String getUpdatedAt() {
 return updatedAt;
 }
@@ -114,7 +135,15 @@ public void setUpdatedAt(String updatedAt) {
 this.updatedAt = updatedAt;
 }
 
-public String getCreatedAt() {
+    public String getVehicle_start_time() {
+        return vehicle_start_time;
+    }
+
+    public void setVehicle_start_time(String vehicle_start_time) {
+        this.vehicle_start_time = vehicle_start_time;
+    }
+
+    public String getCreatedAt() {
 return createdAt;
 }
 
@@ -258,6 +287,15 @@ this.id = id;
         this.paymentDate = paymentDate;
     }
 
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -296,5 +334,7 @@ this.id = id;
             dest.writeInt(ticket);
         }
         dest.writeString(id);
+        dest.writeString(vehicle_start_time);
+        dest.writeString(tripId);
     }
 }

@@ -102,16 +102,18 @@ public class CompleteTripFragment extends MyBaseFragment {
                 @Override
                 public void onClick(int position, String tag) {
                     Completed currentTrip = tripList.get(position);
+
                     Ticket ticket = new Ticket();
                     ticket.setId(currentTrip.getId());
                     ticket.setQrCode(currentTrip.getQrCode());
                     ticket.setDate(currentTrip.getDate());
                     ticket.setTransportName(currentTrip.getTransportName());
                     ticket.setVehicleNumber(currentTrip.getVehicleNumber());
-                    ticket.setTimings(currentTrip.getTimings());
+                    ticket.setTimings(currentTrip.getVehicle_start_time());
                     ticket.setPayment(currentTrip.getPayment());
                     ticket.setTicket(currentTrip.getTicket());
                     ticket.setAdapterPosition(position);
+
                     FragTransactFucntion.addFragFromFadeHistory(getParentFragment().getFragmentManager()
                             , RecieptFragment.newInstance(ticket, currentTrip.getSource().getName()
                                     , currentTrip.getDestination().getName(), false,true), R.id.frame_container_main);

@@ -29,6 +29,11 @@ public class Station implements Parcelable {
     @Expose
     private Integer v;
 
+    @SerializedName("reach_time")
+    @Expose
+    private long reach_time;
+
+
     protected Station(Parcel in) {
         id = in.readString();
         longitude = in.readString();
@@ -40,6 +45,7 @@ public class Station implements Parcelable {
         } else {
             v = in.readInt();
         }
+        reach_time = in.readLong();
     }
 
     public static final Creator<Station> CREATOR = new Creator<Station>() {
@@ -107,6 +113,16 @@ public class Station implements Parcelable {
         return getName();
     }
 
+
+
+    public long getReach_time() {
+        return reach_time;
+    }
+
+    public void setReach_time(long reach_time) {
+        this.reach_time = reach_time;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -125,5 +141,6 @@ public class Station implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(v);
         }
+        dest.writeLong(reach_time);
     }
 }

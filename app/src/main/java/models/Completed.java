@@ -63,6 +63,9 @@ private Integer ticket;
 @SerializedName("id")
 @Expose
 private String id;
+@SerializedName("vehicle_start_time")
+@Expose
+private String vehicle_start_time;
 
 
     protected Completed(Parcel in) {
@@ -93,6 +96,20 @@ private String id;
             ticket = in.readInt();
         }
         id = in.readString();
+        vehicle_start_time = in.readString();
+
+    }
+
+    public String getVehicle_start_time() {
+        return vehicle_start_time;
+    }
+
+    public void setVehicle_start_time(String vehicle_start_time) {
+        this.vehicle_start_time = vehicle_start_time;
+    }
+
+    public static Creator<Completed> getCREATOR() {
+        return CREATOR;
     }
 
     public static final Creator<Completed> CREATOR = new Creator<Completed>() {
@@ -289,6 +306,7 @@ this.id = id;
             dest.writeInt(ticket);
         }
         dest.writeString(id);
+        dest.writeString(vehicle_start_time);
     }
 
 }

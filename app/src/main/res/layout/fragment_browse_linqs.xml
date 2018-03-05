@@ -41,7 +41,7 @@
             android:fontFamily="@font/sans_pro_semi_bold"
             android:text="3435 Kuhlman Parks"
             android:textColor="@color/white"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewMenu"
             app:layout_constraintStart_toEndOf="@+id/imageViewMenu"
@@ -72,7 +72,7 @@
             android:fontFamily="@font/sans_pro_semi_bold"
             android:text="3435 Kuhlman Parks"
             android:textColor="@color/white"
-            android:textSize="16dp"
+            android:textSize="14dp"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@+id/imageViewMenu"
             app:layout_constraintTop_toBottomOf="@+id/textViewSource" />
@@ -87,6 +87,8 @@
         android:layout_marginStart="12dp"
         android:overScrollMode="never"
         android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +104,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/recycleViewRoutes"
         app:layout_constraintRight_toRightOf="@+id/recycleViewRoutes"
         app:layout_constraintTop_toTopOf="@+id/recycleViewRoutes" />
+
     <ImageView
         android:id="@+id/no_record_image"
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ import butterknife.Unbinder;
 import events.TripCanceledEvent;
 import fragments.MyBaseFragment;
 import fragments.RecieptFragment;
+import fragments.TrackLinqsFragment;
 import listners.AdapterItemClickListner;
 import models.Scheduled;
 import models.Ticket;
@@ -53,7 +54,7 @@ public class ScheduleTripsFragment extends MyBaseFragment {
     RecyclerView mRecyclerView;
     @BindView(R.id.no_record_text2)
     ImageView no_record_text2;
-    private ScheduledTripsAdapter adapter;
+    private  ScheduledTripsAdapter adapter;
 
     public ScheduleTripsFragment() {
         // Required empty public constructor
@@ -92,13 +93,14 @@ public class ScheduleTripsFragment extends MyBaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_with_recycler, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initViews();
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();
     }
 
     @Override
@@ -109,47 +111,58 @@ public class ScheduleTripsFragment extends MyBaseFragment {
 
     private void initViews() {
         if (tripList.size() > 0) {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new ScheduledTripsAdapter(getContext(), tripList, new AdapterItemClickListner() {
                 @Override
                 public void onClick(int position, String tag) {
                     Scheduled currentTrip = tripList.get(position);
-                    Ticket ticket = new Ticket();
-                    ticket.setId(currentTrip.getId());
-                    ticket.setQrCode(currentTrip.getQrCode());
-                    ticket.setDate(currentTrip.getDate());
-                    ticket.setTransportName(currentTrip.getTransportName());
-                    ticket.setVehicleNumber(currentTrip.getVehicleNumber());
-                    ticket.setTimings(currentTrip.getTimings());
-                    ticket.setPayment(currentTrip.getPayment());
-                    ticket.setTicket(currentTrip.getTicket());
-                    ticket.setAdapterPosition(position);
-                    FragTransactFucntion.addFragFromFadeHistory(getParentFragment().getFragmentManager()
-                            , RecieptFragment.newInstance(ticket, currentTrip.getSource().getName()
-                                    , currentTrip.getDestination().getName(), false, false), R.id.frame_container_main);
 
+                    if (tag == ScheduledTripsAdapter.FULL_ITEM_CLICK) {
+                        Ticket ticket = new Ticket();
+                        ticket.setId(currentTrip.getId());
+                        ticket.setQrCode(currentTrip.getQrCode());
+                        ticket.setDate(currentTrip.getDate());
+                        ticket.setTransportName(currentTrip.getTransportName());
+                        ticket.setVehicleNumber(currentTrip.getVehicleNumber());
+                        ticket.setTimings(currentTrip.getVehicle_start_time());
+                        ticket.setPayment(currentTrip.getPayment());
+                        ticket.setTicket(currentTrip.getTicket());
+                        ticket.setAdapterPosition(position);
+                        FragTransactFucntion.addFragmentFromRight(getParentFragment().getFragmentManager()
+                                , RecieptFragment.newInstance(ticket, currentTrip.getSource().getName()
+                                        , currentTrip.getDestination().getName(), false, false), R.id.frame_container_main);
+
+                    } else {
+                        FragTransactFucntion.addFragmentFromRight(getParentFragment().getFragmentManager()
+                                , TrackLinqsFragment.newInstance(currentTrip, ""), R.id.frame_container_main);
+                    }
                 }
             });
 
+
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+            mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setAdapter(adapter);
+
             no_record_text2.setVisibility(View.GONE);
         } else
             showNoDataFound(no_record_text2);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(TripCanceledEvent event) {
         Log.d("TAG", "onMessageEvent: " + event.position);
         deleteEntry(event.position);
-
-
     }
 
     void deleteEntry(int position) {
         tripList.remove(position);
         adapter.notifyItemRemoved(position);
-        adapter.notifyItemRangeChanged(position,tripList.size());
+        adapter.notifyItemRangeChanged(position, tripList.size());
 
     }
 

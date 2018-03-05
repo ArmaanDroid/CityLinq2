@@ -37,7 +37,7 @@ public class TransportList implements Parcelable {
     private Route route;
     @SerializedName("timings")
     @Expose
-    private String timings;
+    private String[] timings;
     @SerializedName("__v")
     @Expose
     private Integer v;
@@ -57,9 +57,24 @@ public class TransportList implements Parcelable {
     @Expose
     private String id;
 
+    @SerializedName("returntiming")
+    @Expose
+    private List<String> returntiming = null;
+    @SerializedName("stationsTimings")
+    @Expose
+    private List<String> stationsTimings = null;
+
+    @SerializedName("direction")
+    @Expose
+    private Integer direction;
 
     private String fare;
     private Integer availableSeats;
+    private String vehicle_start_time;
+
+    @SerializedName("startDay")
+    @Expose
+    private long startDay;
 
     protected TransportList(Parcel in) {
         updatedAt = in.readString();
@@ -72,7 +87,7 @@ public class TransportList implements Parcelable {
         } else {
             seats = in.readInt();
         }
-        timings = in.readString();
+        timings = in.createStringArray();
         if (in.readByte() == 0) {
             v = null;
         } else {
@@ -83,12 +98,21 @@ public class TransportList implements Parcelable {
         vehicleColor = in.readString();
         features = in.createStringArrayList();
         id = in.readString();
+        returntiming = in.createStringArrayList();
+        stationsTimings = in.createStringArrayList();
+        if (in.readByte() == 0) {
+            direction = null;
+        } else {
+            direction = in.readInt();
+        }
         fare = in.readString();
         if (in.readByte() == 0) {
             availableSeats = null;
         } else {
             availableSeats = in.readInt();
         }
+        vehicle_start_time = in.readString();
+       startDay=in.readLong();
     }
 
     public static final Creator<TransportList> CREATOR = new Creator<TransportList>() {
@@ -102,6 +126,23 @@ public class TransportList implements Parcelable {
             return new TransportList[size];
         }
     };
+
+    public String getVehicle_start_time() {
+        return vehicle_start_time;
+    }
+
+    public void setVehicle_start_time(String vehicle_start_time) {
+        this.vehicle_start_time = vehicle_start_time;
+    }
+
+
+    public Integer getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Integer direction) {
+        this.direction = direction;
+    }
 
     public String getUpdatedAt() {
         return updatedAt;
@@ -167,11 +208,11 @@ public class TransportList implements Parcelable {
         this.route = route;
     }
 
-    public String getTimings() {
+    public String[] getTimings() {
         return timings;
     }
 
-    public void setTimings(String timings) {
+    public void setTimings(String[] timings) {
         this.timings = timings;
     }
 
@@ -246,6 +287,7 @@ public class TransportList implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeString(updatedAt);
         dest.writeString(createdAt);
         dest.writeString(fleetId);
@@ -257,7 +299,7 @@ public class TransportList implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(seats);
         }
-        dest.writeString(timings);
+        dest.writeStringArray(timings);
         if (v == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -269,6 +311,14 @@ public class TransportList implements Parcelable {
         dest.writeString(vehicleColor);
         dest.writeStringList(features);
         dest.writeString(id);
+        dest.writeStringList(returntiming);
+        dest.writeStringList(stationsTimings);
+        if (direction == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(direction);
+        }
         dest.writeString(fare);
         if (availableSeats == null) {
             dest.writeByte((byte) 0);
@@ -276,5 +326,9 @@ public class TransportList implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(availableSeats);
         }
+        dest.writeString(vehicle_start_time);
+        dest.writeLong(startDay);
     }
+
+
 }

@@ -119,4 +119,5 @@
     <string name="change_city">Change Default City</string>
     <string name="select_pass" >Select a Pass</string>
     <string name="apply_pass">Apply Pass</string>
+    <string name="track_linqs">Track Linq</string>
 </resources>

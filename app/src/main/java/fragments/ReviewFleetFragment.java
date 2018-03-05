@@ -5,24 +5,24 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.squareup.picasso.Picasso;
 
-import adapters.RatingAdapter;
 import api.RequestEndPoints;
 import api.WebRequestData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import models.CommonPojo;
+import models.PendingReviewtrip;
 import sanguinebits.com.citylinq.R;
 import utils.AppConstants;
 
@@ -38,7 +38,7 @@ public class ReviewFleetFragment extends MyBaseFragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private PendingReviewtrip reviewDetails;
     private String mParam2;
     private Unbinder unbinder;
     private Intent intentLoginSignup;
@@ -48,8 +48,17 @@ public class ReviewFleetFragment extends MyBaseFragment {
     @BindView(R.id.textViewReaction)
     TextView textViewReaction;
 
+    @BindView(R.id.editText)
+    EditText editText;
+
+    @BindView(R.id.circleImageViewProfile)
+    CircleImageView circleImageViewProfile;
+
     @BindView(R.id.textView13)
     TextView textViewAddedToFavourite;
+
+    @BindView(R.id.textViewUserName)
+    TextView textViewUserName;
 
     public ReviewFleetFragment() {
         // Required empty public constructor
@@ -64,10 +73,10 @@ public class ReviewFleetFragment extends MyBaseFragment {
      * @return A new instance of fragment WelcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReviewFleetFragment newInstance(String param1, String param2) {
+    public static ReviewFleetFragment newInstance(PendingReviewtrip param1, String param2) {
         ReviewFleetFragment fragment = new ReviewFleetFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -77,7 +86,7 @@ public class ReviewFleetFragment extends MyBaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            reviewDetails = getArguments().getParcelable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -94,6 +103,12 @@ public class ReviewFleetFragment extends MyBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        textViewUserName.setText(reviewDetails.getDriver().getName());
+        int pixels=getResources().getDimensionPixelOffset(R.dimen.profile_review);
+        Picasso.with(getContext()).load(AppConstants.BASE_URL_image_driver + reviewDetails.getDriver().getProfilePic())
+                .placeholder(R.drawable.user)
+                .resize(pixels,pixels)
+                .into(circleImageViewProfile);
         mListener.changeUIAccToFragment(AppConstants.TAG_REVIEW_FRAGMENT, "");
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
 //        recyclerView.setAdapter(new RatingAdapter());
@@ -114,6 +129,32 @@ public class ReviewFleetFragment extends MyBaseFragment {
                     textViewReaction.setText("Awesome");
 
                 }
+            }
+        });
+    }
+
+    @OnClick(R.id.continueButton)
+    void submitReview(){
+      String comment=  editText.getText().toString();
+
+        WebRequestData webRequestData=new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.REVIEW_DRIVER);
+        webRequestData.setUserId(AppConstants.USER_ID);
+        webRequestData.setTripId(reviewDetails.getTripId());
+        webRequestData.setVehicleId(reviewDetails.getVehicle());
+        webRequestData.setDriverId(reviewDetails.getDriver().getId());
+        webRequestData.setRating(String.valueOf(ratingBar.getRating()));
+        webRequestData.setReview(comment);
+
+        makeRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                getFragmentManager().popBackStack();
+            }
+
+            @Override
+            public void failure() throws Exception {
+
             }
         });
     }

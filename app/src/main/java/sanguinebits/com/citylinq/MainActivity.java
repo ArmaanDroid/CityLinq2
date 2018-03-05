@@ -371,6 +371,10 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 showDarkToolbar();
                 textViewTitle.setText(R.string.passes);
                 break;
+            case AppConstants.TAG_TRACK_LINQ_FRAGMENT:
+                showDarkToolbar();
+                textViewTitle.setText(R.string.track_linqs);
+                break;
             case AppConstants.TAG_FAVOURITE_RIDES_FRAGMENT:
                 showDarkToolbar();
                 textViewTitle.setText(R.string.favorite_trips);
@@ -389,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements MyBaseFragment.On
                 break;
             case AppConstants.TAG_REVIEW_FRAGMENT:
                 showDarkToolbar();
+                imageViewMenu.setVisibility(View.GONE);
                 textViewTitle.setText(R.string.reviewFleet);
                 break;
             case AppConstants.TAG_BROWSE_LINQS_FRAGMENT:

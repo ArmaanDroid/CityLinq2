@@ -15,10 +15,12 @@ public class CommonPojo {
     private String requestId;
     private String transactionId;
     private String token;
-    private Integer wallet;
+    private Float wallet;
+    private Integer reviewPending;
     private User user;
     private List<Station> station = null;
 
+    private PendingReviewtrip pendingReviewtrip;
     private List<Station> destinationStations = null;
     private List<Scheduled> schedule = null;
     private List<Object> favTrips = null;
@@ -32,7 +34,21 @@ public class CommonPojo {
     private Ticket ticket;
     private PurchasePass pass;
 
+    public PendingReviewtrip getPendingReviewtrip() {
+        return pendingReviewtrip;
+    }
 
+    public void setPendingReviewtrip(PendingReviewtrip pendingReviewtrip) {
+        this.pendingReviewtrip = pendingReviewtrip;
+    }
+
+    public Integer getReviewPending() {
+        return reviewPending;
+    }
+
+    public void setReviewPending(Integer reviewPending) {
+        this.reviewPending = reviewPending;
+    }
 
     private List<CityList> cityList = null;
 
@@ -196,11 +212,11 @@ public class CommonPojo {
         this.favTrips = favTrips;
     }
 
-    public Integer getWallet() {
+    public Float getWallet() {
         return wallet;
     }
 
-    public void setWallet(Integer wallet) {
+    public void setWallet(Float wallet) {
         this.wallet = wallet;
     }
 }

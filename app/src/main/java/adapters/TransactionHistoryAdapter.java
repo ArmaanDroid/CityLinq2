@@ -21,6 +21,7 @@ import utils.SimpleDividerItemDecoration;
  */
 
 public class TransactionHistoryAdapter extends RecyclerView.Adapter<TransactionHistoryAdapter.ViewHolder> {
+
     List<WalletDetailPerMonth> mOnthAccordingList;
     public TransactionHistoryAdapter(List<WalletDetailPerMonth> mOnthAccordingList) {
         this.mOnthAccordingList=mOnthAccordingList;
@@ -28,7 +29,6 @@ public class TransactionHistoryAdapter extends RecyclerView.Adapter<TransactionH
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.view_transaction_history,parent,false);
         return new ViewHolder(view);
     }
@@ -68,7 +68,6 @@ public class TransactionHistoryAdapter extends RecyclerView.Adapter<TransactionH
             recyclerViewInner.addItemDecoration(new SimpleDividerItemDecoration(itemView.getContext()));
             recyclerViewInner.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
             recyclerViewInner.setAdapter(new TransactionInnerAdapter(currentItem.getTransactions()));
-
         }
     }
 }

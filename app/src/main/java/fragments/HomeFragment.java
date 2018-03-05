@@ -181,8 +181,6 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
         return view;
     }
 
@@ -190,7 +188,6 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         intiView();
-
         if (AppConstants.BRAINTREE_TOKEN == null)
             getBrainTreeToken();
     }
@@ -347,7 +344,9 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
                     .title("You are here"));
         }
 
+
         //check if the stations list is available
+        if(!AppConstants.RELOAD_HOME)
         if (AppConstants.getStations() != null) {
             setAutoCompleteAdapters();
             return;
@@ -362,6 +361,7 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
                 AppConstants.WALLET_BALANCE = commonPojo.getWallet();
                 AppConstants.setScheduleList(commonPojo.getSchedule());
                 AppConstants.setStations(commonPojo.getStations());
+                AppConstants.RELOAD_HOME=false;
 
                 editTextDestination.setText("");
                 editTextSource.setText("");
@@ -374,6 +374,10 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
                 }
 
                 setAutoCompleteAdapters();
+
+                if(commonPojo.getReviewPending()>0){
+                    getReviewFromUser();
+                }
             }
 
             @Override
@@ -396,6 +400,24 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
                 ;
 
                 builder.show();
+            }
+        });
+    }
+
+    private void getReviewFromUser() {
+        WebRequestData webRequestData=new WebRequestData();
+        webRequestData.setRequestEndPoint(RequestEndPoints.PENDING_REVIEW+AppConstants.USER_ID);
+        makeGetRequest(webRequestData, new WeResponseCallback() {
+            @Override
+            public void onResponse(CommonPojo commonPojo) throws Exception {
+                FragTransactFucntion.replaceFragFromFadeHistory(getFragmentManager(),ReviewFleetFragment
+                        .newInstance(commonPojo.getPendingReviewtrip(),""),R.id.frame_container_main);
+
+            }
+
+            @Override
+            public void failure() throws Exception {
+
             }
         });
     }
@@ -744,8 +766,6 @@ public class HomeFragment extends MyBaseFragment implements OnMapReadyCallback {
 
                     points.add(position);
                 }
-
-
             }
 
             // Drawing polyline in the Google Map for the i-th route

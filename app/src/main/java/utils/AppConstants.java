@@ -16,13 +16,15 @@ import services.SingleShotLocationProvider;
 
 public class AppConstants {
 
-        public static final String BASE_URL = "http://34.215.120.189:8081/";
+    public static final String BASE_URL = "http://34.215.120.189:8081/";
     public static final String BASE_URL_image = "http://34.215.120.189:8081/static/user/";
-    public static final String CONTACT_US_URL = "https://www.mycitylinq.com";
+    public static final String BASE_URL_image_driver = "http://34.215.120.189:8081/static/driver/";
+    public static final String CONTACT_US_URL = "http://34.215.120.189:8081/contactUs";
     public static final String FAQS_LINK = BASE_URL+"faq";
     public static final String POLICY_LINK = BASE_URL+"private-policy";
     public static final String ABOUT_US_LINK = BASE_URL+"aboutUs";
     public static final String TERM_CONDITION_LINK = BASE_URL+"terms-condition";
+    public static  boolean RELOAD_HOME = false;
 
 
     public static SingleShotLocationProvider.GPSCoordinates CURRENT_LOCATION ;
@@ -61,13 +63,14 @@ public class AppConstants {
     public static final String TAG_TRANSACTION_HISTORY_FRAGMENT = "TAG_TRANSACTION_HISTORY_FRAGMENT";
     public static final String TAG_WEB_VIEW_FRAGMENT = "TAG_WEB_VIEW_FRAGMENT";
     public static final String TAG_SELECT_PASS = "TAG_SELECT_PASS";
+    public static final String TAG_TRACK_LINQ_FRAGMENT = "TAG_TRACK_LINQ_FRAGMENT";
 
     //Shared Preference stuff
     public static final String SHARED_PREFERENCE_NAME = "sanguinebits.com.citylinq.preference";
 
     //map
     public static final int MAP_LEVEL_CITY= 13;
-    public static Integer WALLET_BALANCE;
+    public static Float WALLET_BALANCE;
 
     //home screen stations
     private static List<Station> stations;

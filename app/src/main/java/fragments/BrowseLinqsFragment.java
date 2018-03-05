@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import adapters.BrowseLinqsAdapter;
 import api.RequestEndPoints;
@@ -128,7 +130,6 @@ public class BrowseLinqsFragment extends MyBaseFragment {
     }
 
     private void initViews() {
-
         if (isNetworkConnected()) {
             no_record_image.setVisibility(View.GONE);
             getServerData();
@@ -142,19 +143,27 @@ public class BrowseLinqsFragment extends MyBaseFragment {
                 }
             });
         }
-
-
     }
 
     private void getServerData() {
         progressDialog.show();
         //make routes request
         try {
+            Calendar calendar2=Calendar.getInstance();
+
             calendar.setTime(AppConstants.JOURNEY_DATE);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, calendar2.get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, calendar2.get(Calendar.MINUTE));
+            calendar.set(Calendar.SECOND, calendar2.get(Calendar.SECOND));
+            calendar.set(Calendar.MILLISECOND, calendar2.get(Calendar.MILLISECOND));
+
+            if(calendar.getTime().after(calendar2.getTime())){
+                calendar.set(Calendar.HOUR_OF_DAY, calendar2.getMinimum(Calendar.HOUR_OF_DAY));
+                calendar.set(Calendar.MINUTE, calendar2.getMinimum(Calendar.MINUTE));
+                calendar.set(Calendar.SECOND, calendar2.getMinimum(Calendar.SECOND));
+                calendar.set(Calendar.MILLISECOND, calendar2.getMinimum(Calendar.MILLISECOND));
+            }
+
             Log.d("TAG", "bookTicket: " + calendar.getTimeInMillis());
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,7 +171,8 @@ public class BrowseLinqsFragment extends MyBaseFragment {
 
         WebRequestData webRequestData = new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.GET_ROUTES + "?source=" + stationSource.getId()
-                + "&destination=" + stationDestination.getId() + "&date=" + calendar.getTimeInMillis());
+                + "&destination=" + stationDestination.getId() + "&date=" + calendar.getTimeInMillis()
+                + "&timeOffset=" + (TimeZone.getDefault().getOffset(calendar.getTimeInMillis()))/1000/60);
 
         makeGetRequest(webRequestData, new WeResponseCallback() {
             @Override

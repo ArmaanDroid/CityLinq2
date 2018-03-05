@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:clickable="true"
+    android:paddingTop="16dp"
     android:background="@color/activityBackground"
     android:layout_height="match_parent">
 
@@ -116,6 +117,7 @@
         android:fontFamily="@font/sans_pro_regular"
         android:layout_marginTop="24dp"
         android:text=" Use Pass"
+        android:visibility="gone"
         android:textColor="@color/textColorLabelGrey"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -168,6 +170,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/drawable_white_box_4_corner"
         android:elevation="1dp"
+        android:visibility="gone"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

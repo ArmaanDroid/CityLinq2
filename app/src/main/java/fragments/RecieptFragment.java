@@ -179,7 +179,7 @@ public class RecieptFragment extends MyBaseFragment {
                 public void onClick(View widget) {
                     try {
 
-                        FragTransactFucntion.replaceFragFromRightHistory(getFragmentManager()
+                        FragTransactFucntion.addFragFromRightFadeHistory(getFragmentManager()
                                 , WebViewFragment.newInstance(getString(R.string.term_condition2), AppConstants.TERM_CONDITION_LINK), R.id.frame_container_main);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -214,7 +214,6 @@ public class RecieptFragment extends MyBaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -286,7 +285,7 @@ public class RecieptFragment extends MyBaseFragment {
 
                                 @Override
                                 public void failure() throws Exception {
-
+                                    showCantDelete();
                                 }
                             });
                         }
@@ -298,6 +297,18 @@ public class RecieptFragment extends MyBaseFragment {
             })
                     .show();
         }
+    }
+
+    private void showCantDelete() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Cancel Trip")
+                .setMessage("You can't delete this trip.")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getFragmentManager().popBackStack();
+                    }
+                }).show();
     }
 
     private void deleteFromAppConstants(String id) {

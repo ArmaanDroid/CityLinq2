@@ -15,17 +15,15 @@
         <views.TicketLinearLayout
             android:id="@+id/ticketLinearLayout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/drawable_blue_box_4_corner"
             android:orientation="vertical"
-            android:paddingEnd="24dp"
-            android:paddingStart="24dp"
-            android:paddingTop="24dp"
-            app:layout_constraintBottom_toTopOf="@+id/continueButton"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewBookingConfirmed">
@@ -33,28 +31,31 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="24dp"
-                android:elevation="1dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:id="@+id/textView25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="26dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/sans_pro_semi_bold"
                     android:text="NYC 23 3556"
                     android:textColor="@color/white"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView33"
+                    app:layout_constraintHorizontal_bias="0.4"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textView33"
                     android:layout_width="65dp"
                     android:layout_height="7dp"
-                    android:layout_marginRight="1dp"
                     android:background="@drawable/drawable_white_pipe"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView6"
@@ -74,11 +75,14 @@
                     android:id="@+id/textView22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/sans_pro_regular"
                     android:text="New Bay Rides"
                     android:textColor="@color/white_80"
                     android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView33"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
                     app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
@@ -88,11 +92,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="20dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingTop="16dp">
+                android:paddingTop="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -170,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:paddingTop="18dp">
+                android:paddingTop="14dp">
 
                 <TextView
                     android:id="@+id/textViewTermsCondition"
@@ -179,7 +183,7 @@
                     android:layout_below="@+id/imageQrCode"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="14dp"
@@ -215,8 +219,8 @@
                     android:layout_height="@dimen/qr_code_dp"
                     android:layout_below="@+id/textViewDateBookTicket"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="23dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="16dp"
                     android:scaleType="centerCrop" />
             </RelativeLayout>
 
@@ -242,6 +246,7 @@
             android:id="@+id/continueButton"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:background="@color/btnColorDark"
             android:padding="16dp"
             android:text="@string/book_another_trip"
@@ -250,6 +255,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ticketLinearLayout"
+            app:layout_constraintVertical_bias="1.0"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintRight_creator="1" />
     </android.support.constraint.ConstraintLayout>

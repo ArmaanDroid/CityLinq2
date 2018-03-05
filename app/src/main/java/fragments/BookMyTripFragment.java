@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.content.res.AppCompatResources;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,11 +127,11 @@ public class BookMyTripFragment extends MyBaseFragment {
     private void initView() {
         textViewDateBookTicket.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(getContext(), R.drawable.ic_calendar_white), null, null, null);
         textViewDateBookTicket.setText(monthNameDateFormat.format(AppConstants.JOURNEY_DATE));
-        tourTiming.setText(transportList.getTimings());
+        tourTiming.setText(transportList.getTimings()[0]);
         textViewSource.setText(stationSource.getName());
         textViewDestination.setText(stationDestination.getName());
         textViewTransportName.setText(transportList.getTransportName());
-        textViewVehicleNumber.setText(transportList.getMakeAndModel());
+        textViewVehicleNumber.setText(transportList.getVehicleNumber());
         textViewFare.setText(setPriceAsText(String.valueOf(Float.valueOf(transportList.getFare()))));
     }
 
@@ -139,6 +140,10 @@ public class BookMyTripFragment extends MyBaseFragment {
         passengerCount = Integer.parseInt(textViewPassengerCount.getText().toString());
 
         if (view.getId() == R.id.imageAdd) {
+            if(passengerCount==transportList.getSeats()){
+                showToast("No more seats available");
+                return;
+            }
             passengerCount++;
             textViewPassengerCount.setText(String.valueOf(passengerCount));
             textViewFare.setText(setPriceAsText(String.valueOf(Float.valueOf(transportList.getFare()) * passengerCount)));

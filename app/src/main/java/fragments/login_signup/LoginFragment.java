@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -273,7 +274,11 @@ public class LoginFragment extends MyBaseFragment {
         webRequestData.setRequestEndPoint(RequestEndPoints.LOGIN);
         webRequestData.setEmail(emailAddress);
         webRequestData.setPassword(password);
-        webRequestData.setDeviceId(firebaseId);
+        if (firebaseId != null)
+            webRequestData.setDeviceId(firebaseId);
+        else
+            webRequestData.setDeviceId("firebaseId");
+
         if (AppConstants.CURRENT_LOCATION != null) {
             webRequestData.setLongitude(String.valueOf(AppConstants.CURRENT_LOCATION.longitude));
             webRequestData.setLatitude(String.valueOf(AppConstants.CURRENT_LOCATION.latitude));

@@ -127,6 +127,7 @@
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:padding="10dp"
+                android:completionThreshold="1"
                 android:textColor="@color/textColorDark"
                 android:textSize="16dp" />
 
@@ -196,7 +197,7 @@
                 android:fontFamily="@font/sans_pro_semi_bold"
                 android:hint="@string/destination"
                 android:includeFontPadding="false"
-                android:completionThreshold="0"
+                android:completionThreshold="1"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:padding="10dp"

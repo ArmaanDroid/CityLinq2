@@ -94,9 +94,9 @@ public class BrowseLinqsAdapter extends RecyclerView.Adapter<BrowseLinqsAdapter.
             }
 
             textViewLinqName.setText(currentItem.getTransportName());
-            textViewSeatAndTime.setText(currentItem.getSeats() + " seats • " + finalDuration);
-            textViewTime.setText(currentItem.getTimings());
-            textViewPrice.setText(setPriceAsText(currentItem.getFare()));
+            textViewSeatAndTime.setText(currentItem.getAvailableSeats() + " seats • " + finalDuration);
+            textViewTime.setText(currentItem.getTimings()[0]);
+            textViewPrice.setText("$"+currentItem.getFare());
             int availablepercentage = (int) ((Float.valueOf(currentItem.getAvailableSeats()) / Float.valueOf(currentItem.getSeats())) * 100);
             if (availablepercentage < 20) {
                 textViewStatus.setCompoundDrawablesWithIntrinsicBounds(AppCompatResources.getDrawable(itemView.getContext(), R.drawable.ic_almost_filled), null, null, null);
@@ -113,6 +113,7 @@ public class BrowseLinqsAdapter extends RecyclerView.Adapter<BrowseLinqsAdapter.
             }
         }
     }
+
     public String setPriceAsText(String price) {
         return  "$" + String.format("%.2f",Float.valueOf( price));
 //        return "$" + price;

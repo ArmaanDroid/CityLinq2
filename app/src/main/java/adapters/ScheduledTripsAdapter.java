@@ -25,6 +25,9 @@ import sanguinebits.com.citylinq.R;
  */
 
 public class ScheduledTripsAdapter extends RecyclerView.Adapter<ScheduledTripsAdapter.ViewHolder> {
+    public static final String FULL_ITEM_CLICK="full_item_click";
+    public static final String TRACK_ITEM_CLICK="track_item_click";
+
     private Context context;
     ArrayList<Scheduled> scheduleds;
     AdapterItemClickListner itemClickListner;
@@ -85,13 +88,20 @@ public class ScheduledTripsAdapter extends RecyclerView.Adapter<ScheduledTripsAd
             date.setTime(Long.parseLong(currentItem.getDate()));
             tv_date_adapter.setText(monthNameDateFormat.format(date));
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListner.onClick(position, FULL_ITEM_CLICK);
+
+                }
+            });
             imageView5.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClickListner.onClick(position, "");
+                    itemClickListner.onClick(position, TRACK_ITEM_CLICK);
                 }
             });
-            textTiming.setText(currentItem.getTimings());
+            textTiming.setText(currentItem.getVehicle_start_time());
             textViewFrom.setText(currentItem.getSource().getName());
             textViewTO.setText(currentItem.getDestination().getName());
             textViewRideName.setText(currentItem.getTransportName());

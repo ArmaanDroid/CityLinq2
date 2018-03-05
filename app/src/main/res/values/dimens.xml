@@ -11,6 +11,7 @@
     <dimen name="fourty_dp">40dp</dimen>
     <dimen name="one_point_five_dp" type="dimen" format="float">0.5dp</dimen>
     <dimen name="line_width">0.7dp</dimen>
-    <dimen name="qr_code_dp">90dp</dimen>
+    <dimen name="qr_code_dp">95dp</dimen>
     <dimen name="h_100">200dp</dimen>
+    <dimen name="profile_review">80dp</dimen>
 </resources>

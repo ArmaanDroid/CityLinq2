@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.models.GooglePaymentRequest;
+import com.google.android.gms.wallet.TransactionInfo;
+import com.google.android.gms.wallet.WalletConstants;
 
 import api.RequestEndPoints;
 import api.WebRequestData;
@@ -54,6 +57,7 @@ public class WalletFragment extends MyBaseFragment {
 
     @BindView(R.id.textView11)
     MyEditTextUnderline editTextAmount;
+
     private String availableAmount;
     private int REQUEST_CODE_paymemt=9087;
     private String amount;
@@ -137,6 +141,13 @@ public class WalletFragment extends MyBaseFragment {
         }
         DropInRequest dropInRequest = new DropInRequest()
                 .clientToken(AppConstants.BRAINTREE_TOKEN);
+        GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
+                .transactionInfo(TransactionInfo.newBuilder()
+                        .setTotalPrice(amount)
+                        .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
+                        .setCurrencyCode("USD")
+                        .build());
+        dropInRequest.googlePaymentRequest(googlePaymentRequest);
 
         dropInRequest.amount(amount);
         startActivityForResult(dropInRequest.getIntent(getActivity()), REQUEST_CODE_paymemt);
@@ -154,6 +165,7 @@ public class WalletFragment extends MyBaseFragment {
             } else {
                 // handle errors here, an exception may be available in
                 Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+                error.printStackTrace();
             }
         }
     }
@@ -161,8 +173,7 @@ public class WalletFragment extends MyBaseFragment {
     private void sendNonceToServer(DropInResult result) {
         WebRequestData webRequestData=new WebRequestData();
         webRequestData.setRequestEndPoint(RequestEndPoints.BRAIN_TREE_PAYMENT);
-//        webRequestData.setNounce(result.getPaymentMethodNonce().getNonce());
-        webRequestData.setNounce("fake-valid-nonce");
+        webRequestData.setNounce(result.getPaymentMethodNonce().getNonce());
         webRequestData.setAmount(amount);
         makeRequest(webRequestData, new WeResponseCallback() {
             @Override
@@ -196,7 +207,6 @@ public class WalletFragment extends MyBaseFragment {
             @Override
             public void failure() throws Exception {
                 showToast("Error adding amount to your wallet");
-
             }
         });
 

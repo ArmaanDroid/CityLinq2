@@ -12,6 +12,7 @@ public class WebRequestData {
     private  String requestEndPoint;
 
     private String name;
+    private String timeOffset;
     private String email;
     private String password;
     private String mobileNumber;
@@ -23,6 +24,10 @@ public class WebRequestData {
     private String city;
     private String userId;
     private String type;
+    private String tripId;
+    private String driverId;
+    private String rating;
+    private String review;
     private String latitude;
     private String longitude;
     private String amount;
@@ -44,6 +49,42 @@ public class WebRequestData {
     private String nounce ;
     private String station ;
     private String rides ;
+    private String wallet ;
+    private Integer direction ;
+    private String vehicle_start_time  ;
+
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
+    }
+
+    public void setDriverId(String driverId) {
+        this.driverId = driverId;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public void setVehicle_start_time(String vehicle_start_time) {
+        this.vehicle_start_time = vehicle_start_time;
+    }
+
+    public void setWallet(String wallet) {
+        this.wallet = wallet;
+    }
+
+    public void setDirection(Integer direction) {
+        this.direction = direction;
+    }
+
+    public void setTimeOffset(String timeOffset) {
+        this.timeOffset = timeOffset;
+    }
 
     public void setRides(String rides) {
         this.rides = rides;

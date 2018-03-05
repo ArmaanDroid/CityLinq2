@@ -7,6 +7,7 @@ package api;
 public class RequestEndPoints {
     public final static String SIGNUP_URL="user/register";
     public final static String SEND_OTP="user/send";
+    public final static String PENDING_REVIEW="user/pendingreview/";
     public final static String VERIFY_OTP="user/verify";
     public final static String CANCEL_OTP="user/cancelotp";
     public final static String LOGIN="user/login";
@@ -23,6 +24,7 @@ public class RequestEndPoints {
     public static final String GET_MY_TRIPS = "user/mytrips/";
     public static final String GET_MY_PASSES = "user/passes/";
     public static final String USE_PASS = "user/usepass/";
+    public static final String REVIEW_DRIVER = "user/review/";
     public static final String ADD_TO_WALLET = "user/addwallet";
     public static final String PAY_BY_WALLET = "user/walletpayment";
     public static final String WALLET_DETAILS = "user/walletdetails/";
